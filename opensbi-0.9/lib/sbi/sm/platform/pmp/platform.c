@@ -30,5 +30,7 @@ int platform_init()
   set_pmp_and_sync(NPMP-1, pmp_config);
 
   printm("[Penglai Monitor@%s] setting initial PMP ready\n", __func__);
+  sbi_printf("[Penglai Monitor@%s] SM_BASE:0x%lx, SM_SIZE:0x%lx\n",
+		  __func__, SM_BASE, SM_SIZE);
   return 0;
 }
