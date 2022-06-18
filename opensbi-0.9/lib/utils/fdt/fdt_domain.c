@@ -16,7 +16,7 @@
 #include <sbi_utils/fdt/fdt_domain.h>
 #include <sbi_utils/fdt/fdt_helper.h>
 
-int fdt_iterate_each_domain(void *fdt, void *opaque,
+int __init fdt_iterate_each_domain(void *fdt, void *opaque,
 			    int (*fn)(void *fdt, int domain_offset,
 				       void *opaque))
 {
@@ -46,7 +46,7 @@ int fdt_iterate_each_domain(void *fdt, void *opaque,
 	return 0;
 }
 
-int fdt_iterate_each_memregion(void *fdt, int domain_offset, void *opaque,
+int __init fdt_iterate_each_memregion(void *fdt, int domain_offset, void *opaque,
 			       int (*fn)(void *fdt, int domain_offset,
 					 int region_offset, u32 region_access,
 					 void *opaque))
@@ -91,7 +91,7 @@ struct __fixup_find_domain_offset_info {
 	int *doffset;
 };
 
-static int __fixup_find_domain_offset(void *fdt, int doff, void *p)
+static int __init __fixup_find_domain_offset(void *fdt, int doff, void *p)
 {
 	struct __fixup_find_domain_offset_info *fdo = p;
 
@@ -105,7 +105,7 @@ static int __fixup_find_domain_offset(void *fdt, int doff, void *p)
 				 SBI_DOMAIN_MEMREGION_WRITEABLE | \
 				 SBI_DOMAIN_MEMREGION_EXECUTABLE)
 
-static int __fixup_count_disable_devices(void *fdt, int doff, int roff,
+static int __init __fixup_count_disable_devices(void *fdt, int doff, int roff,
 					 u32 perm, void *p)
 {
 	int len;
@@ -121,7 +121,7 @@ static int __fixup_count_disable_devices(void *fdt, int doff, int roff,
 	return 0;
 }
 
-static int __fixup_disable_devices(void *fdt, int doff, int roff,
+static int __init __fixup_disable_devices(void *fdt, int doff, int roff,
 				   u32 raccess, void *p)
 {
 	int i, len, coff;
@@ -148,7 +148,7 @@ static int __fixup_disable_devices(void *fdt, int doff, int roff,
 	return 0;
 }
 
-void fdt_domain_fixup(void *fdt)
+void __init fdt_domain_fixup(void *fdt)
 {
 	u32 i, dcount;
 	int err, poffset, doffset;
@@ -224,7 +224,7 @@ static struct sbi_hartmask fdt_masks[FDT_DOMAIN_MAX_COUNT];
 static struct sbi_domain_memregion
 	fdt_regions[FDT_DOMAIN_MAX_COUNT][FDT_DOMAIN_REGION_MAX_COUNT + 2];
 
-static int __fdt_parse_region(void *fdt, int domain_offset,
+static int __init __fdt_parse_region(void *fdt, int domain_offset,
 			      int region_offset, u32 region_access,
 			      void *opaque)
 {
@@ -267,7 +267,7 @@ static int __fdt_parse_region(void *fdt, int domain_offset,
 	return 0;
 }
 
-static int __fdt_parse_domain(void *fdt, int domain_offset, void *opaque)
+static int __init __fdt_parse_domain(void *fdt, int domain_offset, void *opaque)
 {
 	u32 val32;
 	u64 val64;
@@ -414,7 +414,7 @@ static int __fdt_parse_domain(void *fdt, int domain_offset, void *opaque)
 	return sbi_domain_register(dom, &assign_mask);
 }
 
-int fdt_domains_populate(void *fdt)
+int __init fdt_domains_populate(void *fdt)
 {
 	const u32 *val;
 	int cold_domain_offset;

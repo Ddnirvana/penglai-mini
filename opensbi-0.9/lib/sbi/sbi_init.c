@@ -326,7 +326,7 @@ static void __init __noreturn init_coldboot(struct sbi_scratch *scratch, u32 har
 			     scratch->next_mode, FALSE);
 }
 
-static void __noreturn init_warmboot(struct sbi_scratch *scratch, u32 hartid)
+static void __init __noreturn init_warmboot(struct sbi_scratch *scratch, u32 hartid)
 {
 	int rc;
 	unsigned long *init_count;

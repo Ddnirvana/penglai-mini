@@ -64,7 +64,7 @@ ulong sbi_domain_get_assigned_hartmask(const struct sbi_domain *dom,
 	return ret;
 }
 
-void sbi_domain_memregion_initfw(struct sbi_domain_memregion *reg)
+void __init sbi_domain_memregion_initfw(struct sbi_domain_memregion *reg)
 {
 	if (!reg)
 		return;
@@ -112,7 +112,7 @@ bool sbi_domain_check_addr(const struct sbi_domain *dom,
 }
 
 /* Check if region complies with constraints */
-static bool is_region_valid(const struct sbi_domain_memregion *reg)
+static bool __init is_region_valid(const struct sbi_domain_memregion *reg)
 {
 	if (reg->order < 3 || __riscv_xlen < reg->order)
 		return FALSE;
@@ -124,7 +124,7 @@ static bool is_region_valid(const struct sbi_domain_memregion *reg)
 }
 
 /** Check if regionA is sub-region of regionB */
-static bool is_region_subset(const struct sbi_domain_memregion *regA,
+static bool __init is_region_subset(const struct sbi_domain_memregion *regA,
 			     const struct sbi_domain_memregion *regB)
 {
 	ulong regA_start = regA->base;
@@ -142,7 +142,7 @@ static bool is_region_subset(const struct sbi_domain_memregion *regA,
 }
 
 /** Check if regionA conflicts regionB */
-static bool is_region_conflict(const struct sbi_domain_memregion *regA,
+static bool __init is_region_conflict(const struct sbi_domain_memregion *regA,
 				const struct sbi_domain_memregion *regB)
 {
 	if ((is_region_subset(regA, regB) || is_region_subset(regB, regA)) &&
@@ -153,7 +153,7 @@ static bool is_region_conflict(const struct sbi_domain_memregion *regA,
 }
 
 /** Check if regionA should be placed before regionB */
-static bool is_region_before(const struct sbi_domain_memregion *regA,
+static bool __init is_region_before(const struct sbi_domain_memregion *regA,
 			     const struct sbi_domain_memregion *regB)
 {
 	if (regA->order < regB->order)
@@ -166,7 +166,7 @@ static bool is_region_before(const struct sbi_domain_memregion *regA,
 	return FALSE;
 }
 
-static int sanitize_domain(const struct sbi_platform *plat,
+static int __init sanitize_domain(const struct sbi_platform *plat,
 			   struct sbi_domain *dom)
 {
 	u32 i, j, count;
@@ -274,7 +274,7 @@ static int sanitize_domain(const struct sbi_platform *plat,
 	return 0;
 }
 
-void sbi_domain_dump(const struct sbi_domain *dom, const char *suffix)
+void __init sbi_domain_dump(const struct sbi_domain *dom, const char *suffix)
 {
 	u32 i, k;
 	unsigned long rstart, rend;
@@ -356,7 +356,7 @@ void sbi_domain_dump(const struct sbi_domain *dom, const char *suffix)
 		   dom->index, suffix, (dom->system_reset_allowed) ? "yes" : "no");
 }
 
-void sbi_domain_dump_all(const char *suffix)
+void __init sbi_domain_dump_all(const char *suffix)
 {
 	u32 i;
 	const struct sbi_domain *dom;
@@ -367,7 +367,7 @@ void sbi_domain_dump_all(const char *suffix)
 	}
 }
 
-int sbi_domain_register(struct sbi_domain *dom,
+int __init sbi_domain_register(struct sbi_domain *dom,
 			const struct sbi_hartmask *assign_mask)
 {
 	u32 i;
@@ -438,7 +438,7 @@ int sbi_domain_register(struct sbi_domain *dom,
 	return 0;
 }
 
-int sbi_domain_finalize(struct sbi_scratch *scratch, u32 cold_hartid)
+int __init sbi_domain_finalize(struct sbi_scratch *scratch, u32 cold_hartid)
 {
 	int rc;
 	u32 i, dhart;
@@ -493,7 +493,7 @@ int sbi_domain_finalize(struct sbi_scratch *scratch, u32 cold_hartid)
 	return 0;
 }
 
-int sbi_domain_init(struct sbi_scratch *scratch, u32 cold_hartid)
+int __init sbi_domain_init(struct sbi_scratch *scratch, u32 cold_hartid)
 {
 	u32 i;
 	struct sbi_domain_memregion *memregs;

@@ -13,7 +13,7 @@
 #include <sbi/sbi_platform.h>
 
 /* determine CPU extension, return non-zero support */
-int misa_extension_imp(char ext)
+int __init misa_extension_imp(char ext)
 {
 	unsigned long misa = csr_read(CSR_MISA);
 
@@ -28,7 +28,7 @@ int misa_extension_imp(char ext)
 	return sbi_platform_misa_extension(sbi_platform_thishart_ptr(), ext);
 }
 
-int misa_xlen(void)
+int __init misa_xlen(void)
 {
 	long r;
 
@@ -49,7 +49,7 @@ int misa_xlen(void)
 	return r ? r : -1;
 }
 
-void misa_string(int xlen, char *out, unsigned int out_sz)
+void __init misa_string(int xlen, char *out, unsigned int out_sz)
 {
 	unsigned int i, pos = 0;
 	const char valid_isa_order[] = "iemafdqclbjtpvnsuhkorwxyzg";
@@ -88,7 +88,7 @@ void misa_string(int xlen, char *out, unsigned int out_sz)
 		out[pos++] = '\0';
 }
 
-unsigned long csr_read_num(int csr_num)
+unsigned long __init csr_read_num(int csr_num)
 {
 #define switchcase_csr_read(__csr_num, __val)		\
 	case __csr_num:					\
@@ -133,7 +133,7 @@ unsigned long csr_read_num(int csr_num)
 #undef switchcase_csr_read
 }
 
-void csr_write_num(int csr_num, unsigned long val)
+void __init csr_write_num(int csr_num, unsigned long val)
 {
 #define switchcase_csr_write(__csr_num, __val)		\
 	case __csr_num:					\
@@ -174,7 +174,7 @@ void csr_write_num(int csr_num, unsigned long val)
 #undef switchcase_csr_write
 }
 
-static unsigned long ctz(unsigned long x)
+static unsigned long __init ctz(unsigned long x)
 {
 	unsigned long ret = 0;
 
@@ -186,7 +186,7 @@ static unsigned long ctz(unsigned long x)
 	return ret;
 }
 
-int pmp_set(unsigned int n, unsigned long prot, unsigned long addr,
+int __init pmp_set(unsigned int n, unsigned long prot, unsigned long addr,
 	    unsigned long log2len)
 {
 	int pmpcfg_csr, pmpcfg_shift, pmpaddr_csr;
@@ -238,7 +238,7 @@ int pmp_set(unsigned int n, unsigned long prot, unsigned long addr,
 	return 0;
 }
 
-int pmp_get(unsigned int n, unsigned long *prot_out, unsigned long *addr_out,
+int __init pmp_get(unsigned int n, unsigned long *prot_out, unsigned long *addr_out,
 	    unsigned long *log2len)
 {
 	int pmpcfg_csr, pmpcfg_shift, pmpaddr_csr;
