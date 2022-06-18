@@ -72,6 +72,13 @@ typedef unsigned long		physical_size_t;
 #define __initdata		__attribute__((__section__(".init.data")))
 #define __initconst		__attribute__((__section__(".init.rodata")))
 
+/*
+ * Use PL_MINI to remove codes in low-end devices
+ * How to use:
+ * 	PL_MINI is defined if the target setting is low-end devices
+ * 	Use this as an indicator to remove unnecessary extensions
+ * */
+#define PL_MINI
 
 #define likely(x) __builtin_expect((x), 1)
 #define unlikely(x) __builtin_expect((x), 0)
