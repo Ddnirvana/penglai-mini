@@ -6,7 +6,6 @@
  * Authors:
  *   Atish Patra <atish.patra@wdc.com>
  */
-#ifndef PL_MINI
 
 #include <sbi/sbi_domain.h>
 #include <sbi/sbi_ecall.h>
@@ -18,6 +17,7 @@
 #include <sbi/sbi_scratch.h>
 #include <sbi/riscv_asm.h>
 
+#ifndef PL_MINI
 static int sbi_ecall_hsm_handler(unsigned long extid, unsigned long funcid,
 				 const struct sbi_trap_regs *regs,
 				 unsigned long *out_val,

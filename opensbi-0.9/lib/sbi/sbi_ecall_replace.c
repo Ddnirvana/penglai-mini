@@ -8,6 +8,7 @@
  *   Atish Patra <atish.patra@wdc.com>
  */
 
+
 #include <sbi/riscv_asm.h>
 #include <sbi/sbi_ecall.h>
 #include <sbi/sbi_ecall_interface.h>
@@ -18,6 +19,8 @@
 #include <sbi/sbi_timer.h>
 #include <sbi/sbi_tlb.h>
 #include <sbi/sbi_trap.h>
+
+#ifndef PL_MINI
 
 static int sbi_ecall_time_handler(unsigned long extid, unsigned long funcid,
 				  const struct sbi_trap_regs *regs,
@@ -194,3 +197,5 @@ struct sbi_ecall_extension ecall_srst = {
 	.handle = sbi_ecall_srst_handler,
 	.probe = sbi_ecall_srst_probe,
 };
+
+#endif

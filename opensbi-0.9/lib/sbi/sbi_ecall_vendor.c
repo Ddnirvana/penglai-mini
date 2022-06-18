@@ -14,6 +14,8 @@
 #include <sbi/sbi_platform.h>
 #include <sbi/sbi_trap.h>
 
+#ifndef PL_MINI
+
 static int sbi_ecall_vendor_probe(unsigned long extid,
 				  unsigned long *out_val)
 {
@@ -38,3 +40,5 @@ struct sbi_ecall_extension ecall_vendor = {
 	.probe = sbi_ecall_vendor_probe,
 	.handle = sbi_ecall_vendor_handler,
 };
+
+#endif //PL_MINI

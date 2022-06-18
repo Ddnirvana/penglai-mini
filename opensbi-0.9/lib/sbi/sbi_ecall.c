@@ -156,6 +156,7 @@ int sbi_ecall_init(void)
 {
 	int ret;
 
+#ifndef PL_MINI
 	/* The order of below registrations is performance optimized */
 	ret = sbi_ecall_register_extension(&ecall_time);
 	if (ret)
@@ -166,6 +167,7 @@ int sbi_ecall_init(void)
 	ret = sbi_ecall_register_extension(&ecall_ipi);
 	if (ret)
 		return ret;
+#endif
 	ret = sbi_ecall_register_extension(&ecall_base);
 	if (ret)
 		return ret;
@@ -173,16 +175,18 @@ int sbi_ecall_init(void)
 	ret = sbi_ecall_register_extension(&ecall_hsm);
 	if (ret)
 		return ret;
-#endif
 	ret = sbi_ecall_register_extension(&ecall_srst);
 	if (ret)
 		return ret;
+#endif
 	ret = sbi_ecall_register_extension(&ecall_legacy);
 	if (ret)
 		return ret;
+#ifndef PL_MINI
 	ret = sbi_ecall_register_extension(&ecall_vendor);
 	if (ret)
 		return ret;
+#endif
 	ret = sbi_ecall_register_extension(&ecall_penglai_host);
 	if (ret)
 		return ret;
