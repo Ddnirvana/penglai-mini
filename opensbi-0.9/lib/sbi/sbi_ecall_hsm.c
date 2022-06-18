@@ -6,6 +6,7 @@
  * Authors:
  *   Atish Patra <atish.patra@wdc.com>
  */
+#ifndef PL_MINI
 
 #include <sbi/sbi_domain.h>
 #include <sbi/sbi_ecall.h>
@@ -57,3 +58,4 @@ struct sbi_ecall_extension ecall_hsm = {
 	.extid_end = SBI_EXT_HSM,
 	.handle = sbi_ecall_hsm_handler,
 };
+#endif
