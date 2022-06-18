@@ -34,23 +34,25 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
 ***************************************************************************/
 /*
  *   MIRACL Montgomery's method for modular arithmetic without division.
- *   mrmonty.c 
+ *   mrmonty.c
  *
  *   Programs to implement Montgomery's method
- *   See "Modular Multiplication Without Trial Division", Math. Comp. 
+ *   See "Modular Multiplication Without Trial Division", Math. Comp.
  *   Vol 44, Number 170, April 1985, Pages 519-521
  *   NOTE - there is an important correction to this paper mentioned as a
- *   footnote in  "Speeding the Pollard and Elliptic Curve Methods", 
+ *   footnote in  "Speeding the Pollard and Elliptic Curve Methods",
  *   Math. Comput., Vol. 48, January 1987, 243-264
  *
  *   The advantage of this approach is that no division required in order
  *   to compute a modular reduction - useful if division is slow
  *   e.g. on a SPARC processor, or a DSP.
- *   
+ *
  *   The disadvantage is that numbers must first be converted to an internal
  *   "n-residue" form.
  *
  */
+
+#ifndef PL_MINI
 
 #include "sm/gm/miracl/miracl.h"
 #include <stddef.h>
@@ -64,7 +66,7 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
 #endif
 
 #ifdef MR_COUNT_OPS
-extern int fpc,fpa; 
+extern int fpc,fpa;
 #endif
 
 #ifdef MR_CELL
@@ -83,14 +85,14 @@ void kill_monty(_MIPDO_ )
 }
 
 mr_small prepare_monty(_MIPD_ big n)
-{ /* prepare Montgomery modulus */ 
+{ /* prepare Montgomery modulus */
 #ifdef MR_KCM
     int nl;
 #endif
 #ifdef MR_PENTIUM
     mr_small ndash;
     mr_small base;
-    mr_small magic=13835058055282163712.0;   
+    mr_small magic=13835058055282163712.0;
     int control=0x1FFF;
 #endif
 #ifdef MR_OS_THREADS
@@ -103,7 +105,7 @@ mr_small prepare_monty(_MIPD_ big n)
 
     MR_IN(80)
 
-    if (size(n)<=2) 
+    if (size(n)<=2)
     {
         mr_berror(_MIPP_ MR_ERR_BAD_MODULUS);
         MR_OUT
@@ -119,7 +121,7 @@ mr_small prepare_monty(_MIPD_ big n)
 /* Did you know that for p=2 mod 3, -3 is a QNR? */
 
     mr_mip->pmod8=remain(_MIPP_ n,8);
-	
+
     switch (mr_mip->pmod8)
     {
     case 0:
@@ -165,7 +167,7 @@ if (mr_mip->base!=0)
 #ifdef MR_COMBA
     mr_mip->ACTIVE=FALSE;
 
-    if (MR_COMBA==n->len && mr_mip->base==mr_mip->base2) 
+    if (MR_COMBA==n->len && mr_mip->base==mr_mip->base2)
     {
         mr_mip->ACTIVE=TRUE;
 #ifdef MR_SPECIAL
@@ -185,7 +187,7 @@ if (mr_mip->base!=0)
     }
 
 #ifdef MR_KCM
-  
+
 /* test for base==0 & n->len=MR_KCM.2^x */
 
     mr_mip->ACTIVE=FALSE;
@@ -202,7 +204,7 @@ if (mr_mip->base!=0)
             if (nl%2!=0) break;
             nl/=2;
         }
-    }  
+    }
     if (mr_mip->ACTIVE)
     {
         mr_mip->w6->len=n->len+1;
@@ -281,7 +283,7 @@ void nres(_MIPD_ big x,big y)
     copy(x,y);
     divide(_MIPP_ y,mr_mip->modulus,mr_mip->modulus);
     if (size(y)<0) add(_MIPP_ y,mr_mip->modulus,y);
-    if (!mr_mip->MONTY) 
+    if (!mr_mip->MONTY)
     {
         MR_OUT
         return;
@@ -339,7 +341,7 @@ void redc(_MIPD_ big x,big y)
     rn=(int)modulus->len;
     rn2=rn+rn;
 #ifndef MR_SIMPLE_BASE
-    if (mr_mip->base==0) 
+    if (mr_mip->base==0)
     {
 #endif
 #ifndef MR_NOFULLWIDTH
@@ -387,7 +389,7 @@ void redc(_MIPD_ big x,big y)
             ASM loop m1
 
             ASM pop bp
-            ASM mov ax,delay_carry     
+            ASM mov ax,delay_carry
 #ifdef MR_LMM
             ASM add es:[bx],ax
             ASM mov ax,0
@@ -444,7 +446,7 @@ void redc(_MIPD_ big x,big y)
             ASM loop m1
 
             ASM pop ebp
-            ASM mov eax,delay_carry    
+            ASM mov eax,delay_carry
 #ifdef MR_LMM
             ASM add es:[bx],eax
             ASM mov eax,0
@@ -452,7 +454,7 @@ void redc(_MIPD_ big x,big y)
             ASM add es:[bx],edx
             ASM pop es
             ASM pop ds
-#else 
+#else
             ASM add [bx],eax
             ASM mov eax,0
             ASM adc eax,0
@@ -491,7 +493,7 @@ void redc(_MIPD_ big x,big y)
             ASM jnz m1
 
             ASM pop ebp
-            ASM mov eax,delay_carry     
+            ASM mov eax,delay_carry
             ASM add [esi+ebx+4],eax
             ASM mov eax,0
             ASM adc eax,0
@@ -517,17 +519,17 @@ void redc(_MIPD_ big x,big y)
            "xorl %%ebp,%%ebp\n"
         "m1:\n"
            "movl (%%esi),%%eax\n"
-           "addl $4,%%esi\n" 
+           "addl $4,%%esi\n"
            "mull %%edi\n"
            "addl %%ebp,%%eax\n"
            "movl (%%esi,%%ebx),%%ebp\n"
            "adcl $0,%%edx\n"
-           "addl %%eax,%%ebp\n" 
+           "addl %%eax,%%ebp\n"
            "adcl $0,%%edx\n"
            "movl %%ebp,(%%esi,%%ebx)\n"
            "decl %%ecx\n"
            "movl %%edx,%%ebp\n"
-           "jnz m1\n"   
+           "jnz m1\n"
 
            "popl %%ebp\n"
            "movl %5,%%eax\n"
@@ -537,7 +539,7 @@ void redc(_MIPD_ big x,big y)
            "addl %%edx,4(%%esi,%%ebx)\n"
            "adcl $0,%%eax\n"
            "movl %%eax,%5\n"
-       
+
         :
         :"m"(rn),"m"(i),"m"(w0g),"m"(ndash),"m"(mg),"m"(delay_carry)
         :"eax","edi","esi","ebx","ecx","edx","memory"
@@ -551,7 +553,7 @@ void redc(_MIPD_ big x,big y)
 
         for (j=0;j<rn;j++)
         {
-#ifdef MR_NOASM 
+#ifdef MR_NOASM
             dble.d=(mr_large)m*modulus->w[j]+carry+w0->w[i+j];
             w0->w[i+j]=dble.h[MR_BOT];
             carry=dble.h[MR_TOP];
@@ -563,14 +565,14 @@ void redc(_MIPD_ big x,big y)
         if (w0->w[rn+i]<delay_carry) delay_carry=1;
         else delay_carry=0;
         w0->w[rn+i]+=carry;
-        if (w0->w[rn+i]<carry) delay_carry=1; 
+        if (w0->w[rn+i]<carry) delay_carry=1;
 #endif
       }
 #endif
 
 #ifndef MR_SIMPLE_BASE
     }
-    else for (i=0;i<rn;i++) 
+    else for (i=0;i<rn;i++)
     {
 #ifdef MR_FP_ROUNDING
         imuldiv(w0->w[i],ndash,0,mr_mip->base,mr_mip->inverse_base,&m);
@@ -580,7 +582,7 @@ void redc(_MIPD_ big x,big y)
         carry=0;
         for (j=0;j<rn;j++)
         {
-#ifdef MR_NOASM 
+#ifdef MR_NOASM
           dbled=(mr_large)m*modulus->w[j]+carry+w0->w[i+j];
 #ifdef MR_FP_ROUNDING
           carry=(mr_small)MR_LROUND(dbled*mr_mip->inverse_base);
@@ -588,11 +590,11 @@ void redc(_MIPD_ big x,big y)
 #ifndef MR_FP
           if (mr_mip->base==mr_mip->base2)
               carry=(mr_small)(dbled>>mr_mip->lg2b);
-          else 
-#endif  
+          else
+#endif
               carry=(mr_small)MR_LROUND(dbled/mr_mip->base);
 #endif
-          w0->w[i+j]=(mr_small)(dbled-(mr_large)carry*mr_mip->base);  
+          w0->w[i+j]=(mr_small)(dbled-(mr_large)carry*mr_mip->base);
 #else
 #ifdef MR_FP_ROUNDING
           carry=imuldiv(modulus->w[j],m,w0->w[i+j]+carry,mr_mip->base,mr_mip->inverse_base,&w0->w[i+j]);
@@ -606,7 +608,7 @@ void redc(_MIPD_ big x,big y)
         if (w0->w[rn+i]>=mr_mip->base)
         {
             w0->w[rn+i]-=mr_mip->base;
-            delay_carry=1; 
+            delay_carry=1;
         }
     }
 #endif
@@ -614,7 +616,7 @@ void redc(_MIPD_ big x,big y)
     w0->len=rn2+1;
     mr_shift(_MIPP_ w0,(-rn),w0);
     mr_lzero(w0);
-    
+
     if (mr_compare(w0,modulus)>=0) mr_psub(_MIPP_ w0,modulus,w0);
     copy(w0,y);
     MR_OUT
@@ -664,7 +666,7 @@ fpa+=3;
 
 		if (mr_mip->qnr==-2)
 			nres_modsub(_MIPP_ mr_mip->w2,b,mr_mip->w2);
-     
+
 		nres_modmult(_MIPP_ a,b,i);
 		nres_modmult(_MIPP_ mr_mip->w1,mr_mip->w2,r);
 
@@ -690,7 +692,7 @@ Reduction poly is X^2-D=0
 
 Karatsuba
 
-   (a0.b0+D.a1.b1) + ((a0+a1)(b0+b1) - a0.b0 - a1.b1).X  
+   (a0.b0+D.a1.b1) + ((a0+a1)(b0+b1) - a0.b0 - a1.b1).X
 */
 
 void nres_lazy(_MIPD_ big a0,big a1,big b0,big b1,big r,big i)
@@ -723,7 +725,7 @@ if (mr_mip->qnr==-2) fpa++;
         kcm_mul(_MIPP_ a0,b0,mr_mip->w0);
     }
     else
-    { 
+    {
 #endif
         MR_IN(151)
         multiply(_MIPP_ a0,b0,mr_mip->w0);
@@ -745,14 +747,14 @@ fpa+=2;
 		{
 			comba_double_add(mr_mip->w0,mr_mip->w5,mr_mip->w6);
 			comba_add(a0,a1,mr_mip->w1);
-			comba_add(b0,b1,mr_mip->w2); 
+			comba_add(b0,b1,mr_mip->w2);
 		}
 		else
 		{
 #endif
 			mr_padd(_MIPP_ mr_mip->w0,mr_mip->w5,mr_mip->w6);
 			mr_padd(_MIPP_ a0,a1,mr_mip->w1);
-			mr_padd(_MIPP_ b0,b1,mr_mip->w2); 
+			mr_padd(_MIPP_ b0,b1,mr_mip->w2);
 #ifdef MR_COMBA
 		}
 #endif
@@ -763,7 +765,7 @@ fpa+=2;
 		if (mr_mip->qnr==-2)
           nres_double_modadd(_MIPP_ mr_mip->w5,mr_mip->w5,mr_mip->w5);
 		nres_modadd(_MIPP_ a0,a1,mr_mip->w1);
-		nres_modadd(_MIPP_ b0,b1,mr_mip->w2); 
+		nres_modadd(_MIPP_ b0,b1,mr_mip->w2);
     }
 	nres_double_modsub(_MIPP_ mr_mip->w0,mr_mip->w5,mr_mip->w0);  /* r = a0.b0+D.a1.b1 */
 
@@ -813,7 +815,7 @@ fpa+=2;
     }
     else
     {
-#endif  
+#endif
 #ifdef MR_KCM
     if (mr_mip->ACTIVE)
     {
@@ -821,7 +823,7 @@ fpa+=2;
     }
     else
     {
-#endif      
+#endif
         redc(_MIPP_ mr_mip->w0,i);
         MR_OUT
 #ifdef MR_COMBA
@@ -871,7 +873,7 @@ void nres_negate(_MIPD_ big x, big w)
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
-	if (size(x)==0) 
+	if (size(x)==0)
 	{
 		zero(w);
 		return;
@@ -881,14 +883,14 @@ void nres_negate(_MIPD_ big x, big w)
     {
         comba_negate(_MIPP_ x,w);
         return;
-    }    
+    }
     else
     {
 #endif
         if (mr_mip->ERNUM) return;
 
         MR_IN(92)
-        mr_psub(_MIPP_ mr_mip->modulus,x,w);    
+        mr_psub(_MIPP_ mr_mip->modulus,x,w);
         MR_OUT
 
 #ifdef MR_COMBA
@@ -962,7 +964,7 @@ void nres_double_modadd(_MIPD_ big x,big y,big w)
     }
     else
     {
-#endif 
+#endif
 
         if (mr_mip->ERNUM) return;
         MR_IN(153)
@@ -991,7 +993,7 @@ void nres_double_modsub(_MIPD_ big x,big y,big w)
     }
     else
     {
-#endif 
+#endif
 
         if (mr_mip->ERNUM) return;
         MR_IN(154)
@@ -1018,7 +1020,7 @@ void nres_modadd(_MIPD_ big x,big y,big w)
     miracl *mr_mip=get_mip();
 #endif
 #ifdef MR_COUNT_OPS
-fpa++; 
+fpa++;
 #endif
 #ifdef MR_COMBA
 
@@ -1093,12 +1095,12 @@ int nres_moddiv(_MIPD_ big x,big y,big w)
     { /* Illegal parameter usage */
         mr_berror(_MIPP_ MR_ERR_BAD_PARAMETERS);
         MR_OUT
-        
+
         return 0;
     }
     redc(_MIPP_ y,mr_mip->w6);
     gcd=invmodp(_MIPP_ mr_mip->w6,mr_mip->modulus,mr_mip->w6);
-   
+
     if (gcd!=1) zero(w); /* fails silently and returns 0 */
     else
     {
@@ -1116,7 +1118,7 @@ void nres_premult(_MIPD_ big x,int k,big w)
     miracl *mr_mip=get_mip();
 #endif
     int sign=0;
-    if (k==0) 
+    if (k==0)
     {
         zero(w);
         return;
@@ -1137,7 +1139,7 @@ void nres_premult(_MIPD_ big x,int k,big w)
         case 1: copy(x,w);
                 break;
         case 2: nres_modadd(_MIPP_ x,x,w);
-                break;    
+                break;
         case 3:
                 nres_modadd(_MIPP_ x,x,mr_mip->w0);
                 nres_modadd(_MIPP_ x,mr_mip->w0,w);
@@ -1145,7 +1147,7 @@ void nres_premult(_MIPD_ big x,int k,big w)
         case 4:
                 nres_modadd(_MIPP_ x,x,w);
                 nres_modadd(_MIPP_ w,w,w);
-                break;    
+                break;
         case 5:
                 nres_modadd(_MIPP_ x,x,mr_mip->w0);
                 nres_modadd(_MIPP_ mr_mip->w0,mr_mip->w0,mr_mip->w0);
@@ -1173,8 +1175,8 @@ void nres_premult(_MIPD_ big x,int k,big w)
 #else
     divide(_MIPP_ mr_mip->w0,mr_mip->modulus,mr_mip->modulus);
 	copy(mr_mip->w0,w);
-#endif 
-	
+#endif
+
     if (sign==1) nres_negate(_MIPP_ w,w);
 
     MR_OUT
@@ -1213,7 +1215,7 @@ fpc++;
         kcm_redc(_MIPP_ mr_mip->w0,w);
     }
     else
-    { 
+    {
 #endif
 #ifdef MR_PENTIUM
     if (mr_mip->ACTIVE)
@@ -1222,7 +1224,7 @@ fpc++;
         else      fastmodmult(_MIPP_ x,y,w);
     }
     else
-    { 
+    {
 #endif
         if (mr_mip->ERNUM) return;
 
@@ -1311,7 +1313,7 @@ BOOL nres_multi_inverse(_MIPD_ int m,big *x,big *w)
     convert(_MIPP_ 1,w[0]);
     copy(x[0],w[1]);
     for (i=2;i<m;i++)
-        nres_modmult(_MIPP_ w[i-1],x[i-1],w[i]); 
+        nres_modmult(_MIPP_ w[i-1],x[i-1],w[i]);
 
     nres_modmult(_MIPP_ w[m-1],x[m-1],mr_mip->w6);  /* y=x[0]*x[1]*x[2]....x[m-1] */
     if (size(mr_mip->w6)==0)
@@ -1343,8 +1345,8 @@ BOOL nres_multi_inverse(_MIPD_ int m,big *x,big *w)
         nres_modmult(_MIPP_ mr_mip->w5,x[i],mr_mip->w5);
     }
 
-    MR_OUT 
-    return TRUE;   
+    MR_OUT
+    return TRUE;
 }
 
 /* initialise elliptic curve */
@@ -1362,7 +1364,7 @@ void ecurve_init(_MIPD_ big a,big b,big p,int type)
     MR_IN(93)
 
 #ifndef MR_NO_SS
-    mr_mip->SS=FALSE;       /* no special support for super-singular curves */ 
+    mr_mip->SS=FALSE;       /* no special support for super-singular curves */
 #endif
 
     prepare_monty(_MIPP_ p);
@@ -1382,7 +1384,7 @@ void ecurve_init(_MIPD_ big a,big b,big p,int type)
     nres(_MIPP_ a,mr_mip->A);
 
     mr_mip->Bsize=size(b);
-    if (mr_abs(mr_mip->Bsize)==MR_TOOBIG) 
+    if (mr_abs(mr_mip->Bsize)==MR_TOOBIG)
     {
         if (mr_mip->Bsize>=0)
         { /* big positive number - check it isn't minus something small */
@@ -1409,3 +1411,5 @@ void ecurve_init(_MIPD_ big a,big b,big p,int type)
     MR_OUT
     return;
 }
+
+#endif // PL_MINI

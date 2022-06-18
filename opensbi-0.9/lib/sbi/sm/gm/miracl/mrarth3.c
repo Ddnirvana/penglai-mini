@@ -37,6 +37,8 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
  *   mrarth3.c
  */
 
+#ifndef PL_MINI
+
 #include "sm/gm/miracl/miracl.h"
 #include <stddef.h>
 
@@ -73,7 +75,7 @@ void expint(_MIPD_ int b,int n,big x)
         }
     }
     MR_OUT
-}   
+}
 
 void power(_MIPD_ big x,long n,big z,big w)
 { /* raise big number to int power  w=x^n *
@@ -100,14 +102,14 @@ void power(_MIPD_ big x,long n,big z,big w)
 
     if (w==z) forever
     { /* "Russian peasant" exponentiation */
-        if (n%2!=0L) 
+        if (n%2!=0L)
              multiply(_MIPP_ w,mr_mip->w5,w);
         n/=2L;
         if (mr_mip->ERNUM || n==0L) break;
         multiply(_MIPP_ mr_mip->w5,mr_mip->w5,mr_mip->w5);
     }
     else
-    { 
+    {
         norm=normalise(_MIPP_ z,z);
         divide(_MIPP_ mr_mip->w5,z,z);
         forever
@@ -154,7 +156,7 @@ BOOL nroot(_MIPD_ big x,int n,big w)
     if (n<1) mr_berror(_MIPP_ MR_ERR_BAD_ROOT);
     sx=exsign(x);
     if (n%2==0 && sx==MINUS) mr_berror(_MIPP_ MR_ERR_NEG_ROOT);
-    if (mr_mip->ERNUM) 
+    if (mr_mip->ERNUM)
     {
         MR_OUT
         return FALSE;
@@ -229,3 +231,4 @@ BOOL nroot(_MIPD_ big x,int n,big w)
     return FALSE;
 }
 
+#endif // PL_MINI

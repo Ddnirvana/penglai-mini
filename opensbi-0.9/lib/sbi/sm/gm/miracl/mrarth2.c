@@ -38,6 +38,8 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
  *
  */
 
+#ifndef PL_MINI
+
 #include "sm/gm/miracl/miracl.h"
 
 #ifdef MR_FP
@@ -85,7 +87,7 @@ mr_small normalise(_MIPD_ big x,big y)
     }
     else
     {
-        norm=MR_DIV(mr_mip->base,(mr_small)(y->w[len-1]+1));   
+        norm=MR_DIV(mr_mip->base,(mr_small)(y->w[len-1]+1));
         if (norm!=1) mr_pmul(_MIPP_ y,norm,y);
     }
 #endif
@@ -113,7 +115,7 @@ void multiply(_MIPD_ big x,big y,big z)
     miracl *mr_mip=get_mip();
 #endif
     if (mr_mip->ERNUM) return;
-    if (y->len==0 || x->len==0) 
+    if (y->len==0 || x->len==0)
     {
         zero(z);
         return;
@@ -146,7 +148,7 @@ void multiply(_MIPD_ big x,big y,big z)
     {
 #endif
 #ifndef MR_NOFULLWIDTH
-        if (x==y && xl>SQR_FASTER_THRESHOLD)    
+        if (x==y && xl>SQR_FASTER_THRESHOLD)
                              /* extra hassle make it not    */
                              /* worth it for small numbers */
         { /* fast squaring */
@@ -175,7 +177,7 @@ void multiply(_MIPD_ big x,big y,big z)
                 ASM mov di,[si]
 #endif
                 ASM add bx,dx
-                ASM add bx,dx 
+                ASM add bx,dx
                 ASM add bx,2
                 ASM add si,2
                 ASM push bp
@@ -188,11 +190,11 @@ void multiply(_MIPD_ big x,big y,big z)
 #ifdef MR_LMM
                 ASM add es:[bx],ax
 #else
-                ASM add [bx],ax 
+                ASM add [bx],ax
 #endif
                 ASM adc dx,0
                 ASM inc bx
-                ASM inc bx 
+                ASM inc bx
                 ASM mov bp,dx
                 ASM loop tcl4
 
@@ -229,7 +231,7 @@ void multiply(_MIPD_ big x,big y,big z)
                 ASM add bx,dx
                 ASM add bx,dx
                 ASM add bx,4
-                ASM add si,4   
+                ASM add si,4
                 ASM push ebp
                 ASM xor ebp,ebp
               tcl4:
@@ -271,7 +273,7 @@ void multiply(_MIPD_ big x,big y,big z)
                 ASM add ebx,esi
                 ASM add esi,edx
                 ASM sub ebx,edx
-                ASM add esi,4  
+                ASM add esi,4
                 ASM sub ebx,4
                 ASM push ebp
                 ASM xor ebp,ebp
@@ -327,7 +329,7 @@ void multiply(_MIPD_ big x,big y,big z)
 
            "movl %%ebp,4(%%esi,%%ebx)\n"
            "popl %%ebp\n"
-           
+
         :
         :"m"(i),"m"(xl),"m"(xg),"m"(w0g)
         :"eax","edi","esi","ebx","ecx","edx","memory"
@@ -356,7 +358,7 @@ void multiply(_MIPD_ big x,big y,big z)
 #ifdef MR_LMM
             ASM push ds
             ASM push es
-            ASM les bx,DWORD PTR w0g  
+            ASM les bx,DWORD PTR w0g
 #else
             ASM mov bx,w0g
 #endif
@@ -379,7 +381,7 @@ void multiply(_MIPD_ big x,big y,big z)
             ASM mov di,w0g
             ASM mov si,xg
 #endif
-       
+
             ASM xor bx,bx
           tcl7:
             ASM lodsw
@@ -530,7 +532,7 @@ void multiply(_MIPD_ big x,big y,big z)
            "adcl $0,%%ebx\n"
            "addl $4,%%edi\n"
            "decl %%ecx\n"
-           "jnz tcl7\n"                       
+           "jnz tcl7\n"
         :
         :"m"(xl),"m"(w0g),"m"(xg)
         :"eax","edi","esi","ebx","ecx","edx","memory"
@@ -544,7 +546,7 @@ void multiply(_MIPD_ big x,big y,big z)
             for (i=0;i<xl;i++)
             { /* add in squared elements */
                 ti=i+i;
-#ifdef MR_NOASM               
+#ifdef MR_NOASM
                 dble.d=(mr_large)x->w[i]*x->w[i]+carry+w0->w[ti];
                 w0->w[ti]=dble.h[MR_BOT];
                 carry=dble.h[MR_TOP];
@@ -625,7 +627,7 @@ void multiply(_MIPD_ big x,big y,big z)
             ASM add si,dx
             ASM mov edi,[si]
             ASM lds si,DWORD PTR yg
-#else           
+#else
             ASM mov bx,w0g
             ASM add bx,dx
             ASM mov si,xg
@@ -708,17 +710,17 @@ void multiply(_MIPD_ big x,big y,big z)
            "xorl %%ebp,%%ebp\n"
          "tcl6:\n"
            "movl (%%esi),%%eax\n"
-           "addl $4,%%esi\n" 
+           "addl $4,%%esi\n"
            "mull %%edi\n"
            "addl %%ebp,%%eax\n"
            "movl (%%esi,%%ebx),%%ebp\n"
            "adcl $0,%%edx\n"
-           "addl %%eax,%%ebp\n" 
+           "addl %%eax,%%ebp\n"
            "adcl $0,%%edx\n"
            "movl %%ebp,(%%esi,%%ebx)\n"
            "decl %%ecx\n"
            "movl %%edx,%%ebp\n"
-           "jnz tcl6\n"   
+           "jnz tcl6\n"
 
            "movl %%ebp,4(%%esi,%%ebx)\n"
            "popl %%ebp\n"
@@ -732,7 +734,7 @@ void multiply(_MIPD_ big x,big y,big z)
             carry=0;
             for (j=0;j<yl;j++)
             { /* multiply each digit of y by x[i] */
-#ifdef MR_NOASM 
+#ifdef MR_NOASM
                 dble.d=(mr_large)x->w[i]*y->w[j]+carry+w0->w[i+j];
                 w0->w[i+j]=dble.h[MR_BOT];
                 carry=dble.h[MR_TOP];
@@ -758,14 +760,14 @@ void multiply(_MIPD_ big x,big y,big z)
 #ifdef MR_NOASM
                    dbled=(mr_large)x->w[i]*x->w[j]+w0->w[i+j]+carry;
   #ifdef MR_FP_ROUNDING
-                   carry=(mr_small)MR_LROUND(dbled*mr_mip->inverse_base); 
+                   carry=(mr_small)MR_LROUND(dbled*mr_mip->inverse_base);
   #else
     #ifndef MR_FP
                    if (mr_mip->base==mr_mip->base2)
                        carry=(mr_small)(dbled>>mr_mip->lg2b);
                    else
     #endif
-                       carry=(mr_small)MR_LROUND(dbled/mr_mip->base);  
+                       carry=(mr_small)MR_LROUND(dbled/mr_mip->base);
   #endif
                    w0->w[i+j]=(mr_small)(dbled-(mr_large)carry*mr_mip->base);
 #else
@@ -773,7 +775,7 @@ void multiply(_MIPD_ big x,big y,big z)
   #ifdef MR_FP_ROUNDING
               carry=imuldiv(x->w[i],x->w[j],w0->w[i+j]+carry,mr_mip->base,mr_mip->inverse_base,&w0->w[i+j]);
   #else
-              carry=muldiv(x->w[i],x->w[j],w0->w[i+j]+carry,mr_mip->base,&w0->w[i+j]); 
+              carry=muldiv(x->w[i],x->w[j],w0->w[i+j]+carry,mr_mip->base,&w0->w[i+j]);
   #endif
 #endif
                 }
@@ -795,7 +797,7 @@ void multiply(_MIPD_ big x,big y,big z)
                     carry=(mr_small)(dbled>>mr_mip->lg2b);
                 else
 #endif
-                    carry=(mr_small)MR_LROUND(dbled/mr_mip->base); 
+                    carry=(mr_small)MR_LROUND(dbled/mr_mip->base);
 #endif
                 w0->w[ti]=(mr_small)(dbled-(mr_large)carry*mr_mip->base);
 #else
@@ -818,7 +820,7 @@ void multiply(_MIPD_ big x,big y,big z)
         }
         else for (i=0;i<xl;i++)
         { /* long multiplication */
-            carry=0; 
+            carry=0;
             for (j=0;j<yl;j++)
             { /* multiply each digit of y by x[i] */
 #ifdef MR_NOASM
@@ -830,8 +832,8 @@ void multiply(_MIPD_ big x,big y,big z)
 #ifndef MR_FP
                 if (mr_mip->base==mr_mip->base2)
                     carry=(mr_small)(dbled>>mr_mip->lg2b);
-                else 
-#endif  
+                else
+#endif
                     carry=(mr_small)MR_LROUND(dbled/mr_mip->base);
 #endif
                 w0->w[i+j]=(mr_small)(dbled-(mr_large)carry*mr_mip->base);
@@ -916,7 +918,7 @@ void divide(_MIPD_ big x,big y,big z)
     if (x0==y0)
     {
         if (x0==1) /* special case - x and y are both mr_smalls */
-        { 
+        {
             d=MR_DIV(w0->w[0],y->w[0]);
             w0->w[0]=MR_REMAIN(w0->w[0],y->w[0]);
             mr_lzero(w0);
@@ -1070,7 +1072,7 @@ void divide(_MIPD_ big x,big y,big z)
 #endif
             ASM pop edi
             ASM pop esi
-#endif  
+#endif
 #if INLINE_ASM == 3
             ASM push esi
             ASM push edi
@@ -1107,7 +1109,7 @@ void divide(_MIPD_ big x,big y,big z)
             ASM mov attemp,edi
             ASM pop edi
             ASM pop esi
-#endif       
+#endif
 #if INLINE_ASM == 4
    ASM (
            "movl %1,%%ebx\n"
@@ -1180,7 +1182,7 @@ void divide(_MIPD_ big x,big y,big z)
                 ra+=ldy;
                 if (ra<ldy) carry=1;
             }
-#endif    
+#endif
             m=k-y0+1;
             if (attemp>0)
             { /* do partial subtraction */
@@ -1220,7 +1222,7 @@ void divide(_MIPD_ big x,big y,big z)
                 ASM sub es:[bx],ax
 #else
                 ASM sub [bx],ax
-#endif              
+#endif
                 ASM adc dx,0
                 ASM mov bp,dx
                 ASM loop tcl3
@@ -1345,11 +1347,11 @@ void divide(_MIPD_ big x,big y,big z)
            "decl %%ecx\n"
            "movl %%edx,%%ebp\n"
            "jnz tcl3\n"
-    
+
            "movl %%ebp,%%eax\n"
            "popl %%ebp\n"
            "movl %%eax,%0\n"
- 
+
         :"=m"(borrow)
         :"m"(y0),"m"(m),"m"(attemp),"m"(w0g),"m"(yg)
         :"eax","edi","esi","ebx","ecx","edx","memory"
@@ -1408,7 +1410,7 @@ void divide(_MIPD_ big x,big y,big z)
                 ra=ldy+w0->w[k];
             }
 #ifdef MR_NOASM
-            else 
+            else
             {
                 dbled=(mr_large)w0->w[k+1]*mr_mip->base+w0->w[k];
                 attemp=(mr_small)MR_LROUND(dbled/ldy);
@@ -1427,22 +1429,22 @@ void divide(_MIPD_ big x,big y,big z)
 #ifndef MR_FP
                 if (mr_mip->base==mr_mip->base2)
                     tst=(mr_small)(dbled>>mr_mip->lg2b);
-                else 
-#endif  
+                else
+#endif
                     tst=(mr_small)MR_LROUND(dbled/mr_mip->base);
 #endif
                 r=(mr_small)(dbled-(mr_large)tst*mr_mip->base);
 #else
 #ifdef MR_FP_ROUNDING
-                tst=imuldiv(sdy,attemp,(mr_small)0,mr_mip->base,mr_mip->inverse_base,&r); 
+                tst=imuldiv(sdy,attemp,(mr_small)0,mr_mip->base,mr_mip->inverse_base,&r);
 #else
-                tst=muldiv(sdy,attemp,(mr_small)0,mr_mip->base,&r); 
+                tst=muldiv(sdy,attemp,(mr_small)0,mr_mip->base,&r);
 #endif
 #endif
                 if (tst< ra || (tst==ra && r<=w0->w[k-1])) break;
                 attemp--;  /* refine guess */
                 ra+=ldy;
-            }    
+            }
             m=k-y0+1;
             if (attemp>0)
             { /* do partial subtraction */
@@ -1457,8 +1459,8 @@ void divide(_MIPD_ big x,big y,big z)
 #ifndef MR_FP
                   if (mr_mip->base==mr_mip->base2)
                       borrow=(mr_small)(dbled>>mr_mip->lg2b);
-                  else 
-#endif  
+                  else
+#endif
                       borrow=(mr_small)MR_LROUND(dbled/mr_mip->base);
 #endif
                   dig=(mr_small)(dbled-(mr_large)borrow*mr_mip->base);
@@ -1545,7 +1547,7 @@ BOOL divisible(_MIPD_ big x,big y)
     MR_OUT
     if (size(mr_mip->w0)==0) return TRUE;
     else                    return FALSE;
-}     
+}
 
 void mad(_MIPD_ big x,big y,big z,big w,big q,big r)
 { /* Multiply, Add and Divide; q=(x*y+z)/w remainder r   *
@@ -1576,3 +1578,4 @@ void mad(_MIPD_ big x,big y,big z,big w,big q,big r)
     MR_OUT
 }
 
+#endif // PL_MINI

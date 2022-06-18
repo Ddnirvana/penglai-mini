@@ -34,13 +34,15 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
 ***************************************************************************/
 /*
  *
- *   MIRACL Core module - contains initialisation code and general purpose 
+ *   MIRACL Core module - contains initialisation code and general purpose
  *   utilities
  *   mrcore.c
  *
- *   Space can be saved by removing unneeded functions (mr_and ?) 
+ *   Space can be saved by removing unneeded functions (mr_and ?)
  *
  */
+
+#ifndef PL_MINI
 
 #include "sm/gm/miracl/miracl.h"
 #include "sbi/sbi_string.h"
@@ -60,10 +62,10 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
 
     miracl *mr_mip;
     #pragma omp threadprivate(mr_mip)
-    
+
     miracl *get_mip()
     {
-        return mr_mip; 
+        return mr_mip;
     }
 
     void mr_init_threading()
@@ -78,11 +80,11 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
 
   #ifdef MR_WINDOWS_MT
     #include <windows.h>
-    DWORD mr_key;   
+    DWORD mr_key;
 
     miracl *get_mip()
     {
-        return (miracl *)TlsGetValue(mr_key); 
+        return (miracl *)TlsGetValue(mr_key);
     }
 
     void mr_init_threading()
@@ -103,7 +105,7 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
 
     miracl *get_mip()
     {
-        return (miracl *)pthread_getspecific(mr_key); 
+        return (miracl *)pthread_getspecific(mr_key);
     }
 
     void mr_init_threading()
@@ -129,7 +131,7 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
 #define MR_MIP_EXISTS
         miracl *get_mip()
         {
-          return (miracl *)mr_mip; 
+          return (miracl *)mr_mip;
         }
       #endif
     #endif
@@ -145,7 +147,7 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
 #endif
 
 /* See Advanced Windows by Jeffrey Richter, Chapter 12 for methods for
-   creating different instances of this global for each executing thread 
+   creating different instances of this global for each executing thread
    when using Windows '95/NT
 */
 
@@ -371,19 +373,19 @@ break;
 case 2 :
 mputs((char *)"Division by zero attempted\n");
 break;
-case 3 : 
+case 3 :
 mputs((char *)"Overflow - Number too big\n");
 break;
 case 4 :
 mputs((char *)"Internal result is negative\n");
 break;
-case 5 : 
+case 5 :
 mputs((char *)"Input format error\n");
 break;
 case 6 :
 mputs((char *)"Illegal number base\n");
 break;
-case 7 : 
+case 7 :
 mputs((char *)"Illegal parameter usage\n");
 break;
 case 8 :
@@ -520,7 +522,7 @@ mr_small brand(_MIPDO_ )
         pdiff=t - mr_mip->ira[i] - mr_mip->borrow;
         if (pdiff<t) mr_mip->borrow=0;
         if (pdiff>t) mr_mip->borrow=1;
-        mr_mip->ira[i]=pdiff; 
+        mr_mip->ira[i]=pdiff;
     }
     if (mr_mip->lg2b>32)
     { /* double up */
@@ -545,7 +547,7 @@ void irand(_MIPD_ mr_unsign32 seed)
     for (i=1;i<NK;i++)
     { /* fill initialisation vector */
         in=(NV*i)%NK;
-        mr_mip->ira[in]=m; 
+        mr_mip->ira[in]=m;
         t=m;
         m=seed-m;
         seed=t;
@@ -593,7 +595,7 @@ mr_small mr_setbase(_MIPD_ mr_small nb)
 #endif
     fits=FALSE;
     bits=MIRACL;
-    while (bits>1) 
+    while (bits>1)
     {
         bits/=2;
         temp=((mr_small)1<<bits);
@@ -690,7 +692,7 @@ void uconvert(_MIPD_ unsigned int n ,big x)
 #endif
     zero(x);
     if (n==0) return;
-    
+
     m=0;
 #ifndef MR_SIMPLE_BASE
     if (mr_mip->base==0)
@@ -788,7 +790,7 @@ void dlconv(_MIPD_ mr_dltype n,big x)
         }
 #endif
 #ifndef MR_SIMPLE_BASE
-    }    
+    }
     else while (n>0)
     {
         x->w[m++]=(mr_small)MR_REMAIN(n,mr_mip->base);
@@ -829,7 +831,7 @@ void ulgconv(_MIPD_ unsigned long n,big x)
 #endif
 #endif
 #ifndef MR_SIMPLE_BASE
-    }    
+    }
     else while (n>0)
     {
         x->w[m++]=MR_REMAIN(n,mr_mip->base);
@@ -866,14 +868,14 @@ flash mirvar(_MIPD_ int iv)
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
- 
+
     if (mr_mip->ERNUM) return NULL;
-    MR_IN(23);  
+    MR_IN(23);
 
     if (!(mr_mip->active))
     {
         mr_berror(_MIPP_ MR_ERR_NO_MIRSYS);
-        MR_OUT  
+        MR_OUT
         return NULL;
     }
 
@@ -886,17 +888,17 @@ flash mirvar(_MIPD_ int iv)
     x=(big)mr_alloc(_MIPP_ mr_size(mr_mip->nib-1),1);
     if (x==NULL)
     {
-        MR_OUT 
+        MR_OUT
         return x;
     }
-    
-    ptr=(char *)&x->w;
-    align=(unsigned long)(ptr+sizeof(mr_small *))%sizeof(mr_small);   
 
-    x->w=(mr_small *)(ptr+sizeof(mr_small *)+sizeof(mr_small)-align);   
+    ptr=(char *)&x->w;
+    align=(unsigned long)(ptr+sizeof(mr_small *))%sizeof(mr_small);
+
+    x->w=(mr_small *)(ptr+sizeof(mr_small *)+sizeof(mr_small)-align);
 
     if (iv!=0) convert(_MIPP_ iv,x);
-    MR_OUT 
+    MR_OUT
     return x;
 }
 
@@ -916,19 +918,19 @@ flash mirvar_mem_variable(char *mem,int index,int sz)
 
     x=(big)&mem[offset+mr_size(sz)*index];
     ptr=(char *)&x->w;
-    align=(unsigned long)(ptr+sizeof(mr_small *))%sizeof(mr_small);   
-    x->w=(mr_small *)(ptr+sizeof(mr_small *)+sizeof(mr_small)-align);   
+    align=(unsigned long)(ptr+sizeof(mr_small *))%sizeof(mr_small);
+    x->w=(mr_small *)(ptr+sizeof(mr_small *)+sizeof(mr_small)-align);
 
     return x;
 }
 
 flash mirvar_mem(_MIPD_ char *mem,int index)
 { /* initialize big/flash number from pre-allocated memory */
- 
+
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
- 
+
     if (mr_mip->ERNUM) return NULL;
 
     return mirvar_mem_variable(mem,index,mr_mip->nib-1);
@@ -970,7 +972,7 @@ void set_io_buffer_size(_MIPD_ int len)
     MR_IN(142)
     for (i=0;i<mr_mip->IOBSIZ;i++) mr_mip->IOBUFF[i]=0;
     mr_free(mr_mip->IOBUFF);
-    if (len==0) 
+    if (len==0)
     {
         MR_OUT
         return;
@@ -1037,7 +1039,7 @@ miracl *mirsys(int nd,mr_small nb)
     return mirsys_basic(mr_mip,nd,nb);
 #endif
 #endif
-/* In these cases mr_mip is a "global" pointer and the mip itself is allocated from the heap. 
+/* In these cases mr_mip is a "global" pointer and the mip itself is allocated from the heap.
    In fact mr_mip (and mip) may be thread specific if some multi-threading scheme is implemented */
 #ifndef MR_STATIC
  #ifdef MR_WINDOWS_MT
@@ -1046,12 +1048,12 @@ miracl *mirsys(int nd,mr_small nb)
  #endif
 
  #ifdef MR_UNIX_MT
-    miracl *mr_mip=mr_first_alloc(); 
-    pthread_setspecific(mr_key,mr_mip);    
+    miracl *mr_mip=mr_first_alloc();
+    pthread_setspecific(mr_key,mr_mip);
  #endif
 
  #ifdef MR_OPENMP_MT
-    mr_mip=mr_first_alloc(); 
+    mr_mip=mr_first_alloc();
  #endif
 
  #ifndef MR_WINDOWS_MT
@@ -1074,7 +1076,7 @@ miracl *mirsys_basic(miracl *mr_mip,int nd,mr_small nb)
 #ifndef MR_NO_RAND
     int i;
 #endif
-   
+
     mr_small b,nw;
 #ifdef MR_FP
     mr_small dres;
@@ -1087,7 +1089,7 @@ miracl *mirsys_basic(miracl *mr_mip,int nd,mr_small nb)
     mr_mip->trace[0]=0;
     mr_mip->depth++;
     mr_mip->trace[mr_mip->depth]=29;
-#endif           
+#endif
                     /* digest hardware configuration */
 
 #ifdef MR_NO_STANDARD_IO
@@ -1181,7 +1183,7 @@ miracl *mirsys_basic(miracl *mr_mip,int nd,mr_small nb)
 #endif
 
 #ifdef MR_ALWAYS_BINARY
-    if (mr_mip->base!=mr_mip->base2) 
+    if (mr_mip->base!=mr_mip->base2)
     {
         mr_berror(_MIPP_ MR_ERR_NOT_BINARY);
         MR_OUT
@@ -1192,7 +1194,7 @@ miracl *mirsys_basic(miracl *mr_mip,int nd,mr_small nb)
 /* calculate total space for bigs */
 /*
 
- big -> |int len|small *ptr| alignment space | size in words +1| alignment up to multiple of 4 | 
+ big -> |int len|small *ptr| alignment space | size in words +1| alignment up to multiple of 4 |
 
 
 */
@@ -1211,15 +1213,15 @@ miracl *mirsys_basic(miracl *mr_mip,int nd,mr_small nb)
     }
 #endif
 
-   /* mr_mip->nib=(int)(nw+1);    add one extra word for small overflows */     
+   /* mr_mip->nib=(int)(nw+1);    add one extra word for small overflows */
 
 #ifdef MR_FLASH
     mr_mip->workprec=mr_mip->nib;
     mr_mip->stprec=mr_mip->nib;
-    while (mr_mip->stprec>2 && mr_mip->stprec>MR_FLASH/mr_mip->lg2b) 
+    while (mr_mip->stprec>2 && mr_mip->stprec>MR_FLASH/mr_mip->lg2b)
         mr_mip->stprec=(mr_mip->stprec+1)/2;
     if (mr_mip->stprec<2) mr_mip->stprec=2;
-   
+
 #endif
 
 #ifndef MR_DOUBLE_BIG
@@ -1234,7 +1236,7 @@ miracl *mirsys_basic(miracl *mr_mip,int nd,mr_small nb)
 #endif
 #endif
     mr_mip->ERNUM=0;
-    
+
     mr_mip->NTRY=6;
     mr_mip->MONTY=ON;
 #ifdef MR_FLASH
@@ -1273,7 +1275,7 @@ miracl *mirsys_basic(miracl *mr_mip,int nd,mr_small nb)
     mr_mip->ira[0]=0x55555555;
     mr_mip->ira[1]=0x12345678;
 
-    for (i=2;i<NK;i++) 
+    for (i=2;i<NK;i++)
         mr_mip->ira[i]=mr_mip->ira[i-1]+mr_mip->ira[i-2]+0x1379BDF1;
     mr_mip->rndptr=NK;
     mr_mip->borrow=0;
@@ -1301,11 +1303,11 @@ miracl *mirsys_basic(miracl *mr_mip,int nd,mr_small nb)
     mr_mip->fin=FALSE;
     mr_mip->fout=FALSE;
     mr_mip->active=ON;
-    
+
     mr_mip->nib=(mr_mip->nib-1)/2;
 
 /* allocate memory for workspace variables */
-   
+
 #ifndef MR_DOUBLE_BIG
 
     mr_mip->w0=mirvar_mem(_MIPP_ mr_mip->workspace,0);  /* double length */
@@ -1384,7 +1386,7 @@ miracl *mirsys_basic(miracl *mr_mip,int nd,mr_small nb)
 #endif
     MR_OUT
     return mr_mip;
-} 
+}
 
 #ifndef MR_STATIC
 
@@ -1468,10 +1470,10 @@ void mirexit(_MIPDO_ )
 #ifndef MR_STATIC
     mr_mip=NULL;
 #endif
-#endif   
-#endif   
-#endif  
-    
+#endif
+#endif
+#endif
+
 #ifdef MR_OPENMP_MT
     mr_mip=NULL;
 #endif
@@ -1481,7 +1483,7 @@ void mirexit(_MIPDO_ )
 int exsign(flash x)
 { /* extract sign of big/flash number */
     if ((x->len&(MR_MSBIT))==0) return PLUS;
-    else                        return MINUS;    
+    else                        return MINUS;
 }
 
 void insign(int s,flash x)
@@ -1489,7 +1491,7 @@ void insign(int s,flash x)
     if (x->len==0) return;
     if (s<0) x->len|=MR_MSBIT;
     else     x->len&=MR_OBITS;
-}   
+}
 
 void mr_lzero(big x)
 {  /*  strip leading zeros from big number  */
@@ -1521,7 +1523,7 @@ int getdig(_MIPD_ big x,int i)
     if (mr_mip->pack==1) return (int)n;
     k=i%mr_mip->pack;
     for (i=1;i<=k;i++)
-        n=MR_DIV(n,mr_mip->apbase);  
+        n=MR_DIV(n,mr_mip->apbase);
     return (int)MR_REMAIN(n,mr_mip->apbase);
 }
 
@@ -1538,7 +1540,7 @@ int numdig(_MIPD_ big x)
     while (getdig(_MIPP_ x,nd)==0)
         nd--;
     return nd;
-} 
+}
 
 void putdig(_MIPD_ int n,big x,int i)
 {  /* insert a digit into a packed word */
@@ -1584,7 +1586,7 @@ void putdig(_MIPD_ int n,big x,int i)
 void mr_and(big x,big y,big z)
 { /* z= bitwise logical AND of x and y */
     int i,nx,ny,nz,nr;
-    if (x==y) 
+    if (x==y)
     {
         copy(x,z);
         return;
@@ -1604,14 +1606,14 @@ void mr_and(big x,big y,big z)
 
     for (i=0;i<nr;i++)
         z->w[i]=x->w[i]&y->w[i];
-    for (i=nr;i<nz;i++) 
+    for (i=nr;i<nz;i++)
         z->w[i]=0;
     z->len=nr;
 	mr_lzero(z);
 }
 
 void mr_xor(big x,big y,big z)
-{ 
+{
      int i,nx,ny,nz,nr;
      if (x==y)
      {
@@ -1648,12 +1650,12 @@ void copy(flash x,flash y)
     if (x==y || y==NULL) return;
 
     if (x==NULL)
-    { 
+    {
         zero(y);
         return;
     }
 
-#ifdef MR_FLASH    
+#ifdef MR_FLASH
     ny=mr_lent(y);
     nx=mr_lent(x);
 #else
@@ -1771,7 +1773,7 @@ int mr_compare(big x,big y)
     if (m<n) return -sig;
     while (m>0)
     { /* check digit by digit */
-        m--;  
+        m--;
         if (x->w[m]>y->w[m]) return sig;
         if (x->w[m]<y->w[m]) return -sig;
     }
@@ -1800,7 +1802,7 @@ void fpack(_MIPD_ big n,big d,flash x)
     s=(n->len&MR_MSBIT);
     ln=(int)(n->len&MR_OBITS);
     if (ln==1 && n->w[0]==1) ln=0;
-    if ((ld+ln>mr_mip->nib) && (mr_mip->check || ld+ln>2*mr_mip->nib)) 
+    if ((ld+ln>mr_mip->nib) && (mr_mip->check || ld+ln>2*mr_mip->nib))
         mr_berror(_MIPP_ MR_ERR_FLASH_OVERFLOW);
     if (mr_mip->ERNUM)
     {
@@ -1906,12 +1908,12 @@ unsigned int isqrt(unsigned int num,unsigned int guess)
     unsigned int oldguess=guess;
     if (num==0) return 0;
     if (num<4) return 1;
-  
+
     for (;;)
     { /* Newtons iteration */
      /*   sqr=guess+(((num/guess)-guess)/2); */
         sqr=((num/guess)+guess)/2;
-        if (sqr==guess || sqr==oldguess) 
+        if (sqr==guess || sqr==oldguess)
         {
             if (sqr*sqr>num) sqr--;
             return sqr;
@@ -1927,12 +1929,12 @@ unsigned long mr_lsqrt(unsigned long num,unsigned long guess)
     unsigned long oldguess=guess;
     if (num==0) return 0;
     if (num<4) return 1;
-  
+
     for (;;)
     { /* Newtons iteration */
      /*   sqr=guess+(((num/guess)-guess)/2); */
         sqr=((num/guess)+guess)/2;
-        if (sqr==guess || sqr==oldguess) 
+        if (sqr==guess || sqr==oldguess)
         {
             if (sqr*sqr>num) sqr--;
             return sqr;
@@ -1968,7 +1970,7 @@ int mr_testbit(_MIPD_ big x,int n)
 
     a=x->w[n/mr_mip->lg2b];
 
-    a=MR_DIV(a,m); 
+    a=MR_DIV(a,m);
 
     if ((MR_DIV(a,2.0)*2.0) != a) return 1;
 #else
@@ -2025,7 +2027,7 @@ int mr_window(_MIPD_ big x,int i,int *nbs,int * nzs,int window_size)
     if (!mr_testbit(_MIPP_ x,i)) return 0;
 
 /* adjust window size if not enough bits left */
-   
+
     if (i-w+1<0) w=i+1;
 
     r=1;
@@ -2075,7 +2077,7 @@ int mr_window2(_MIPD_ big x,big y,int i,int *nbs,int *nzs)
 
     c=mr_testbit(_MIPP_ x,i-1); d=mr_testbit(_MIPP_ y,i-1);
 
-    if (!c && !d) 
+    if (!c && !d)
     {
         *nzs=1;
         return r;
@@ -2105,7 +2107,7 @@ int mr_naf_window(_MIPD_ big x,big x3,int i,int *nbs,int *nzs,int store)
    * return +7, with nbs=4 and nzs=1, having stopped after    *
    * the first 4 bits. If it goes too far, it must backtrack  *
    * Note in an NAF non-zero elements are never side by side, *
-   * so 10T10T won't happen. NOTE: return value n zero or     * 
+   * so 10T10T won't happen. NOTE: return value n zero or     *
    * odd, -21 <= n <= +21     */
 
     int nb,j,r,abs_r,biggest;
@@ -2140,13 +2142,13 @@ int mr_naf_window(_MIPD_ big x,big x3,int i,int *nbs,int *nzs,int store)
         if (nb<0) r=(r+1)/2;
         (*nbs)--;
     }
-    
+
     while (r%2==0)
     { /* remove trailing zeros */
         r/=2;
         (*nzs)++;
         (*nbs)--;
-    }     
+    }
     return r;
 }
 
@@ -2173,7 +2175,7 @@ epoint* epoint_init(_MIPDO_ )
 
     MR_IN(96)
 
-/* Create space for whole structure in one heap access */ 
+/* Create space for whole structure in one heap access */
 
     p=(epoint *)mr_alloc(_MIPP_ mr_esize(mr_mip->nib-1),1);
 
@@ -2223,7 +2225,7 @@ epoint* epoint_init_mem_variable(_MIPD_ char *mem,int index,int sz)
 }
 
 epoint* epoint_init_mem(_MIPD_ char *mem,int index)
-{ 
+{
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
@@ -2277,7 +2279,7 @@ void ecp_memkill(_MIPD_ char *mem,int num)
 
 void epoint_free(epoint *p)
 { /* clean up point */
- 
+
     if (p==NULL) return;
     zero(p->X);
     zero(p->Y);
@@ -2285,6 +2287,8 @@ void epoint_free(epoint *p)
     if (p->marker==MR_EPOINT_GENERAL) zero(p->Z);
 #endif
     mr_free(p);
-}        
+}
 
 #endif
+
+#endif // PL_MINI

@@ -33,10 +33,12 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
                                                                            *
 ***************************************************************************/
 /*
- *   MIRACL arithmetic routines 0 - Add and subtract routines 
+ *   MIRACL arithmetic routines 0 - Add and subtract routines
  *   mrarth0.c
  *
  */
+
+#ifndef PL_MINI
 
 #include "sm/gm/miracl/miracl.h"
 
@@ -45,19 +47,19 @@ void mr_padd(_MIPD_ big x,big y,big z)
    *  x and y are positive              */
     int i,lx,ly,lz,la;
     mr_small carry,psum;
-    mr_small *gx,*gy,*gz; 
+    mr_small *gx,*gy,*gz;
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
     lx = (int)x->len;
     ly = (int)y->len;
-    
+
     if (ly>lx)
     {
         lz=ly;
         la=lx;
-        if (x!=z) copy(y,z); 
-        else la=ly;  
+        if (x!=z) copy(y,z);
+        else la=ly;
     }
     else
     {
@@ -71,7 +73,7 @@ void mr_padd(_MIPD_ big x,big y,big z)
     gx=x->w; gy=y->w; gz=z->w;
     if (lz<mr_mip->nib || !mr_mip->check) z->len++;
 #ifndef MR_SIMPLE_BASE
-    if (mr_mip->base==0) 
+    if (mr_mip->base==0)
     {
 #endif
         for (i=0;i<la;i++)
@@ -162,7 +164,7 @@ void mr_psub(_MIPD_ big x,big y,big z)
 #ifndef MR_SIMPLE_BASE
     if (mr_mip->base==0)
     {
-#endif    
+#endif
         for (i=0;i<ly || borrow>0;i++)
         { /* subtract by columns */
             if (i>lx)
@@ -305,7 +307,7 @@ void incr(_MIPD_ big x,int n,big z)
 }
 
 void decr(_MIPD_ big x,int n,big z)
-{  /* subtract int from big number: z=x-n */   
+{  /* subtract int from big number: z=x-n */
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
@@ -319,3 +321,4 @@ void decr(_MIPD_ big x,int n,big z)
     MR_OUT
 }
 
+#endif // PL_MINI

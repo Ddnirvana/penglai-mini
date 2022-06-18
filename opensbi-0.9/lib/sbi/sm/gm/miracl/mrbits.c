@@ -33,9 +33,11 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
                                                                            *
 ***************************************************************************/
 /*
- *   MIRACL bit manipulation routines 
+ *   MIRACL bit manipulation routines
  *   mrbits.c
  */
+
+#ifndef PL_MINI
 
 #include "sm/gm/miracl/miracl.h"
 
@@ -70,7 +72,7 @@ int logb2(_MIPD_ big x)
 
 #ifndef MR_ALWAYS_BINARY
     }
-    else 
+    else
     {
         copy(x,mr_mip->w0);
         insign(PLUS,mr_mip->w0);
@@ -211,7 +213,7 @@ void bigbits(_MIPD_ int n,big x)
 #endif
     zero(x);
     if (mr_mip->ERNUM || n<=0) return;
-    
+
     MR_IN(150)
 
     expb2(_MIPP_ n,mr_mip->w1);
@@ -242,3 +244,5 @@ void bigbits(_MIPD_ int n,big x)
 }
 
 #endif
+
+#endif // PL_MINI

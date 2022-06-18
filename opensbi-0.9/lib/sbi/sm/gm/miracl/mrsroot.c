@@ -34,10 +34,10 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
 ***************************************************************************/
 /*
  *   MIRACL method for modular square root
- *   mrsroot.c 
+ *   mrsroot.c
  *
- *   Siguna Mueller's O(lg(p)^3) algorithm, Designs Codes and Cryptography, 2004 
- * 
+ *   Siguna Mueller's O(lg(p)^3) algorithm, Designs Codes and Cryptography, 2004
+ *
  *   This is a little slower for p=1 mod 4 primes, but its not time critical, and
  *   more importantly it doesn't pull in the large powmod code into elliptic curve programs
  *   It does require code from mrjack.c and mrlucas.c
@@ -53,10 +53,12 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
  *
  *   If you know that the prime is 3 mod 4, and you know that x is almost certainly a QR
  *   then the jacobi-dependent code can be deleted with some space savings.
- * 
+ *
  *   NOTE - IF p IS NOT PRIME, THIS CODE WILL FAIL SILENTLY!
  *
  */
+
+#ifndef PL_MINI
 
 #include "sm/gm/miracl/miracl.h"
 #include <stddef.h>
@@ -64,14 +66,14 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
 BOOL nres_sqroot(_MIPD_ big x,big w)
 { /* w=sqrt(x) mod p. This depends on p being prime! */
     int t,js;
-   
+
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
     if (mr_mip->ERNUM) return FALSE;
 
     copy(x,w);
-    if (size(w)==0) return TRUE; 
+    if (size(w)==0) return TRUE;
 
     MR_IN(100)
 
@@ -92,8 +94,8 @@ BOOL nres_sqroot(_MIPD_ big x,big w)
         return TRUE;
     }
 
-    if (jack(_MIPP_ w,mr_mip->modulus)!=1) 
-    { /* Jacobi test */ 
+    if (jack(_MIPP_ w,mr_mip->modulus)!=1)
+    { /* Jacobi test */
         zero(w);
         MR_OUT
         return FALSE;
@@ -117,13 +119,13 @@ BOOL nres_sqroot(_MIPD_ big x,big w)
             if (mr_mip->ERNUM || size(mr_mip->w10)==0) break;
             nres_modmult(_MIPP_ mr_mip->w2,mr_mip->w2,mr_mip->w2);
         }
- 
- /*     nres_moddiv(_MIPP_ mr_mip->one,w,mr_mip->w11); 
-        nres_modadd(_MIPP_ mr_mip->w11,w,mr_mip->w3);  
+
+ /*     nres_moddiv(_MIPP_ mr_mip->one,w,mr_mip->w11);
+        nres_modadd(_MIPP_ mr_mip->w11,w,mr_mip->w3);
         nres_lucas(_MIPP_ mr_mip->w3,mr_mip->w10,w,w);
-        nres_modadd(_MIPP_ mr_mip->w11,mr_mip->one,mr_mip->w11); 
+        nres_modadd(_MIPP_ mr_mip->w11,mr_mip->one,mr_mip->w11);
         nres_moddiv(_MIPP_ w,mr_mip->w11,w); */
-    } 
+    }
     else
     { /* 1 mod 4 primes */
         for (t=1; ;t++)
@@ -141,7 +143,7 @@ BOOL nres_sqroot(_MIPD_ big x,big w)
             if (jack(_MIPP_ mr_mip->w1,mr_mip->modulus)==js) break;
             if (mr_mip->ERNUM) break;
         }
-    
+
         decr(_MIPP_ mr_mip->w4,2,mr_mip->w3);
         nres(_MIPP_ mr_mip->w3,mr_mip->w3);
         nres_lucas(_MIPP_ mr_mip->w3,mr_mip->w10,w,w); /* heavy lifting done here */
@@ -152,7 +154,7 @@ BOOL nres_sqroot(_MIPD_ big x,big w)
             nres_moddiv(_MIPP_ w,mr_mip->w11,w);
         }
     }
-    
+
     MR_OUT
     return TRUE;
 }
@@ -186,3 +188,5 @@ BOOL sqroot(_MIPD_ big x,big p,big w)
     MR_OUT
     return FALSE;
 }
+
+#endif // PL_MINI

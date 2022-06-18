@@ -1,9 +1,9 @@
 /************************************************************************
   Copyright (c) IPADS@SJTU 2021. Modification to support Penglai (RISC-V TEE)
-  
+
   This file contains GM/T SM2 standard implementation, provided by the Commercial
   Cryptography Testing Center, see <http://www.scctc.org.cn> for more infomation.
-  
+
   File name:       SM3.c
   Version:         SM3_V1.1
   Date:            Sep 18,2016
@@ -22,6 +22,8 @@
                          //little-endian format into big-endian format.
     10.SM3_SelfTest      //test whether the SM3 calculation is correct by comparing the hash result with the standard data
 **************************************************************************/
+
+#ifndef PL_MINI
 
 #include "sm/gm/SM3.h"
 
@@ -397,3 +399,5 @@ int SM3_SelfTest()
 		return 0;
 	return 1;
 }
+
+#endif //PL_MINI

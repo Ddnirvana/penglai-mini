@@ -35,11 +35,13 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
 
 /*
  *
- *   MIRACL arithmetic routines 1 - multiplying and dividing BIG NUMBERS by  
+ *   MIRACL arithmetic routines 1 - multiplying and dividing BIG NUMBERS by
  *   integer numbers.
  *   mrarth1.c
  *
  */
+
+#ifndef PL_MINI
 
 #include "sm/gm/miracl/miracl.h"
 
@@ -56,7 +58,7 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
 #include <ieeefp.h>
 #endif
 
-/* Invert n and set FP rounding. 
+/* Invert n and set FP rounding.
  * Set to round up
  * Calculate 1/n
  * set to round down (towards zero)
@@ -65,12 +67,12 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
 mr_large mr_invert(mr_small n)
 {
     mr_large inn;
-    int up=  0x1BFF; 
+    int up=  0x1BFF;
 
 #ifdef _MSC_VER
   #ifdef MR_NOASM
 #define NO_EXTENDED
-  #endif 
+  #endif
 #endif
 
 #ifdef NO_EXTENDED
@@ -89,7 +91,7 @@ mr_large mr_invert(mr_small n)
         fstp TBYTE PTR inn;
         fldcw WORD PTR down;
     }
-    return inn;   
+    return inn;
 #endif
 #ifdef _MSC_VER
     _asm
@@ -101,7 +103,7 @@ mr_large mr_invert(mr_small n)
         fstp QWORD  PTR inn;
         fldcw WORD PTR down;
     }
-    return inn;   
+    return inn;
 #endif
 #ifdef __GNUC__
 #ifdef i386
@@ -116,7 +118,7 @@ mr_large mr_invert(mr_small n)
     : "m"(n),"m"(up),"m"(down)
     : "memory"
     );
-    return inn;   
+    return inn;
 #else
     fpsetround(FP_RP);
     inn=(mr_large)1.0/n;
@@ -124,13 +126,13 @@ mr_large mr_invert(mr_small n)
     return inn;
 #endif
 #endif
-    return 0.0L;   
+    return 0.0L;
 }
 
 #endif
 
 void mr_pmul(_MIPD_ big x,mr_small sn,big z)
-{ 
+{
     int m,xl;
     mr_lentype sx;
     mr_small carry;
@@ -164,7 +166,7 @@ void mr_pmul(_MIPD_ big x,mr_small sn,big z)
     xl=(int)(x->len&MR_OBITS);
 
 #ifndef MR_SIMPLE_BASE
-    if (mr_mip->base==0) 
+    if (mr_mip->base==0)
     {
 #endif
 #ifndef MR_NOFULLWIDTH
@@ -205,7 +207,7 @@ void mr_pmul(_MIPD_ big x,mr_small sn,big z)
         ASM pop ds
 #endif
         ASM mov carry,ax
-     out1: 
+     out1:
 #endif
 #if INLINE_ASM == 2
         ASM cld
@@ -242,7 +244,7 @@ void mr_pmul(_MIPD_ big x,mr_small sn,big z)
         ASM pop ds
 #endif
         ASM mov carry,eax
-     out1: 
+     out1:
 #endif
 #if INLINE_ASM == 3
         ASM mov ecx,xl
@@ -268,7 +270,7 @@ void mr_pmul(_MIPD_ big x,mr_small sn,big z)
         ASM mov eax,ebp
         ASM pop ebp
         ASM mov carry,eax
-     out1: 
+     out1:
 #endif
 #if INLINE_ASM == 4
 
@@ -280,8 +282,8 @@ void mr_pmul(_MIPD_ big x,mr_small sn,big z)
            "movl %1,%%edi\n"
            "movl %2,%%esi\n"
            "pushl %%ebp\n"
-           "xorl %%ebp,%%ebp\n"  
-        "0:\n"  
+           "xorl %%ebp,%%ebp\n"
+        "0:\n"
            "movl (%%esi),%%eax\n"
            "addl $4,%%esi\n"
            "mull %%ebx\n"
@@ -292,11 +294,11 @@ void mr_pmul(_MIPD_ big x,mr_small sn,big z)
            "movl %%edx,%%ebp\n"
            "decl %%ecx\n"
            "jnz 0b\n"
- 
+
            "movl %%ebp,%%eax\n"
            "popl %%ebp\n"
            "movl %%eax,%0\n"
-        "1:"  
+        "1:"
         :"=m"(carry)
         :"m"(zg),"m"(xg),"m"(sn),"m"(xl)
         :"eax","edi","esi","ebx","ecx","edx","memory"
@@ -332,8 +334,8 @@ void mr_pmul(_MIPD_ big x,mr_small sn,big z)
 #ifndef MR_SIMPLE_BASE
     }
     else while (m<xl || carry>0)
-    { /* multiply each digit of x by n */ 
-    
+    { /* multiply each digit of x by n */
+
         if (m>mr_mip->nib && mr_mip->check)
         {
             mr_berror(_MIPP_ MR_ERR_OVERFLOW);
@@ -347,8 +349,8 @@ void mr_pmul(_MIPD_ big x,mr_small sn,big z)
   #ifndef MR_FP
         if (mr_mip->base==mr_mip->base2)
           carry=(mr_small)(dbled>>mr_mip->lg2b);
-        else 
-  #endif  
+        else
+  #endif
           carry=(mr_small)MR_LROUND(dbled/mr_mip->base);
  #endif
         z->w[m]=(mr_small)(dbled-(mr_large)carry*mr_mip->base);
@@ -425,7 +427,7 @@ mr_small mr_sdiv(_MIPD_ big x,mr_small sn,big z)
     xl=(int)(x->len&MR_OBITS);
     if (x!=z) zero(z);
 #ifndef MR_SIMPLE_BASE
-    if (mr_mip->base==0) 
+    if (mr_mip->base==0)
     {
 #endif
 #ifndef MR_NOFULLWIDTH
@@ -512,7 +514,7 @@ mr_small mr_sdiv(_MIPD_ big x,mr_small sn,big z)
         ASM pop ds
 #endif
         ASM mov sr,eax
-     out2: 
+     out2:
         ASM cld
 #endif
 #if INLINE_ASM == 3
@@ -559,8 +561,8 @@ mr_small mr_sdiv(_MIPD_ big x,mr_small sn,big z)
            "addl %%ebx,%%edi\n"
            "movl %3,%%ebx\n"
            "pushl %%ebp\n"
-           "xorl %%ebp,%%ebp\n"  
-         "2:\n"  
+           "xorl %%ebp,%%ebp\n"
+         "2:\n"
            "subl $4,%%esi\n"
            "movl %%ebp,%%edx\n"
            "movl (%%esi),%%eax\n"
@@ -570,12 +572,12 @@ mr_small mr_sdiv(_MIPD_ big x,mr_small sn,big z)
            "movl %%eax,(%%edi)\n"
            "decl %%ecx\n"
            "jnz 2b\n"
- 
+
            "movl %%ebp,%%eax\n"
            "popl %%ebp\n"
            "movl %%eax,%0\n"
         "3:"
-           "nop"  
+           "nop"
         :"=m"(sr)
         :"m"(zg),"m"(xg),"m"(sn),"m"(xl)
         :"eax","edi","esi","ebx","ecx","edx","memory"
@@ -621,10 +623,10 @@ mr_small mr_sdiv(_MIPD_ big x,mr_small sn,big z)
     mr_lzero(z);
     return sr;
 }
-         
+
 int subdiv(_MIPD_ big x,int n,big z)
 {  /*  subdivide a big number by an int   z=x/n  *
-    *  returns int remainder                     */ 
+    *  returns int remainder                     */
     mr_lentype sx;
 #ifdef MR_FP_ROUNDING
     mr_large in;
@@ -641,7 +643,7 @@ int subdiv(_MIPD_ big x,int n,big z)
     if (mr_notint(x)) mr_berror(_MIPP_ MR_ERR_INT_OP);
 #endif
     if (n==0) mr_berror(_MIPP_ MR_ERR_DIV_BY_ZERO);
-    if (mr_mip->ERNUM) 
+    if (mr_mip->ERNUM)
     {
         MR_OUT
         return 0;
@@ -673,7 +675,7 @@ int subdiv(_MIPD_ big x,int n,big z)
         for (i=0;;i++)
         {
             z->w[i]>>=1;
-            if (i==msb) 
+            if (i==msb)
             {
                 if (z->w[i]==0) mr_lzero(z);
                 break;
@@ -735,7 +737,7 @@ int remain(_MIPD_ big x,int n)
         {
             if (sx==0) return 1;
             else       return (-1);
-        } 
+        }
     }
     if (n==8 && MR_REMAIN(mr_mip->base,8)==0)
     { /* fast check */
@@ -744,7 +746,7 @@ int remain(_MIPD_ big x,int n)
         if (sx!=0) r=-r;
         return r;
     }
-    
+
     copy(x,mr_mip->w0);
     r=subdiv(_MIPP_ mr_mip->w0,n,mr_mip->w0);
     MR_OUT
@@ -770,7 +772,7 @@ int hamming(_MIPD_ big x)
     absol(mr_mip->w1,mr_mip->w1);
     while (size(mr_mip->w1)!=0)
         h+=subdiv(_MIPP_ mr_mip->w1,2,mr_mip->w1);
-    
+
     MR_OUT
     return h;
 }
@@ -795,14 +797,14 @@ void bytes_to_big(_MIPD_ int len,const char *ptr,big x)
     }
 /* remove leading zeros.. */
 
-    while (*ptr==0) 
+    while (*ptr==0)
     {
         ptr++; len--;
-        if (len==0) 
+        if (len==0)
         {
             MR_OUT
             return;
-        } 
+        }
     }
 
 #ifndef MR_SIMPLE_BASE
@@ -810,14 +812,14 @@ void bytes_to_big(_MIPD_ int len,const char *ptr,big x)
     { /* pack bytes directly into big */
 #endif
 #ifndef MR_NOFULLWIDTH
-        m=MIRACL/8;  
+        m=MIRACL/8;
         n=len/m;
 
         r=len%m;
-		wrd=(mr_small)0;  
+		wrd=(mr_small)0;
         if (r!=0)
         {
-            n++; 
+            n++;
             for (j=0;j<r;j++) {wrd<<=8; wrd|=MR_TOBYTE(*ptr++); }
         }
         x->len=n;
@@ -827,7 +829,7 @@ void bytes_to_big(_MIPD_ int len,const char *ptr,big x)
             MR_OUT
             return;
         }
-        if (r!=0) 
+        if (r!=0)
         {
             n--;
             x->w[n]=wrd;
@@ -853,13 +855,13 @@ void bytes_to_big(_MIPD_ int len,const char *ptr,big x)
             premult(_MIPP_ x,256,x);
 #endif
             ch=MR_TOBYTE(ptr[i]);
-            dig=ch;  
+            dig=ch;
             incr(_MIPP_ x,(int)dig,x);
         }
     }
 #endif
     MR_OUT
-} 
+}
 
 int big_to_bytes(_MIPD_ int max,big x,char *ptr,BOOL justify)
 { /* convert positive big into octet string */
@@ -871,7 +873,7 @@ int big_to_bytes(_MIPD_ int max,big x,char *ptr,BOOL justify)
 #endif
     if (mr_mip->ERNUM || max<0) return 0;
 
-	if (max==0 && justify) return 0; 
+	if (max==0 && justify) return 0;
 	if (size(x)==0)
 	{
 		if (justify)
@@ -881,7 +883,7 @@ int big_to_bytes(_MIPD_ int max,big x,char *ptr,BOOL justify)
 		}
 		return 0;
 	}
-     
+
     MR_IN(141);
 
     mr_lzero(x);        /* should not be needed.... */
@@ -903,16 +905,16 @@ int big_to_bytes(_MIPD_ int max,big x,char *ptr,BOOL justify)
         {
             mr_berror(_MIPP_ MR_ERR_TOO_BIG);
             MR_OUT
-            return 0; 
+            return 0;
         }
 
         if (justify)
         {
             start=max-len;
-            for (i=0;i<start;i++) ptr[i]=0; 
+            for (i=0;i<start;i++) ptr[i]=0;
         }
         else start=0;
-        
+
         if (r!=0)
         {
             wrd=x->w[n--];
@@ -920,7 +922,7 @@ int big_to_bytes(_MIPD_ int max,big x,char *ptr,BOOL justify)
             {
                 ptr[start+i]=(char)(wrd&0xFF);
                 wrd>>=8;
-            }  
+            }
         }
 
         for (i=r;i<len;i+=m)
@@ -955,7 +957,7 @@ int big_to_bytes(_MIPD_ int max,big x,char *ptr,BOOL justify)
             {
                 mr_berror(_MIPP_ MR_ERR_TOO_BIG);
                 MR_OUT
-                return 0; 
+                return 0;
             }
 #if MIRACL==8
             ch=mr_mip->w1->w[0];
@@ -984,7 +986,7 @@ void mr_jsf(_MIPD_ big k0,big k1,big u0p,big u0m,big u1p,big u1m)
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
-    if (mr_mip->ERNUM) return;   
+    if (mr_mip->ERNUM) return;
 
     MR_IN(191)
 
@@ -1035,7 +1037,7 @@ void mr_jsf(_MIPD_ big k0,big k1,big u0p,big u0m,big u1p,big u1m)
             if (u1<0) add(_MIPP_ u1m,mr_mip->w1,u1m);
         }
 #endif
-      
+
         if (d0+d0==1+u0) d0=1-d0;
         if (d1+d1==1+u1) d1=1-d1;
 
@@ -1049,10 +1051,12 @@ void mr_jsf(_MIPD_ big k0,big k1,big u0p,big u0m,big u1p,big u1m)
 #ifndef MR_ALWAYS_BINARY
         else
             premult(_MIPP_ mr_mip->w1,2,mr_mip->w1);
-#endif        
+#endif
     }
     MR_OUT
     return;
 }
 
 #endif
+
+#endif // PL_MINI

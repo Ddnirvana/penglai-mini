@@ -5,6 +5,7 @@
 #include <sbi/sbi_string.h>
 #include <sm/print.h>
 
+#ifndef PL_MINI
 static int hash_enclave_mem(SM3_STATE *hash_ctx, pte_t* ptes, int level,
         uintptr_t va, int hash_va)
 {
@@ -67,14 +68,16 @@ static int hash_enclave_mem(SM3_STATE *hash_ctx, pte_t* ptes, int level,
 
     return hash_curr_va;
 }
+#endif // PL_MINI
 
 void hash_enclave(struct enclave_t *enclave, void* hash, uintptr_t nonce_arg)
 {
+#ifndef PL_MINI
     SM3_STATE hash_ctx;
     uintptr_t nonce = nonce_arg;
 
     SM3_init(&hash_ctx);
-    
+
     SM3_process(&hash_ctx, (unsigned char*)(&(enclave->entry_point)),
         sizeof(unsigned long));
     hash_enclave_mem(
@@ -84,10 +87,12 @@ void hash_enclave(struct enclave_t *enclave, void* hash, uintptr_t nonce_arg)
     );
     SM3_process(&hash_ctx, (unsigned char*)(&nonce), sizeof(uintptr_t));
     SM3_done(&hash_ctx, hash);
+#endif // PL_MINI
 }
 
 void update_enclave_hash(char *output, void* hash, uintptr_t nonce_arg)
 {
+#ifndef PL_MINI
     SM3_STATE hash_ctx;
     uintptr_t nonce = nonce_arg;
 
@@ -97,15 +102,17 @@ void update_enclave_hash(char *output, void* hash, uintptr_t nonce_arg)
     SM3_done(&hash_ctx, hash);
 
     sbi_memcpy(output, hash, HASH_SIZE);
+#endif // PL_MINI
 }
 
 // initailize Secure Monitor's private key and public key.
 void attest_init()
 {
+#ifndef PL_MINI
     int i;
     struct prikey_t *sm_prikey = (struct prikey_t *)SM_PRI_KEY;
     struct pubkey_t *sm_pubkey = (struct pubkey_t *)SM_PUB_KEY;
-    
+
     i = SM2_Init();
     if(i)
         printm("SM2_Init failed with ret value: %d\n", i);
@@ -113,23 +120,30 @@ void attest_init()
     i = SM2_KeyGeneration(sm_prikey->dA, sm_pubkey->xA, sm_pubkey->yA);
     if(i)
         printm("SM2_KeyGeneration failed with ret value: %d\n", i);
+#endif // PL_MINI
 }
 
 void sign_enclave(void* signature_arg, unsigned char *message, int len)
 {
+#ifndef PL_MINI
     struct signature_t *signature = (struct signature_t*)signature_arg;
     struct prikey_t *sm_prikey = (struct prikey_t *)SM_PRI_KEY;
-    
+
     SM2_Sign(message, len, sm_prikey->dA, (unsigned char *)(signature->r),
         (unsigned char *)(signature->s));
+#endif // PL_MINI
 }
 
 int verify_enclave(void* signature_arg, unsigned char *message, int len)
 {
+#ifndef PL_MINI
     int ret = 0;
     struct signature_t *signature = (struct signature_t*)signature_arg;
     struct pubkey_t *sm_pubkey = (struct pubkey_t *)SM_PUB_KEY;
     ret = SM2_Verify(message, len, sm_pubkey->xA, sm_pubkey->yA,
         (unsigned char *)(signature->r), (unsigned char *)(signature->s));
     return ret;
+#else
+	return -1; // Error, not supported
+#endif // PL_MINI
 }

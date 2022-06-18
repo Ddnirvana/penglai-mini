@@ -37,7 +37,7 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
  *   mrcurve.c
  *
  *   Assumes Weierstrass equation y^2 = x^3 + Ax + B
- *   See IEEE P1363 Draft Standard 
+ *   See IEEE P1363 Draft Standard
  *
  *   (See below for Edwards coordinates implementation)
  *
@@ -48,6 +48,8 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
  *        on 32-bit computer
  *
  */
+
+#ifndef PL_MINI
 
 #include "sm/gm/miracl/miracl.h"
 
@@ -95,7 +97,7 @@ BOOL epoint_x(_MIPD_ big x)
     if (mr_mip->ERNUM) return FALSE;
 
     MR_IN(147)
-    
+
     if (x==NULL) return FALSE;
 
     nres(_MIPP_ x,mr_mip->w2);
@@ -125,7 +127,7 @@ BOOL epoint_set(_MIPD_ big x,big y,int cb,epoint *p)
    * (which "decompresses" y). Otherwise, check     *
    * validity of given (x,y) point, ignoring cb.    *
    * Returns TRUE for valid point, otherwise FALSE. */
-  
+
     BOOL valid;
 
 #ifdef MR_OS_THREADS
@@ -156,7 +158,7 @@ BOOL epoint_set(_MIPD_ big x,big y,int cb,epoint *p)
     { /* compare with y^2 */
         nres(_MIPP_ y,p->Y);
         nres_modmult(_MIPP_ p->Y,p->Y,mr_mip->w1);
-        
+
         if (mr_compare(mr_mip->w1,mr_mip->w3)==0) valid=TRUE;
     }
     else
@@ -166,7 +168,7 @@ BOOL epoint_set(_MIPD_ big x,big y,int cb,epoint *p)
         valid=nres_sqroot(_MIPP_ mr_mip->w3,p->Y);
     /* check LSB - have we got the right root? */
         redc(_MIPP_ p->Y,mr_mip->w1);
-        if (remain(_MIPP_ mr_mip->w1,2)!=cb) 
+        if (remain(_MIPP_ mr_mip->w1,2)!=cb)
             mr_psub(_MIPP_ mr_mip->modulus,p->Y,p->Y);
 
 #else
@@ -174,7 +176,7 @@ BOOL epoint_set(_MIPD_ big x,big y,int cb,epoint *p)
     MR_OUT
     return FALSE;
 #endif
-    } 
+    }
     if (valid)
     {
         p->marker=MR_EPOINT_NORMALIZED;
@@ -211,7 +213,7 @@ void epoint_getxyz(_MIPD_ epoint *p,big x,big y,big z)
             {
                 if (y!=NULL) zero(y);
             }
-#ifndef MR_AFFINE_ONLY 
+#ifndef MR_AFFINE_ONLY
         }
         if (mr_mip->coord==MR_PROJECTIVE)
         { /* (1,1,0) = O */
@@ -235,7 +237,7 @@ void epoint_getxyz(_MIPD_ epoint *p,big x,big y,big z)
 
     if (mr_mip->coord==MR_PROJECTIVE)
     {
-        if (z!=NULL) 
+        if (z!=NULL)
         {
             if (p->marker!=MR_EPOINT_GENERAL) copy(mr_mip->w1,z);
             else redc(_MIPP_ p->Z,z);
@@ -269,7 +271,7 @@ int epoint_get(_MIPD_ epoint* p,big x,big y)
 
     MR_IN(98)
 
-    if (!epoint_norm(_MIPP_ p)) 
+    if (!epoint_norm(_MIPP_ p))
     { /* not possible ! */
         MR_OUT
         return (-1);
@@ -279,14 +281,14 @@ int epoint_get(_MIPD_ epoint* p,big x,big y)
     redc(_MIPP_ p->Y,mr_mip->w1);
 
     if (x!=y) copy(mr_mip->w1,y);
-    lsb=remain(_MIPP_ mr_mip->w1,2); 
+    lsb=remain(_MIPP_ mr_mip->w1,2);
     MR_OUT
     return lsb;
 }
 
 BOOL epoint_norm(_MIPD_ epoint *p)
 { /* normalise a point */
-    
+
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
@@ -305,18 +307,18 @@ BOOL epoint_norm(_MIPD_ epoint *p)
     if (nres_moddiv(_MIPP_ mr_mip->w8,p->Z,mr_mip->w8)>1) /* 1/Z  */
     {
         epoint_set(_MIPP_ NULL,NULL,0,p);
-        mr_berror(_MIPP_ MR_ERR_COMPOSITE_MODULUS); 
+        mr_berror(_MIPP_ MR_ERR_COMPOSITE_MODULUS);
         MR_OUT
         return FALSE;
     }
-    
+
     nres_modmult(_MIPP_ mr_mip->w8,mr_mip->w8,mr_mip->w1);/* 1/ZZ */
     nres_modmult(_MIPP_ p->X,mr_mip->w1,p->X);            /* X/ZZ */
     nres_modmult(_MIPP_ mr_mip->w1,mr_mip->w8,mr_mip->w1);/* 1/ZZZ */
     nres_modmult(_MIPP_ p->Y,mr_mip->w1,p->Y);            /* Y/ZZZ */
 
     copy(mr_mip->one,p->Z);
-   
+
     p->marker=MR_EPOINT_NORMALIZED;
     MR_OUT
 
@@ -331,13 +333,13 @@ BOOL epoint_multi_norm(_MIPD_ int m,big *work,epoint **p)
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
- 
+
 #ifndef MR_AFFINE_ONLY
     int i;
 	BOOL inf=FALSE;
     big w[MR_MAX_M_T_S];
     if (mr_mip->coord==MR_AFFINE) return TRUE;
-    if (mr_mip->ERNUM) return FALSE;   
+    if (mr_mip->ERNUM) return FALSE;
     if (m>MR_MAX_M_T_S) return FALSE;
 
     MR_IN(190)
@@ -354,9 +356,9 @@ BOOL epoint_multi_norm(_MIPD_ int m,big *work,epoint **p)
 		for (i=0;i<m;i++) epoint_norm(_MIPP_ p[i]);
 		MR_OUT
 		return TRUE;
-	}  
+	}
 
-    if (!nres_multi_inverse(_MIPP_ m,w,work)) 
+    if (!nres_multi_inverse(_MIPP_ m,w,work))
     {
        MR_OUT
        return FALSE;
@@ -370,10 +372,10 @@ BOOL epoint_multi_norm(_MIPD_ int m,big *work,epoint **p)
         nres_modmult(_MIPP_ p[i]->X,mr_mip->w1,p[i]->X);    /* X/ZZ */
         nres_modmult(_MIPP_ mr_mip->w1,work[i],mr_mip->w1);
         nres_modmult(_MIPP_ p[i]->Y,mr_mip->w1,p[i]->Y);    /* Y/ZZZ */
-    }    
+    }
     MR_OUT
 #endif
-    return TRUE;   
+    return TRUE;
 }
 
 /* adds b+=a, d+=c, and slopes in s1 and s2 */
@@ -386,7 +388,7 @@ void ecurve_double_add(_MIPD_ epoint *a,epoint*b,epoint *c,epoint *d,big *s1,big
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
-    if (mr_mip->ERNUM) return;    
+    if (mr_mip->ERNUM) return;
 
     MR_IN(144);
 
@@ -535,7 +537,7 @@ void ecurve_multi_add(_MIPD_ int m,epoint **x,epoint**w)
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
-    if (mr_mip->ERNUM) return;    
+    if (mr_mip->ERNUM) return;
 
     MR_IN(122)
 #ifndef MR_AFFINE_ONLY
@@ -555,13 +557,13 @@ void ecurve_multi_add(_MIPD_ int m,epoint **x,epoint**w)
             B[i]=mirvar(_MIPP_ 0);
             C[i]=mirvar(_MIPP_ 0);
             flag[i]=0;
-            if (mr_compare(x[i]->X,w[i]->X)==0 && mr_compare(x[i]->Y,w[i]->Y)==0) 
+            if (mr_compare(x[i]->X,w[i]->X)==0 && mr_compare(x[i]->Y,w[i]->Y)==0)
             { /* doubling */
                 if (x[i]->marker==MR_EPOINT_INFINITY || size(x[i]->Y)==0)
                 {
                     flag[i]=1;       /* result is infinity */
                     copy(mr_mip->w3,B[i]);
-                    continue;    
+                    continue;
                 }
                 nres_modmult(_MIPP_ x[i]->X,x[i]->X,A[i]);
                 nres_premult(_MIPP_ A[i],3,A[i]);  /* 3*x^2 */
@@ -594,10 +596,10 @@ void ecurve_multi_add(_MIPD_ int m,epoint **x,epoint**w)
                 { /* point at infinity */
                     flag[i]=1;       /* result is infinity */
                     copy(mr_mip->w3,B[i]);
-                    continue;    
+                    continue;
                 }
                 nres_modsub(_MIPP_ x[i]->Y,w[i]->Y,A[i]);
-            }   
+            }
         }
         nres_multi_inverse(_MIPP_ m,B,C);  /* only one inversion needed */
         for (i=0;i<m;i++)
@@ -621,7 +623,7 @@ void ecurve_multi_add(_MIPD_ int m,epoint **x,epoint**w)
             nres_modmult(_MIPP_ mr_mip->w8,mr_mip->w8,mr_mip->w2); /* m^2 */
             nres_modsub(_MIPP_ mr_mip->w2,x[i]->X,mr_mip->w1);
             nres_modsub(_MIPP_ mr_mip->w1,w[i]->X,mr_mip->w1);
-       
+
             nres_modsub(_MIPP_ w[i]->X,mr_mip->w1,mr_mip->w2);
             nres_modmult(_MIPP_ mr_mip->w2,mr_mip->w8,mr_mip->w2);
             nres_modsub(_MIPP_ mr_mip->w2,w[i]->Y,w[i]->Y);
@@ -641,7 +643,7 @@ void ecurve_multi_add(_MIPD_ int m,epoint **x,epoint**w)
         for (i=0;i<m;i++) ecurve_add(_MIPP_ x[i],w[i]);
     }
 #endif
-    MR_OUT  
+    MR_OUT
 }
 
 #endif
@@ -655,7 +657,7 @@ void ecurve_double(_MIPD_ epoint *p)
 #endif
     if (mr_mip->ERNUM) return;
 
-    if (p->marker==MR_EPOINT_INFINITY) 
+    if (p->marker==MR_EPOINT_INFINITY)
     { /* 2 times infinity == infinity ! */
         return;
     }
@@ -664,12 +666,12 @@ void ecurve_double(_MIPD_ epoint *p)
     if (mr_mip->coord==MR_AFFINE)
     { /* 2 sqrs, 1 mul, 1 div */
 #endif
-        if (size(p->Y)==0) 
+        if (size(p->Y)==0)
         { /* set to point at infinity */
             epoint_set(_MIPP_ NULL,NULL,0,p);
             return;
         }
- 
+
         nres_modmult(_MIPP_ p->X,p->X,mr_mip->w8);    /* w8=x^2   */
         nres_premult(_MIPP_ mr_mip->w8,3,mr_mip->w8); /* w8=3*x^2 */
         if (mr_abs(mr_mip->Asize) == MR_TOOBIG)
@@ -681,10 +683,10 @@ void ecurve_double(_MIPD_ epoint *p)
             nres_modadd(_MIPP_ mr_mip->w8,mr_mip->w2,mr_mip->w8);
         }                                     /* w8=3*x^2+A */
         nres_premult(_MIPP_ p->Y,2,mr_mip->w6);      /* w6=2y */
-        if (nres_moddiv(_MIPP_ mr_mip->w8,mr_mip->w6,mr_mip->w8)>1) 
+        if (nres_moddiv(_MIPP_ mr_mip->w8,mr_mip->w6,mr_mip->w8)>1)
         {
             epoint_set(_MIPP_ NULL,NULL,0,p);
-            mr_berror(_MIPP_ MR_ERR_COMPOSITE_MODULUS); 
+            mr_berror(_MIPP_ MR_ERR_COMPOSITE_MODULUS);
             return;
         }
 
@@ -693,13 +695,13 @@ void ecurve_double(_MIPD_ epoint *p)
         nres_modmult(_MIPP_ mr_mip->w8,mr_mip->w8,mr_mip->w2); /* w2=m^2 */
         nres_premult(_MIPP_ p->X,2,mr_mip->w1);
         nres_modsub(_MIPP_ mr_mip->w2,mr_mip->w1,mr_mip->w1); /* w1=m^2-2x */
-        
+
         nres_modsub(_MIPP_ p->X,mr_mip->w1,mr_mip->w2);
         nres_modmult(_MIPP_ mr_mip->w2,mr_mip->w8,mr_mip->w2);
         nres_modsub(_MIPP_ mr_mip->w2,p->Y,p->Y);
         copy(mr_mip->w1,p->X);
-        
-        return;    
+
+        return;
 #ifndef MR_AFFINE_ONLY
     }
 
@@ -708,7 +710,7 @@ void ecurve_double(_MIPD_ epoint *p)
         epoint_set(_MIPP_ NULL,NULL,0,p);
         return;
     }
- 
+
     convert(_MIPP_ 1,mr_mip->w1);
     if (mr_abs(mr_mip->Asize) < MR_TOOBIG)
     {
@@ -748,7 +750,7 @@ void ecurve_double(_MIPD_ epoint *p)
         nres_modmult(_MIPP_ p->X,p->X,mr_mip->w1);
         nres_modadd(_MIPP_ mr_mip->w1,mr_mip->w1,mr_mip->w8);
         nres_modadd(_MIPP_ mr_mip->w8,mr_mip->w1,mr_mip->w8);
-        nres_modadd(_MIPP_ mr_mip->w8,mr_mip->w3,mr_mip->w8);        
+        nres_modadd(_MIPP_ mr_mip->w8,mr_mip->w3,mr_mip->w8);
     }
 
 /* w8 contains numerator of slope 3x^2+A.z^4  *
@@ -773,14 +775,14 @@ void ecurve_double(_MIPD_ epoint *p)
     nres_modsub(_MIPP_ p->Y,mr_mip->w2,p->Y);
 
 /* alternative method
-    nres_modadd(_MIPP_ p->Y,p->Y,mr_mip->w2);  
+    nres_modadd(_MIPP_ p->Y,p->Y,mr_mip->w2);
 
     if (p->marker==MR_EPOINT_NORMALIZED)
         copy(mr_mip->w2,p->Z);
 
     else nres_modmult(_MIPP_ mr_mip->w2,p->Z,p->Z);
 
-    nres_modmult(_MIPP_ mr_mip->w2,mr_mip->w2,mr_mip->w2); 
+    nres_modmult(_MIPP_ mr_mip->w2,mr_mip->w2,mr_mip->w2);
     nres_modmult(_MIPP_ p->X,mr_mip->w2,mr_mip->w3);
     nres_modadd(_MIPP_ mr_mip->w3,mr_mip->w3,p->X);
     nres_modmult(_MIPP_ mr_mip->w8,mr_mip->w8,mr_mip->w1);
@@ -796,10 +798,10 @@ void ecurve_double(_MIPD_ epoint *p)
     nres_modsub(_MIPP_ mr_mip->w3,mr_mip->w2,p->Y);
 */
 
-/* 
+/*
 
-Observe that when finished w8 contains the line slope, w7 has 2y^2 and w6 has z^2 
-This is useful for calculating line functions in pairings  
+Observe that when finished w8 contains the line slope, w7 has 2y^2 and w6 has z^2
+This is useful for calculating line functions in pairings
 
 */
 
@@ -807,11 +809,11 @@ This is useful for calculating line functions in pairings
     return;
 #endif
 }
-   
+
 static BOOL ecurve_padd(_MIPD_ epoint *p,epoint *pa)
 { /* primitive add two epoints on the active ecurve - pa+=p;   *
    * note that if p is normalized, its Z coordinate isn't used */
- 
+
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
@@ -821,11 +823,11 @@ static BOOL ecurve_padd(_MIPD_ epoint *p,epoint *pa)
 #endif
         nres_modsub(_MIPP_ p->Y,pa->Y,mr_mip->w8);
         nres_modsub(_MIPP_ p->X,pa->X,mr_mip->w6);
-        if (size(mr_mip->w6)==0) 
+        if (size(mr_mip->w6)==0)
         { /* divide by 0 */
-            if (size(mr_mip->w8)==0) 
+            if (size(mr_mip->w8)==0)
             { /* should have doubled ! */
-                return FALSE; 
+                return FALSE;
             }
             else
             { /* point at infinity */
@@ -843,7 +845,7 @@ static BOOL ecurve_padd(_MIPD_ epoint *p,epoint *pa)
         nres_modmult(_MIPP_ mr_mip->w8,mr_mip->w8,mr_mip->w2); /* w2=m^2 */
         nres_modsub(_MIPP_ mr_mip->w2,p->X,mr_mip->w1); /* w1=m^2-x1-x2 */
         nres_modsub(_MIPP_ mr_mip->w1,pa->X,mr_mip->w1);
-        
+
 
         nres_modsub(_MIPP_ pa->X,mr_mip->w1,mr_mip->w2);
         nres_modmult(_MIPP_ mr_mip->w2,mr_mip->w8,mr_mip->w2);
@@ -855,7 +857,7 @@ static BOOL ecurve_padd(_MIPD_ epoint *p,epoint *pa)
 #ifndef MR_AFFINE_ONLY
     }
 
-    if (p->marker!=MR_EPOINT_NORMALIZED)    
+    if (p->marker!=MR_EPOINT_NORMALIZED)
     {
         nres_modmult(_MIPP_ p->Z,p->Z,mr_mip->w6);
         nres_modmult(_MIPP_ pa->X,mr_mip->w6,mr_mip->w1);
@@ -872,7 +874,7 @@ static BOOL ecurve_padd(_MIPD_ epoint *p,epoint *pa)
     else nres_modmult(_MIPP_ pa->Z,pa->Z,mr_mip->w6);
 
     nres_modmult(_MIPP_ p->X,mr_mip->w6,mr_mip->w4);
-    if (pa->marker!=MR_EPOINT_NORMALIZED) 
+    if (pa->marker!=MR_EPOINT_NORMALIZED)
         nres_modmult(_MIPP_ mr_mip->w6,pa->Z,mr_mip->w6);
     nres_modmult(_MIPP_ p->Y,mr_mip->w6,mr_mip->w5);
     nres_modsub(_MIPP_ mr_mip->w1,mr_mip->w4,mr_mip->w1);
@@ -884,7 +886,7 @@ static BOOL ecurve_padd(_MIPD_ epoint *p,epoint *pa)
     {
         if (size(mr_mip->w8)==0)
         { /* should have doubled ! */
-           return FALSE; 
+           return FALSE;
         }
         else
         { /* point at infinity */
@@ -896,10 +898,10 @@ static BOOL ecurve_padd(_MIPD_ epoint *p,epoint *pa)
     nres_modadd(_MIPP_ mr_mip->w1,mr_mip->w6,mr_mip->w4);
     nres_modadd(_MIPP_ mr_mip->w5,mr_mip->w5,mr_mip->w6);
     nres_modadd(_MIPP_ mr_mip->w8,mr_mip->w6,mr_mip->w5);
-    
+
     if (p->marker!=MR_EPOINT_NORMALIZED)
-    { 
-        if (pa->marker!=MR_EPOINT_NORMALIZED) 
+    {
+        if (pa->marker!=MR_EPOINT_NORMALIZED)
             nres_modmult(_MIPP_ pa->Z,p->Z,mr_mip->w3);
         else
             copy(p->Z,mr_mip->w3);
@@ -929,12 +931,12 @@ static BOOL ecurve_padd(_MIPD_ epoint *p,epoint *pa)
     nres_div2(_MIPP_ mr_mip->w5,pa->Y);
 
     pa->marker=MR_EPOINT_GENERAL;
-    return TRUE;      
+    return TRUE;
 #endif
 }
 
 void epoint_copy(epoint *a,epoint *b)
-{   
+{
     if (a==b || b==NULL) return;
 
     copy(a->X,b->X);
@@ -961,7 +963,7 @@ BOOL epoint_comp(_MIPD_ epoint *a,epoint *b)
     }
     if (b->marker==MR_EPOINT_INFINITY)
         return FALSE;
-    
+
 #ifndef MR_AFFINE_ONLY
     if (mr_mip->coord==MR_AFFINE)
     {
@@ -975,11 +977,11 @@ BOOL epoint_comp(_MIPD_ epoint *a,epoint *b)
     if (mr_mip->coord==MR_PROJECTIVE)
     {
         MR_IN(105)
-        if (a->marker!=MR_EPOINT_GENERAL) 
+        if (a->marker!=MR_EPOINT_GENERAL)
             copy(mr_mip->one,mr_mip->w1);
         else copy(a->Z,mr_mip->w1);
 
-        if (b->marker!=MR_EPOINT_GENERAL) 
+        if (b->marker!=MR_EPOINT_GENERAL)
             copy(mr_mip->one,mr_mip->w2);
         else copy(b->Z,mr_mip->w2);
 
@@ -1018,7 +1020,7 @@ int ecurve_add(_MIPD_ epoint *p,epoint *pa)
 
     MR_IN(94)
 
-    if (p==pa) 
+    if (p==pa)
     {
         ecurve_double(_MIPP_ pa);
         MR_OUT
@@ -1028,17 +1030,17 @@ int ecurve_add(_MIPD_ epoint *p,epoint *pa)
     if (pa->marker==MR_EPOINT_INFINITY)
     {
         epoint_copy(p,pa);
-        MR_OUT 
+        MR_OUT
         return MR_ADD;
     }
-    if (p->marker==MR_EPOINT_INFINITY) 
+    if (p->marker==MR_EPOINT_INFINITY)
     {
         MR_OUT
         return MR_ADD;
     }
 
     if (!ecurve_padd(_MIPP_ p,pa))
-    {    
+    {
         ecurve_double(_MIPP_ pa);
         MR_OUT
         return MR_DOUBLE;
@@ -1076,8 +1078,8 @@ int ecurve_sub(_MIPD_ epoint *p,epoint *pa)
         epoint_set(_MIPP_ NULL,NULL,0,pa);
         MR_OUT
         return MR_OVER;
-    } 
-    if (p->marker==MR_EPOINT_INFINITY) 
+    }
+    if (p->marker==MR_EPOINT_INFINITY)
     {
         MR_OUT
         return MR_ADD;
@@ -1100,7 +1102,7 @@ int ecurve_mult(_MIPD_ big e,epoint *pa,epoint *pt)
 #endif
 
 #ifdef MR_STATIC
-    char mem[MR_ECP_RESERVE(MR_ECC_STORE_N)];  
+    char mem[MR_ECP_RESERVE(MR_ECC_STORE_N)];
 #ifndef MR_AFFINE_ONLY
     char mem1[MR_BIG_RESERVE(MR_ECC_STORE_N)];
 #endif
@@ -1121,7 +1123,7 @@ int ecurve_mult(_MIPD_ big e,epoint *pa,epoint *pt)
     if (mr_mip->ERNUM) return 0;
 
     MR_IN(95)
-    if (size(e)==0) 
+    if (size(e)==0)
     { /* multiplied by 0 */
         epoint_set(_MIPP_ NULL,NULL,0,pt);
         MR_OUT
@@ -1138,7 +1140,7 @@ int ecurve_mult(_MIPD_ big e,epoint *pa,epoint *pt)
     }
 
     if (size(mr_mip->w9)==1)
-    { 
+    {
         MR_OUT
         return 0;
     }
@@ -1215,7 +1217,7 @@ int ecurve_mult(_MIPD_ big e,epoint *pa,epoint *pt)
 #ifndef MR_ALWAYS_BINARY
     }
     else
-    { 
+    {
         mem=(char *)ecp_memalloc(_MIPP_ 1);
         p=epoint_init_mem(_MIPP_ mem,0);
         epoint_norm(_MIPP_ pt);
@@ -1232,15 +1234,15 @@ int ecurve_mult(_MIPD_ big e,epoint *pa,epoint *pt)
             ecurve_double(_MIPP_ pt);
             ce=mr_compare(mr_mip->w9,mr_mip->w11); /* e(i)=1? */
             ch=mr_compare(mr_mip->w10,mr_mip->w11); /* h(i)=1? */
-            if (ch>=0) 
+            if (ch>=0)
             {  /* h(i)=1 */
                 if (ce<0) {ecurve_add(_MIPP_ p,pt); nadds++;}
                 mr_psub(_MIPP_ mr_mip->w10,mr_mip->w11,mr_mip->w10);
             }
-            if (ce>=0) 
+            if (ce>=0)
             {  /* e(i)=1 */
                 if (ch<0) {ecurve_sub(_MIPP_ p,pt); nadds++;}
-                mr_psub(_MIPP_ mr_mip->w9,mr_mip->w11,mr_mip->w9);  
+                mr_psub(_MIPP_ mr_mip->w9,mr_mip->w11,mr_mip->w9);
             }
             subdiv(_MIPP_ mr_mip->w11,2,mr_mip->w11);
         }
@@ -1284,7 +1286,7 @@ void ecurve_multn(_MIPD_ int n,big *y,epoint **x,epoint *w)
     for (j=0;j<n;j++) if ((k=logb2(_MIPP_ y[j])) > nb) nb=k;
 
     epoint_set(_MIPP_ NULL,NULL,0,w);            /* w=0 */
-    
+
 #ifndef MR_ALWAYS_BINARY
     if (mr_mip->base==mr_mip->base2)
     {
@@ -1301,7 +1303,7 @@ void ecurve_multn(_MIPD_ int n,big *y,epoint **x,epoint *w)
             }
             ecurve_double(_MIPP_ w);
             if (ea!=0) ecurve_add(_MIPP_ G[ea],w);
-        }    
+        }
 #ifndef MR_ALWAYS_BINARY
     }
     else mr_berror(_MIPP_ MR_ERR_NOT_SUPPORTED);
@@ -1317,7 +1319,7 @@ void ecurve_multn(_MIPD_ int n,big *y,epoint **x,epoint *w)
 /* PP=P+Q, PM=P-Q. Assumes P and Q are both normalized, and P!=Q */
 
 static BOOL ecurve_add_sub(_MIPD_ epoint *P,epoint *Q,epoint *PP,epoint *PM)
-{ 
+{
  #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
@@ -1326,7 +1328,7 @@ static BOOL ecurve_add_sub(_MIPD_ epoint *P,epoint *Q,epoint *PP,epoint *PM)
     if (mr_mip->ERNUM) return FALSE;
 
     if (P->marker==MR_EPOINT_GENERAL || Q->marker==MR_EPOINT_GENERAL)
-    { 
+    {
         mr_berror(_MIPP_ MR_ERR_BAD_PARAMETERS);
         MR_OUT
         return FALSE;
@@ -1344,8 +1346,8 @@ static BOOL ecurve_add_sub(_MIPD_ epoint *P,epoint *Q,epoint *PP,epoint *PM)
     }
 
     t1= mr_mip->w10;
-    t2= mr_mip->w11; 
-    lam = mr_mip->w13;   
+    t2= mr_mip->w11;
+    lam = mr_mip->w13;
 
     copy(P->X,t2);
     nres_modsub(_MIPP_ t2,Q->X,t2);
@@ -1353,7 +1355,7 @@ static BOOL ecurve_add_sub(_MIPD_ epoint *P,epoint *Q,epoint *PP,epoint *PM)
     redc(_MIPP_ t2,t2);
     invmodp(_MIPP_ t2,mr_mip->modulus,t2);
     nres(_MIPP_ t2,t2);
-    
+
     nres_modadd(_MIPP_ P->X,Q->X,PP->X);
     copy(PP->X,PM->X);
 
@@ -1404,7 +1406,7 @@ void ecurve_mult2(_MIPD_ big e,epoint *p,big ea,epoint *pa,epoint *pt)
 
     MR_IN(103)
 
-    if (size(e)==0) 
+    if (size(e)==0)
     {
         ecurve_mult(_MIPP_ ea,pa,pt);
         MR_OUT
@@ -1443,11 +1445,11 @@ void ecurve_mult2(_MIPD_ big e,epoint *p,big ea,epoint *pa,epoint *pt)
     ecurve_add_sub(_MIPP_ p1,p2,ps[0],ps[1]);     /* only one inversion! ps[0]=p1+p2, ps[1]=p1-p2 */
 
     mr_jsf(_MIPP_ mr_mip->w9,mr_mip->w12,mr_mip->w10,mr_mip->w9,mr_mip->w13,mr_mip->w12);
-  
-/*    To use a simple NAF instead, substitute this for the JSF 
-        premult(_MIPP_ mr_mip->w9,3,mr_mip->w10);      3*ea  
-        premult(_MIPP_ mr_mip->w12,3,mr_mip->w13);     3*e  
-*/ 
+
+/*    To use a simple NAF instead, substitute this for the JSF
+        premult(_MIPP_ mr_mip->w9,3,mr_mip->w10);      3*ea
+        premult(_MIPP_ mr_mip->w12,3,mr_mip->w13);     3*e
+*/
 
 #ifndef MR_ALWAYS_BINARY
     if (mr_mip->base==mr_mip->base2)
@@ -1512,22 +1514,22 @@ void ecurve_mult2(_MIPD_ big e,epoint *p,big ea,epoint *pa,epoint *pt)
             e1=h1=e2=h2=0;
             if (mr_compare(mr_mip->w9,mr_mip->w11)>=0)
             { /* e1(i)=1? */
-                e2=1;  
+                e2=1;
                 mr_psub(_MIPP_ mr_mip->w9,mr_mip->w11,mr_mip->w9);
             }
             if (mr_compare(mr_mip->w10,mr_mip->w11)>=0)
             { /* h1(i)=1? */
-                h2=1;  
+                h2=1;
                 mr_psub(_MIPP_ mr_mip->w10,mr_mip->w11,mr_mip->w10);
-            } 
+            }
             if (mr_compare(mr_mip->w12,mr_mip->w11)>=0)
             { /* e2(i)=1? */
-                e1=1;   
+                e1=1;
                 mr_psub(_MIPP_ mr_mip->w12,mr_mip->w11,mr_mip->w12);
             }
-            if (mr_compare(mr_mip->w13,mr_mip->w11)>=0) 
+            if (mr_compare(mr_mip->w13,mr_mip->w11)>=0)
             { /* h2(i)=1? */
-                h1=1;  
+                h1=1;
                 mr_psub(_MIPP_ mr_mip->w13,mr_mip->w11,mr_mip->w13);
             }
 
@@ -1570,21 +1572,21 @@ void ecurve_mult2(_MIPD_ big e,epoint *p,big ea,epoint *pa,epoint *pt)
 
 #else
 
-/*   Twisted Inverted Edwards curves 
+/*   Twisted Inverted Edwards curves
 
  *   Assumes Twisted Inverted Edward's equation x^2+Ay^2 = x^2.y^2 + B
  *   Assumes points are not of order 2 or 4
 */
 
 static void epoint_getrhs(_MIPD_ big x,big y)
-{ 
+{
   /* find RHS=(x^2-B)/(x^2-A) */
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
- 
+
     nres_modmult(_MIPP_ x,x,mr_mip->w6);
-    nres_modsub(_MIPP_ mr_mip->w6,mr_mip->B,y);  
+    nres_modsub(_MIPP_ mr_mip->w6,mr_mip->B,y);
     nres_modsub(_MIPP_ mr_mip->w6,mr_mip->A,mr_mip->w6);
 
     nres_moddiv(_MIPP_ y,mr_mip->w6,y);
@@ -1603,7 +1605,7 @@ BOOL epoint_x(_MIPD_ big x)
     if (mr_mip->ERNUM) return FALSE;
 
     MR_IN(147)
-    
+
     if (x==NULL) return FALSE;
 
     nres(_MIPP_ x,mr_mip->w2);
@@ -1633,7 +1635,7 @@ BOOL epoint_set(_MIPD_ big x,big y,int cb,epoint *p)
    * (which "decompresses" y). Otherwise, check     *
    * validity of given (x,y) point, ignoring cb.    *
    * Returns TRUE for valid point, otherwise FALSE. */
-  
+
     BOOL valid;
 
 #ifdef MR_OS_THREADS
@@ -1646,7 +1648,7 @@ BOOL epoint_set(_MIPD_ big x,big y,int cb,epoint *p)
     if (x==NULL || y==NULL)
     {
         copy(mr_mip->one,p->X);
-        zero(p->Y); 
+        zero(p->Y);
         p->marker=MR_EPOINT_INFINITY;
         MR_OUT
         return TRUE;
@@ -1666,7 +1668,7 @@ BOOL epoint_set(_MIPD_ big x,big y,int cb,epoint *p)
 		if (mr_abs(mr_mip->Asize)==MR_TOOBIG)
 			nres_modmult(_MIPP_ mr_mip->w2,mr_mip->A,mr_mip->w2);
 		else
-			nres_premult(_MIPP_ mr_mip->w2,mr_mip->Asize,mr_mip->w2);   
+			nres_premult(_MIPP_ mr_mip->w2,mr_mip->Asize,mr_mip->w2);
 		nres_modadd(_MIPP_ mr_mip->w2,mr_mip->w1,mr_mip->w2);
 		if (mr_compare(mr_mip->w2,mr_mip->w3)==0) valid=TRUE;
 	}
@@ -1678,7 +1680,7 @@ BOOL epoint_set(_MIPD_ big x,big y,int cb,epoint *p)
         valid=nres_sqroot(_MIPP_ mr_mip->w7,p->Y);
     /* check LSB - have we got the right root? */
         redc(_MIPP_ p->Y,mr_mip->w1);
-        if (remain(_MIPP_ mr_mip->w1,2)!=cb) 
+        if (remain(_MIPP_ mr_mip->w1,2)!=cb)
             mr_psub(_MIPP_ mr_mip->modulus,p->Y,p->Y);
 
 #else
@@ -1686,7 +1688,7 @@ BOOL epoint_set(_MIPD_ big x,big y,int cb,epoint *p)
 		MR_OUT
 		return FALSE;
 #endif
-    } 
+    }
     if (valid)
     {
         p->marker=MR_EPOINT_NORMALIZED;
@@ -1747,7 +1749,7 @@ int epoint_get(_MIPD_ epoint* p,big x,big y)
 
     MR_IN(98)
 
-    if (!epoint_norm(_MIPP_ p)) 
+    if (!epoint_norm(_MIPP_ p))
     { /* not possible ! */
         MR_OUT
         return (-1);
@@ -1757,14 +1759,14 @@ int epoint_get(_MIPD_ epoint* p,big x,big y)
     redc(_MIPP_ p->Y,mr_mip->w1);
 
     if (x!=y) copy(mr_mip->w1,y);
-    lsb=remain(_MIPP_ mr_mip->w1,2); 
+    lsb=remain(_MIPP_ mr_mip->w1,2);
     MR_OUT
     return lsb;
 }
 
 BOOL epoint_norm(_MIPD_ epoint *p)
 { /* normalise a point */
-    
+
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
@@ -1780,16 +1782,16 @@ BOOL epoint_norm(_MIPD_ epoint *p)
     if (nres_moddiv(_MIPP_ mr_mip->w8,p->Z,mr_mip->w8)>1) /* 1/Z  */
     {
         epoint_set(_MIPP_ NULL,NULL,0,p);
-        mr_berror(_MIPP_ MR_ERR_COMPOSITE_MODULUS); 
+        mr_berror(_MIPP_ MR_ERR_COMPOSITE_MODULUS);
         MR_OUT
         return FALSE;
     }
-    
+
     nres_modmult(_MIPP_ p->X,mr_mip->w8,p->X);            /* X/Z */
     nres_modmult(_MIPP_ p->Y,mr_mip->w8,p->Y);            /* Y/Z */
 
     copy(mr_mip->one,p->Z);
-   
+
     p->marker=MR_EPOINT_NORMALIZED;
     MR_OUT
 
@@ -1804,7 +1806,7 @@ void ecurve_double(_MIPD_ epoint *p)
 #endif
     if (mr_mip->ERNUM) return;
 
-    if (p->marker==MR_EPOINT_INFINITY) 
+    if (p->marker==MR_EPOINT_INFINITY)
     { /* 2 times infinity == infinity ! */
         return;
     }
@@ -1819,7 +1821,7 @@ void ecurve_double(_MIPD_ epoint *p)
     if (mr_abs(mr_mip->Asize)==MR_TOOBIG)                      /* U = aB        */
         nres_modmult(_MIPP_ p->Y,mr_mip->A,p->Y);
     else
-        nres_premult(_MIPP_ p->Y,mr_mip->Asize,p->Y);   
+        nres_premult(_MIPP_ p->Y,mr_mip->Asize,p->Y);
 
     if (p->marker!=MR_EPOINT_NORMALIZED)
         nres_modmult(_MIPP_ p->Z,p->Z,p->Z);
@@ -1830,8 +1832,8 @@ void ecurve_double(_MIPD_ epoint *p)
     if (mr_abs(mr_mip->Bsize)==MR_TOOBIG)                           /* 2dZ^2 */
         nres_modmult(_MIPP_ p->Z,mr_mip->B,p->Z);
     else
-        nres_premult(_MIPP_ p->Z,mr_mip->Bsize,p->Z);  
-  
+        nres_premult(_MIPP_ p->Z,mr_mip->Bsize,p->Z);
+
     nres_modadd(_MIPP_ p->X,p->Y,mr_mip->w2);           /* C=A+U         */
     nres_modsub(_MIPP_ p->X,p->Y,mr_mip->w3);           /* D=A-U         */
 
@@ -1844,11 +1846,11 @@ void ecurve_double(_MIPD_ epoint *p)
     p->marker=MR_EPOINT_GENERAL;
     return;
 }
-   
+
 static BOOL ecurve_padd(_MIPD_ epoint *p,epoint *pa)
 { /* primitive add two epoints on the active ecurve - pa+=p;   *
    * note that if p is normalized, its Z coordinate isn't used */
- 
+
 #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
@@ -1863,7 +1865,7 @@ static BOOL ecurve_padd(_MIPD_ epoint *p,epoint *pa)
     nres_modadd(_MIPP_ p->X,p->Y,mr_mip->w1);
     nres_modadd(_MIPP_ pa->X,pa->Y,mr_mip->w2);
     nres_modmult(_MIPP_ mr_mip->w1,mr_mip->w2,mr_mip->w1);  /* I=(X1+Y1)(X2+Y2) */
-    if (p->marker!=MR_EPOINT_NORMALIZED) 
+    if (p->marker!=MR_EPOINT_NORMALIZED)
     {
         if (pa->marker==MR_EPOINT_NORMALIZED)
             copy(p->Z,pa->Z);
@@ -1875,7 +1877,7 @@ static BOOL ecurve_padd(_MIPD_ epoint *p,epoint *pa)
     }
 
     nres_modmult(_MIPP_ pa->Z,pa->Z,mr_mip->w2);       /* w2 = B = dA^2   */
-    if (mr_abs(mr_mip->Bsize)==MR_TOOBIG)                   
+    if (mr_abs(mr_mip->Bsize)==MR_TOOBIG)
         nres_modmult(_MIPP_ mr_mip->w2,mr_mip->B,mr_mip->w2);
     else
         nres_premult(_MIPP_ mr_mip->w2,mr_mip->Bsize,mr_mip->w2);
@@ -1909,11 +1911,11 @@ static BOOL ecurve_padd(_MIPD_ epoint *p,epoint *pa)
     }
     else pa->marker=MR_EPOINT_GENERAL;
 
-    return TRUE;      
+    return TRUE;
 }
 
 void epoint_copy(epoint *a,epoint *b)
-{   
+{
     if (a==b || b==NULL) return;
 
     copy(a->X,b->X);
@@ -1938,7 +1940,7 @@ BOOL epoint_comp(_MIPD_ epoint *a,epoint *b)
     }
     if (b->marker==MR_EPOINT_INFINITY)
         return FALSE;
-    
+
     MR_IN(105)
     copy(a->Z,mr_mip->w1);
     copy(b->Z,mr_mip->w2);
@@ -1946,7 +1948,7 @@ BOOL epoint_comp(_MIPD_ epoint *a,epoint *b)
     nres_modmult(_MIPP_ a->X,b->Z,mr_mip->w1);
     nres_modmult(_MIPP_ b->X,a->Z,mr_mip->w2);
 
-    if (mr_compare(mr_mip->w1,mr_mip->w2)!=0) 
+    if (mr_compare(mr_mip->w1,mr_mip->w2)!=0)
     {
         MR_OUT
         return FALSE;
@@ -1955,14 +1957,14 @@ BOOL epoint_comp(_MIPD_ epoint *a,epoint *b)
     nres_modmult(_MIPP_ a->Y,b->Z,mr_mip->w1);
     nres_modmult(_MIPP_ b->Y,a->Z,mr_mip->w2);
 
-    if (mr_compare(mr_mip->w1,mr_mip->w2)!=0) 
+    if (mr_compare(mr_mip->w1,mr_mip->w2)!=0)
     {
         MR_OUT
         return FALSE;
     }
     MR_OUT
     return TRUE;
- 
+
 }
 
 int ecurve_add(_MIPD_ epoint *p,epoint *pa)
@@ -1975,7 +1977,7 @@ int ecurve_add(_MIPD_ epoint *p,epoint *pa)
 
     MR_IN(94)
 
-    if (p==pa) 
+    if (p==pa)
     {
         ecurve_double(_MIPP_ pa);
         MR_OUT
@@ -1985,17 +1987,17 @@ int ecurve_add(_MIPD_ epoint *p,epoint *pa)
     if (pa->marker==MR_EPOINT_INFINITY)
     {
         epoint_copy(p,pa);
-        MR_OUT 
+        MR_OUT
         return MR_ADD;
     }
-    if (p->marker==MR_EPOINT_INFINITY) 
+    if (p->marker==MR_EPOINT_INFINITY)
     {
         MR_OUT
         return MR_ADD;
     }
 
     if (!ecurve_padd(_MIPP_ p,pa))
-    {    
+    {
         ecurve_double(_MIPP_ pa);
         MR_OUT
         return MR_DOUBLE;
@@ -2033,8 +2035,8 @@ int ecurve_sub(_MIPD_ epoint *p,epoint *pa)
         epoint_set(_MIPP_ NULL,NULL,0,pa);
         MR_OUT
         return MR_OVER;
-    } 
-    if (p->marker==MR_EPOINT_INFINITY) 
+    }
+    if (p->marker==MR_EPOINT_INFINITY)
     {
         MR_OUT
         return MR_ADD;
@@ -2054,7 +2056,7 @@ int ecurve_mult(_MIPD_ big e,epoint *pa,epoint *pt)
     epoint *table[MR_ECC_STORE_N];
 
 #ifdef MR_STATIC
-    char mem[MR_ECP_RESERVE(MR_ECC_STORE_N)];  
+    char mem[MR_ECP_RESERVE(MR_ECC_STORE_N)];
 #else
     char *mem;
 #endif
@@ -2069,7 +2071,7 @@ int ecurve_mult(_MIPD_ big e,epoint *pa,epoint *pt)
     if (mr_mip->ERNUM) return 0;
 
     MR_IN(95)
-    if (size(e)==0) 
+    if (size(e)==0)
     { /* multiplied by 0 */
         epoint_set(_MIPP_ NULL,NULL,0,pt);
         MR_OUT
@@ -2085,7 +2087,7 @@ int ecurve_mult(_MIPD_ big e,epoint *pa,epoint *pt)
     }
 
     if (size(mr_mip->w9)==1)
-    { 
+    {
         MR_OUT
         return 0;
     }
@@ -2145,7 +2147,7 @@ int ecurve_mult(_MIPD_ big e,epoint *pa,epoint *pt)
 #ifndef MR_ALWAYS_BINARY
     }
     else
-    { 
+    {
         mem=(char *)ecp_memalloc(_MIPP_ 1);
         p=epoint_init_mem(_MIPP_ mem,0);
         epoint_copy(pt,p);
@@ -2161,15 +2163,15 @@ int ecurve_mult(_MIPD_ big e,epoint *pa,epoint *pt)
             ecurve_double(_MIPP_ pt);
             ce=mr_compare(mr_mip->w9,mr_mip->w11); /* e(i)=1? */
             ch=mr_compare(mr_mip->w10,mr_mip->w11); /* h(i)=1? */
-            if (ch>=0) 
+            if (ch>=0)
             {  /* h(i)=1 */
                 if (ce<0) {ecurve_add(_MIPP_ p,pt); nadds++;}
                 mr_psub(_MIPP_ mr_mip->w10,mr_mip->w11,mr_mip->w10);
             }
-            if (ce>=0) 
+            if (ce>=0)
             {  /* e(i)=1 */
                 if (ch<0) {ecurve_sub(_MIPP_ p,pt); nadds++;}
-                mr_psub(_MIPP_ mr_mip->w9,mr_mip->w11,mr_mip->w9);  
+                mr_psub(_MIPP_ mr_mip->w9,mr_mip->w11,mr_mip->w9);
             }
             subdiv(_MIPP_ mr_mip->w11,2,mr_mip->w11);
         }
@@ -2213,7 +2215,7 @@ void ecurve_multn(_MIPD_ int n,big *y,epoint **x,epoint *w)
     for (j=0;j<n;j++) if ((k=logb2(_MIPP_ y[j])) > nb) nb=k;
 
     epoint_set(_MIPP_ NULL,NULL,0,w);            /* w=0 */
-    
+
 #ifndef MR_ALWAYS_BINARY
     if (mr_mip->base==mr_mip->base2)
     {
@@ -2230,7 +2232,7 @@ void ecurve_multn(_MIPD_ int n,big *y,epoint **x,epoint *w)
             }
             ecurve_double(_MIPP_ w);
             if (ea!=0) ecurve_add(_MIPP_ G[ea],w);
-        }    
+        }
 #ifndef MR_ALWAYS_BINARY
     }
     else mr_berror(_MIPP_ MR_ERR_NOT_SUPPORTED);
@@ -2246,25 +2248,25 @@ void ecurve_multn(_MIPD_ int n,big *y,epoint **x,epoint *w)
 /* PP=P+Q, PM=P-Q. */
 
 static BOOL ecurve_add_sub(_MIPD_ epoint *P,epoint *Q,epoint *PP,epoint *PM)
-{ 
+{
  #ifdef MR_OS_THREADS
     miracl *mr_mip=get_mip();
 #endif
-   
+
     if (P->marker==MR_EPOINT_NORMALIZED)
     {
         if (Q->marker==MR_EPOINT_NORMALIZED)
             copy(mr_mip->one,mr_mip->w1);
         else copy(Q->Z,mr_mip->w1);
     }
-    else 
+    else
     {
         if (Q->marker==MR_EPOINT_NORMALIZED)
             copy(P->Z,mr_mip->w1);
         else nres_modmult(_MIPP_ P->Z,Q->Z,mr_mip->w1);         /* w1 = A = Z1*Z2 */
     }
     nres_modmult(_MIPP_ mr_mip->w1,mr_mip->w1,mr_mip->w2);      /* w2 = B = dA^2   */
-    if (mr_abs(mr_mip->Bsize)==MR_TOOBIG)                   
+    if (mr_abs(mr_mip->Bsize)==MR_TOOBIG)
         nres_modmult(_MIPP_ mr_mip->w2,mr_mip->B,mr_mip->w2);
     else
         nres_premult(_MIPP_ mr_mip->w2,mr_mip->Bsize,mr_mip->w2);
@@ -2337,7 +2339,7 @@ void ecurve_mult2(_MIPD_ big e,epoint *p,big ea,epoint *pa,epoint *pt)
 
     MR_IN(103)
 
-    if (size(e)==0) 
+    if (size(e)==0)
     {
         ecurve_mult(_MIPP_ ea,pa,pt);
         MR_OUT
@@ -2369,15 +2371,15 @@ void ecurve_mult2(_MIPD_ big e,epoint *p,big ea,epoint *pa,epoint *pt)
         epoint_negate(_MIPP_ p1);
     }
 
-    epoint_set(_MIPP_ NULL,NULL,0,pt);            /* pt=0 */ 
+    epoint_set(_MIPP_ NULL,NULL,0,pt);            /* pt=0 */
     ecurve_add_sub(_MIPP_ p1,p2,ps[0],ps[1]);     /* ps[0]=p1+p2, ps[1]=p1-p2 */
 
     mr_jsf(_MIPP_ mr_mip->w9,mr_mip->w12,mr_mip->w10,mr_mip->w9,mr_mip->w13,mr_mip->w12);
-  
-/*    To use a simple NAF instead, substitute this for the JSF 
-        premult(_MIPP_ mr_mip->w9,3,mr_mip->w10);      3*ea  
-        premult(_MIPP_ mr_mip->w12,3,mr_mip->w13);     3*e  
-*/ 
+
+/*    To use a simple NAF instead, substitute this for the JSF
+        premult(_MIPP_ mr_mip->w9,3,mr_mip->w10);      3*ea
+        premult(_MIPP_ mr_mip->w12,3,mr_mip->w13);     3*e
+*/
 
 #ifndef MR_ALWAYS_BINARY
     if (mr_mip->base==mr_mip->base2)
@@ -2442,22 +2444,22 @@ void ecurve_mult2(_MIPD_ big e,epoint *p,big ea,epoint *pa,epoint *pt)
             e1=h1=e2=h2=0;
             if (mr_compare(mr_mip->w9,mr_mip->w11)>=0)
             { /* e1(i)=1? */
-                e2=1;  
+                e2=1;
                 mr_psub(_MIPP_ mr_mip->w9,mr_mip->w11,mr_mip->w9);
             }
             if (mr_compare(mr_mip->w10,mr_mip->w11)>=0)
             { /* h1(i)=1? */
-                h2=1;  
+                h2=1;
                 mr_psub(_MIPP_ mr_mip->w10,mr_mip->w11,mr_mip->w10);
-            } 
+            }
             if (mr_compare(mr_mip->w12,mr_mip->w11)>=0)
             { /* e2(i)=1? */
-                e1=1;   
+                e1=1;
                 mr_psub(_MIPP_ mr_mip->w12,mr_mip->w11,mr_mip->w12);
             }
-            if (mr_compare(mr_mip->w13,mr_mip->w11)>=0) 
+            if (mr_compare(mr_mip->w13,mr_mip->w11)>=0)
             { /* h2(i)=1? */
-                h1=1;  
+                h1=1;
                 mr_psub(_MIPP_ mr_mip->w13,mr_mip->w11,mr_mip->w13);
             }
 
@@ -2499,3 +2501,5 @@ void ecurve_mult2(_MIPD_ big e,epoint *p,big ea,epoint *pa,epoint *pt)
 #endif
 
 #endif
+
+#endif // PL_MINI

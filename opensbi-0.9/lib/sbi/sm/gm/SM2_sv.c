@@ -1,6 +1,6 @@
 /************************************************************************
   Copyright (c) IPADS@SJTU 2021. Modification to support Penglai (RISC-V TEE)
-  
+
   This file contains GM/T SM2 standard implementation, provided by the Commercial
   Cryptography Testing Center, see <http://www.scctc.org.cn> for more infomation.
 
@@ -20,14 +20,15 @@
     9.SM2_Verify                        //SM2 verification
     10.SM2_SelfCheck()                  //SM2 self-check
     11.SM3_256()                        //this function can be found in SM3.c and SM3.h
-  
+
   Additional Functions Added By PENGLAI Enclave:
 	1.MIRACL_Init						//init miracl system
-	2.SM2_make_prikey					//generate a SM2 private key 
+	2.SM2_make_prikey					//generate a SM2 private key
 	3.SM2_make_pubkey					//generate a SM2 public Key out of a private Key
 	4.SM2_gen_random					//generate a random number K lies in [1,n-1]
 	5.SM2_compute_ZA					//compute ZA out of a given pubkey
 **************************************************************************/
+#ifndef PL_MINI
 
 #include "sm/gm/miracl/miracl.h"
 #include "sm/gm/SM2_sv.h"
@@ -113,7 +114,7 @@ int SM2_Init()
 	bytes_to_big(SM2_NUMWORD, SM2_n, n);
 
 	ecurve_init(a, b, p, MR_PROJECTIVE);
-	
+
 	sbi_memset(g_mem_point, 0, MR_ECP_RESERVE(2));
 	G = epoint_init_mem(g_mem_point, 0);
 	nG = epoint_init_mem(g_mem_point, 1);
@@ -123,7 +124,7 @@ int SM2_Init()
 	ecurve_mult(n, G, nG);
 	if (!point_at_infinity(nG)) //test if the order of the point is n
 		return ERR_ORDER;
-	
+
 	return 0;
 }
 
@@ -228,7 +229,7 @@ int Test_Zero(big x)
 	char mem[MR_BIG_RESERVE(1)];
 	sbi_memset(mem, 0, MR_BIG_RESERVE(1));
 	z = mirvar_mem(mem, 0);
-	
+
 	zero(z);
 	if (mr_compare(x, z) == 0)
 		return 1;
@@ -295,7 +296,7 @@ static void SM2_make_prikey(unsigned char prikey[])
 /****************************************************************
   Function:            SM2_make_pubkey
   Description:         calculate a pubKey out of a given priKey
-  Calls:               
+  Calls:
   Called By:           SM2_KeyGeneration()
   Input:               priKey       // a big number lies in[1,n-2]
   Output:              pubKey       // pubKey=[priKey]G
@@ -352,7 +353,7 @@ static int SM2_make_pubkey(unsigned char PriKey[], unsigned char Px[], unsigned 
 int SM2_KeyGeneration(unsigned char PriKey[], unsigned char Px[], unsigned char Py[])
 {
 	int i = 0;
-	
+
 	SM2_make_prikey(PriKey);
 	i = SM2_make_pubkey(PriKey, Px, Py);
 	if (i)
@@ -368,7 +369,7 @@ static void SM2_gen_random(unsigned char rand[])
 	unsigned char temp[32] = {
 		0x59, 0x27, 0x6E, 0x27, 0xD5, 0x06, 0x86, 0x1A, 0x16, 0x68, 0x0F, 0x3A, 0xD9, 0xC0, 0x2D, 0xCC,
 		0xEF, 0x3C, 0xC1, 0xFA, 0x3C, 0xDB, 0xE4, 0xCE, 0x6D, 0x54, 0xB8, 0x0D, 0xEA, 0xC1, 0xBC, 0x21};
-	
+
 	sbi_memcpy(rand, temp, 32);
 }
 
@@ -625,7 +626,7 @@ int SM2_SelfCheck()
 	unsigned long sp_ptr;
 	asm volatile("mv %0 ,sp" : "=r"(sp_ptr));
 	printm(" - - - - SM2_SelfCheck , stack: %lx - - - - \n", sp_ptr);
-	
+
 	int temp;
 	unsigned char dA[32]; // the private key
 	unsigned char xA[32], yA[32]; // the public key
@@ -656,3 +657,5 @@ int SM2_SelfCheck()
 
 	return 0;
 }
+
+#endif //PL_MINI

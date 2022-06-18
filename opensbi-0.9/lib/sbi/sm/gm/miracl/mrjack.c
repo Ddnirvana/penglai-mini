@@ -40,6 +40,8 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
  *   Shallit and Sorenson
  */
 
+#ifndef PL_MINI
+
 #include "sm/gm/miracl/miracl.h"
 
 int jack(_MIPD_ big a,big n)
@@ -55,12 +57,12 @@ int jack(_MIPD_ big a,big n)
     t=1;
     copy(n,mr_mip->w2);
     nm8=remain(_MIPP_ mr_mip->w2,8);
-    if (nm8%2==0) 
+    if (nm8%2==0)
     {
         MR_OUT
         return 0;
     }
-    
+
     if (size(a)<0)
     {
         if (nm8%4==3) t=-1;
@@ -73,7 +75,7 @@ int jack(_MIPD_ big a,big n)
         while (remain(_MIPP_ mr_mip->w1,2)==0)
         {
             subdiv(_MIPP_ mr_mip->w1,2,mr_mip->w1);
-            if (nm8==3 || nm8==5) t=-t; 
+            if (nm8==3 || nm8==5) t=-t;
         }
         if (mr_compare(mr_mip->w1,mr_mip->w2)<0)
         {
@@ -84,8 +86,8 @@ int jack(_MIPD_ big a,big n)
         }
         mr_psub(_MIPP_ mr_mip->w1,mr_mip->w2,mr_mip->w1);
         subdiv(_MIPP_ mr_mip->w1,2,mr_mip->w1);
- 
-        if (nm8==3 || nm8==5) t=-t; 
+
+        if (nm8==3 || nm8==5) t=-t;
     }
 
     MR_OUT
@@ -116,17 +118,17 @@ static void rfind(mr_small u,mr_small v,mr_small k,mr_small sk,mr_utype *a,mr_ut
 
     w=invers(v,k);
     w=smul(u,w,k);
-    
+
     x1=k; x2=0;
     y1=w; y2=1;
 
-// NOTE: x1 and y1 are always +ve. x2 and y2 are always small 
+// NOTE: x1 and y1 are always +ve. x2 and y2 are always small
 
     while (y1>=sk)
     {
 #ifndef MR_NOFULLWIDTH
         if (x1==0) q=muldvm((mr_small)1,(mr_small)0,y1,&sr);
-        else 
+        else
 #endif
         q=MR_DIV(x1,y1);
         r= x1-q*y1; x1=y1; y1=r;
@@ -137,8 +139,8 @@ static void rfind(mr_small u,mr_small v,mr_small k,mr_small sk,mr_utype *a,mr_ut
 }
 
 int jack(_MIPD_ big U,big V)
-{ // find jacobi symbol for U wrt V. Only defined for 
-  // positive V, V odd. Otherwise returns 0           
+{ // find jacobi symbol for U wrt V. Only defined for
+  // positive V, V odd. Otherwise returns 0
     int i,e,r,m,t,v8,u4;
     mr_utype a,b;
     mr_small u,v,d,g,k,sk,s;
@@ -159,7 +161,7 @@ int jack(_MIPD_ big U,big V)
     MR_IN(3)
 
     if (remain(_MIPP_ mr_mip->w2,2)==0)
-    { // V is even 
+    { // V is even
         MR_OUT
         return 0;
     }
@@ -171,7 +173,7 @@ int jack(_MIPD_ big U,big V)
         {
            k*=2;
            if (k==MAXBASE) break;
-        }    
+        }
         if (m%2==1) {m--; k=MR_DIV(k,2);}
 #ifdef MR_FP_ROUNDING
         ik=mr_invert(k);
@@ -187,7 +189,7 @@ int jack(_MIPD_ big U,big V)
     for (i=0;i<r;i++) sk*=2;
 
     t=1;
-    v8=remain(_MIPP_ mr_mip->w2,8); 
+    v8=remain(_MIPP_ mr_mip->w2,8);
 
     while (!mr_mip->ERNUM && size(mr_mip->w1)!=0)
     {
@@ -197,14 +199,14 @@ int jack(_MIPD_ big U,big V)
             if (v8%4==3) t=-t;
         }
 
-        do { // oddify 
+        do { // oddify
 
 #ifndef MR_ALWAYS_BINARY
-            if (mr_mip->base==mr_mip->base2) 
+            if (mr_mip->base==mr_mip->base2)
             {
 #endif
                  if (mr_mip->base==k) u=mr_mip->w1->w[0];
-                 else                 u=MR_REMAIN(mr_mip->w1->w[0],k); 
+                 else                 u=MR_REMAIN(mr_mip->w1->w[0],k);
 #ifndef MR_ALWAYS_BINARY
             }
 
@@ -223,8 +225,8 @@ int jack(_MIPD_ big U,big V)
             }
             if (s==mr_mip->base) mr_shift(_MIPP_ mr_mip->w1,-1,mr_mip->w1);
 #ifdef MR_FP_ROUNDING
-            else if (s>1) 
-            { 
+            else if (s>1)
+            {
                 mr_sdiv(_MIPP_ mr_mip->w1,s,mr_invert(s),mr_mip->w1);
             }
 #else
@@ -236,7 +238,7 @@ int jack(_MIPD_ big U,big V)
         {
             if (mr_mip->base==mr_mip->base2) u4=(int)MR_REMAIN(mr_mip->w1->w[0],4);
             else                             u4=remain(_MIPP_ mr_mip->w1,4);
-            if (v8%4==3 && u4==3) t=-t; 
+            if (v8%4==3 && u4==3) t=-t;
             w=mr_mip->w1; mr_mip->w1=mr_mip->w2; mr_mip->w2=w;
         }
 
@@ -244,7 +246,7 @@ int jack(_MIPD_ big U,big V)
         if (mr_mip->base==mr_mip->base2)
         {
 #endif
-            if (k==mr_mip->base)   
+            if (k==mr_mip->base)
             {
                 u=mr_mip->w1->w[0];
                 v=mr_mip->w2->w[0];
@@ -276,11 +278,11 @@ int jack(_MIPD_ big U,big V)
             d=mr_sdiv(_MIPP_ mr_mip->w2,a,mr_mip->w3);
 #endif
             d=sgcd(d,a);
-            a=MR_DIV(a,d); 
+            a=MR_DIV(a,d);
         }
         else d=1;
 
-        if (d>1) 
+        if (d>1)
         {
 #ifdef MR_FP_ROUNDING
             id=mr_invert(d);
@@ -291,7 +293,7 @@ int jack(_MIPD_ big U,big V)
             u=mr_sdiv(_MIPP_ mr_mip->w1,d,mr_mip->w3);
 #endif
         }
-        else u=0;   
+        else u=0;
 
         g=a;
         if (mr_mip->base==mr_mip->base2) v8=(int)MR_REMAIN(mr_mip->w2->w[0],8);
@@ -308,13 +310,13 @@ int jack(_MIPD_ big U,big V)
         v=mr_sdiv(_MIPP_ mr_mip->w2,g,mr_mip->w3);
 #endif
         t*=jac(v,g)*jac(u,d);
-        if (t==0) 
+        if (t==0)
         {
             MR_OUT
             return 0;
         }
 
-// printf("a= %I64d b=%I64d %d\n",a,b,(int)b); 
+// printf("a= %I64d b=%I64d %d\n",a,b,(int)b);
 
         if (a>1) mr_pmul(_MIPP_ mr_mip->w1,a,mr_mip->w1);
         if (b>=0)
@@ -325,7 +327,7 @@ int jack(_MIPD_ big U,big V)
             mr_pmul(_MIPP_ mr_mip->w2,b,mr_mip->w3);
             negify(mr_mip->w3,mr_mip->w3);
         }
-       // premult(_MIPP_ mr_mip->w2,(int)b,mr_mip->w3); <- nasty bug - potential loss of precision in b 
+       // premult(_MIPP_ mr_mip->w2,(int)b,mr_mip->w3); <- nasty bug - potential loss of precision in b
         add(_MIPP_ mr_mip->w1,mr_mip->w3,mr_mip->w1);
         if (k==mr_mip->base) mr_shift(_MIPP_ mr_mip->w1,-1,mr_mip->w1);
 #ifdef MR_FP_ROUNDING
@@ -336,7 +338,9 @@ int jack(_MIPD_ big U,big V)
     }
     MR_OUT
     if (size(mr_mip->w2)==1) return t;
-    return 0; 
-} 
+    return 0;
+}
 
 */
+
+#endif // PL_MINI

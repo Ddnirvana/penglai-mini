@@ -37,6 +37,8 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
  *   mrlucas.c (Postl's algorithm)
  */
 
+#ifndef PL_MINI
+
 #include "sm/gm/miracl/miracl.h"
 #include <stddef.h>
 
@@ -50,7 +52,7 @@ void nres_lucas(_MIPD_ big p,big r,big vp,big v)
 
     MR_IN(107)
 
-    if (size(r)==0) 
+    if (size(r)==0)
     {
         zero(vp);
         convert(_MIPP_ 2,v);
@@ -68,7 +70,7 @@ void nres_lucas(_MIPD_ big p,big r,big vp,big v)
     }
 
     copy(p,mr_mip->w3);
-    
+
     convert(_MIPP_ 2,mr_mip->w4);
     nres(_MIPP_ mr_mip->w4,mr_mip->w4);     /* w4=2 */
 
@@ -76,7 +78,7 @@ void nres_lucas(_MIPD_ big p,big r,big vp,big v)
     copy(mr_mip->w3,mr_mip->w9);
 
     copy(r,mr_mip->w1);
-    insign(PLUS,mr_mip->w1);         
+    insign(PLUS,mr_mip->w1);
     decr(_MIPP_ mr_mip->w1,1,mr_mip->w1);
 
 #ifndef MR_ALWAYS_BINARY
@@ -102,19 +104,19 @@ void nres_lucas(_MIPD_ big p,big r,big vp,big v)
                 nres_modsub(_MIPP_ mr_mip->w9,mr_mip->w3,mr_mip->w9);
                 nres_modmult(_MIPP_ mr_mip->w8,mr_mip->w8,mr_mip->w8);
                 nres_modsub(_MIPP_ mr_mip->w8,mr_mip->w4,mr_mip->w8);
-            }  
+            }
         }
 
 #ifndef MR_ALWAYS_BINARY
     }
     else
     {
-        expb2(_MIPP_ logb2(_MIPP_ mr_mip->w1)-1,mr_mip->w2);                                                                                                   
+        expb2(_MIPP_ logb2(_MIPP_ mr_mip->w1)-1,mr_mip->w2);
 
         while (!mr_mip->ERNUM && size(mr_mip->w2)!=0)
         { /* use binary method */
             if (mr_compare(mr_mip->w1,mr_mip->w2)>=0)
-            { /* vp=v*vp-p, v=v*v-2 */ 
+            { /* vp=v*vp-p, v=v*v-2 */
                 nres_modmult(_MIPP_ mr_mip->w8,mr_mip->w9,mr_mip->w8);
                 nres_modsub(_MIPP_ mr_mip->w8,mr_mip->w3,mr_mip->w8);
                 nres_modmult(_MIPP_ mr_mip->w9,mr_mip->w9,mr_mip->w9);
@@ -155,3 +157,5 @@ void lucas(_MIPD_ big p,big r,big n,big vp,big v)
     MR_OUT
 }
 
+
+#endif // PL_MINI

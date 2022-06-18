@@ -37,6 +37,8 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
  *   mrxgcd.c
  */
 
+#ifndef PL_MINI
+
 #include "sm/gm/miracl/miracl.h"
 
 #ifdef MR_FP
@@ -44,7 +46,7 @@ the CertiVox MIRACL Crypto SDK with a closed source product.               *
 #endif
 
 #ifdef MR_COUNT_OPS
-extern int fpx; 
+extern int fpx;
 #endif
 
 #ifndef MR_USE_BINARY_XGCD
@@ -129,9 +131,9 @@ int xgcd(_MIPD_ big x,big y,big xd,big yd,big z)
     MR_IN(30)
 
 #ifdef MR_COUNT_OPS
-    fpx++; 
+    fpx++;
 #endif
-  
+
     copy(x,mr_mip->w1);
     copy(y,mr_mip->w2);
     s=exsign(mr_mip->w1);
@@ -180,7 +182,7 @@ int xgcd(_MIPD_ big x,big y,big xd,big yd,big z)
             mr_pmul(_MIPP_ mr_mip->w3,a,mr_mip->w3);
             mr_pmul(_MIPP_ mr_mip->w4,b,mr_mip->w0);
             mr_pmul(_MIPP_ mr_mip->w4,d,mr_mip->w4);
-    
+
             if (a==0) copy(mr_mip->w0,mr_mip->w3);
             else      mr_padd(_MIPP_ mr_mip->w3,mr_mip->w0,mr_mip->w3);
             mr_padd(_MIPP_ mr_mip->w4,mr_mip->w5,mr_mip->w4);
@@ -227,7 +229,7 @@ int xgcd(_MIPD_ big x,big y,big xd,big yd,big z)
                 if (m==0)
                 {
                     u=mr_mip->w1->w[n-1];
-                    v=mr_mip->w2->w[n-1];   
+                    v=mr_mip->w2->w[n-1];
                 }
                 else
                 {
@@ -276,7 +278,7 @@ int xgcd(_MIPD_ big x,big y,big xd,big yd,big z)
             else
             {
                 if (dplus)
-                { 
+                {
                     if ((mr_small)(v-c)==0 || (mr_small)(v+d)==0) break;
 
                     q=qdiv(u+a,v-c);
@@ -285,7 +287,7 @@ int xgcd(_MIPD_ big x,big y,big xd,big yd,big z)
 
                     if (q!=qdiv(u-b,v+d)) break;
                 }
-                else 
+                else
                 {
                     if ((mr_small)(v+c)==0 || (mr_small)(v-d)==0) break;
                     q=qdiv(u-a,v+c);
@@ -296,13 +298,13 @@ int xgcd(_MIPD_ big x,big y,big xd,big yd,big z)
 
             if (q==1)
             {
-                if ((mr_small)(b+d) >= MAXBASE) break; 
+                if ((mr_small)(b+d) >= MAXBASE) break;
                 r=a+c;  a=c; c=r;
                 r=b+d;  b=d; d=r;
-                lr=u-v; u=v; v=lr;      
+                lr=u-v; u=v; v=lr;
             }
             else
-            { 
+            {
                 if (q>=MR_DIV(MAXBASE-b,d)) break;
                 r=a+q*c;  a=c; c=r;
                 r=b+q*d;  b=d; d=r;
@@ -361,11 +363,11 @@ int invmodp(_MIPD_ big a,big p,big z)
     MR_IN(213);
 
     u=mr_mip->w1; v=mr_mip->w2; x1=mr_mip->w3; x2=mr_mip->w4;
-    copy(a,u);    
-    copy(p,v);    
-    convert(_MIPP_ 1,x1); 
-    zero(x2);      
-   
+    copy(a,u);
+    copy(p,v);
+    convert(_MIPP_ 1,x1);
+    zero(x2);
+
     while (size(u)!=1 && size(v)!=1)
     {
         while (remain(_MIPP_ u,2)==0)
@@ -404,7 +406,7 @@ int invmodp(_MIPD_ big a,big p,big z)
 
 #ifndef MR_STATIC
 
-/* Montgomery's method for multiple 
+/* Montgomery's method for multiple
    simultaneous modular inversions */
 
 BOOL double_inverse(_MIPD_ big n,big x,big y,big w,big z)
@@ -427,8 +429,8 @@ BOOL double_inverse(_MIPD_ big n,big x,big y,big w,big z)
     mad(_MIPP_ w,mr_mip->w6,w,n,n,y);
     mad(_MIPP_ x,mr_mip->w6,x,n,n,z);
 
-    MR_OUT 
-    return TRUE;   
+    MR_OUT
+    return TRUE;
 }
 
 BOOL multi_inverse(_MIPD_ int m,big *x,big n,big *w)
@@ -459,7 +461,7 @@ BOOL multi_inverse(_MIPD_ int m,big *x,big n,big *w)
     convert(_MIPP_ 1,w[0]);
     copy(x[0],w[1]);
     for (i=2;i<m;i++)
-        mad(_MIPP_ w[i-1],x[i-1],x[i-1],n,n,w[i]); 
+        mad(_MIPP_ w[i-1],x[i-1],x[i-1],n,n,w[i]);
 
     mad(_MIPP_ w[m-1],x[m-1],x[m-1],n,n,mr_mip->w6);  /* y=x[0]*x[1]*x[2]....x[m-1] */
     if (size(mr_mip->w6)==0)
@@ -488,8 +490,10 @@ BOOL multi_inverse(_MIPD_ int m,big *x,big n,big *w)
         mad(_MIPP_ mr_mip->w5,x[i],x[i],n,n,mr_mip->w5);
     }
 
-    MR_OUT 
-    return TRUE;   
+    MR_OUT
+    return TRUE;
 }
 
 #endif
+
+#endif // PL_MINI
