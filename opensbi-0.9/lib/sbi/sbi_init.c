@@ -453,7 +453,7 @@ void __init __noreturn sbi_init(struct sbi_scratch *scratch)
 		init_warmboot(scratch, hartid);
 }
 
-unsigned long sbi_init_count(u32 hartid)
+unsigned long __init sbi_init_count(u32 hartid)
 {
 	struct sbi_scratch *scratch;
 	unsigned long *init_count;

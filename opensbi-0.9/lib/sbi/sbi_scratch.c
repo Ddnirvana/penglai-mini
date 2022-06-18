@@ -22,7 +22,7 @@ static unsigned long extra_offset = SBI_SCRATCH_EXTRA_SPACE_OFFSET;
 
 typedef struct sbi_scratch *(*hartid2scratch)(ulong hartid, ulong hartindex);
 
-int sbi_scratch_init(struct sbi_scratch *scratch)
+int __init sbi_scratch_init(struct sbi_scratch *scratch)
 {
 	u32 i;
 	const struct sbi_platform *plat = sbi_platform_ptr(scratch);

@@ -83,7 +83,7 @@ int sbi_send_pmp(ulong hmask, ulong hbase, struct pmp_data_t* pmp_data)
 	return sbi_ipi_send_many(hmask, hbase, pmp_event, pmp_data);
 }
 
-int sbi_pmp_init(struct sbi_scratch *scratch, bool cold_boot)
+int __init sbi_pmp_init(struct sbi_scratch *scratch, bool cold_boot)
 {
 	int ret;
 	struct pmp_data_t *pmpdata;

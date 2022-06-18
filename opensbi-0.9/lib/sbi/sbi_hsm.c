@@ -117,7 +117,7 @@ int sbi_hsm_hart_started_mask(const struct sbi_domain *dom,
 	return 0;
 }
 
-void sbi_hsm_prepare_next_jump(struct sbi_scratch *scratch, u32 hartid)
+void __init sbi_hsm_prepare_next_jump(struct sbi_scratch *scratch, u32 hartid)
 {
 	u32 oldstate;
 	struct sbi_hsm_data *hdata = sbi_scratch_offset_ptr(scratch,
@@ -129,7 +129,7 @@ void sbi_hsm_prepare_next_jump(struct sbi_scratch *scratch, u32 hartid)
 		sbi_hart_hang();
 }
 
-static void sbi_hsm_hart_wait(struct sbi_scratch *scratch, u32 hartid)
+static void __init sbi_hsm_hart_wait(struct sbi_scratch *scratch, u32 hartid)
 {
 	unsigned long saved_mie;
 	const struct sbi_platform *plat = sbi_platform_ptr(scratch);
@@ -153,7 +153,7 @@ static void sbi_hsm_hart_wait(struct sbi_scratch *scratch, u32 hartid)
 	sbi_platform_ipi_clear(plat, hartid);
 }
 
-int sbi_hsm_init(struct sbi_scratch *scratch, u32 hartid, bool cold_boot)
+int __init sbi_hsm_init(struct sbi_scratch *scratch, u32 hartid, bool cold_boot)
 {
 	u32 i;
 	struct sbi_scratch *rscratch;
