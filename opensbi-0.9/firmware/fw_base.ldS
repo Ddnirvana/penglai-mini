@@ -14,11 +14,25 @@
 	. = ALIGN(0x1000); /* Need this to create proper sections */
 
 	/* Beginning of the code section */
-
 	.text :
  	{
 		PROVIDE(_text_start = .);
 		*(.entry)
+	}
+
+	PROVIDE(_sinittext = .);
+	/* Init text section first */
+	.init.text :
+	{
+		*(.init.text .init.text.*)
+		*(.text.startup)
+	}
+	PROVIDE(_einittext = .);
+
+	. = ALIGN(0x1000); /* Need this to create proper sections */
+
+	.text :
+	{
 		*(.text)
 		. = ALIGN(8);
 		PROVIDE(_text_end = .);

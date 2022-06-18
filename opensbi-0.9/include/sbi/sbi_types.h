@@ -64,6 +64,15 @@ typedef unsigned long		physical_size_t;
 #define __packed		__attribute__((packed))
 #define __noreturn		__attribute__((noreturn))
 
+/*
+ * init helpers to clean firmware code after booting
+ * the implementation is based on Linux's init macros
+ * */
+#define __init		__attribute__((__section__(".init.text")))
+#define __initdata		__attribute__((__section__(".init.data")))
+#define __initconst		__attribute__((__section__(".init.rodata")))
+
+
 #define likely(x) __builtin_expect((x), 1)
 #define unlikely(x) __builtin_expect((x), 0)
 

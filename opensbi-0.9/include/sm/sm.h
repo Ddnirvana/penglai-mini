@@ -12,9 +12,19 @@
 #include <sm/enclave_args.h>
 
 extern uintptr_t _fw_start[], _fw_end[];
+extern uintptr_t _sinittext[], _einittext[];
+extern uintptr_t _text_end[], _text_start[];
+extern uintptr_t _rodata_end[], _rodata_start[];
+extern uintptr_t _data_end[], _data_start[];
+extern uintptr_t _bss_end[], _bss_start[];
 
 #define SM_BASE ((uintptr_t) _fw_start)
 #define SM_SIZE (((uintptr_t) _fw_end) - ((uintptr_t) _fw_start))
+#define INIT_SIZE (((uintptr_t) _einittext) - ((uintptr_t) _sinittext))
+#define TEXT_SIZE (((uintptr_t) _text_end) - ((uintptr_t) _text_start))
+#define RO_SIZE (((uintptr_t) _rodata_end) - ((uintptr_t) _rodata_start))
+#define RW_SIZE (((uintptr_t) _data_end) - ((uintptr_t) _data_start))
+#define BSS_SIZE (((uintptr_t) _bss_end) - ((uintptr_t) _bss_start))
 
 #define MAX_HARTS 8
 
