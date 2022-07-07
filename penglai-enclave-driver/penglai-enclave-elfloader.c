@@ -108,8 +108,8 @@ int penglai_enclave_loadelf(enclave_mem_t*enclave_mem, void* __user elf_ptr, uns
 			printk("KERNEL MODULE: penglai enclave load program failed\n");
 			return -1;
 		}
-		printk("[Penglai Driver@%s] elf_prog_addr:0x%lx elf_prog_size:0x%x, infile_addr:0x%lx", __func__,
-				elf_prog_addr, elf_prog_size, elf_prog_infile_addr);
+//		printk("[Penglai Driver@%s] elf_prog_addr:0x%lx elf_prog_size:0x%x, infile_addr:0x%lx", __func__,
+//				elf_prog_addr, elf_prog_size, elf_prog_infile_addr);
 		elf_prog_ptr += sizeof(struct elf_phdr);
 	}
 	return 0;

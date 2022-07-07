@@ -2,6 +2,12 @@
 DEFINE_IDR(idr_enclave);
 DEFINE_SPINLOCK(idr_enclave_lock);
 
+inline unsigned long dd_get_cycle(void){
+	unsigned long n;
+	__asm__ __volatile__("rdcycle %0" : "=r"(n));
+	return n;
+}
+
 /*
  * ACK (DD): the idr_alloc function is learned from keystone :)
  * */
@@ -55,6 +61,7 @@ enclave_t* create_enclave(int total_pages)
 	int size;
 	struct sbiret ret;
 	unsigned long order = ilog2(total_pages-1) + 1;
+	unsigned long begin_cycle, end_cycle;
 
 	if(!enclave || !enclave_mem || !untrusted_mem)
 	{
@@ -65,6 +72,7 @@ enclave_t* create_enclave(int total_pages)
 	printk("[Penglai Driver@%s] total_pages:%d order:%ld\n",
 			__func__, total_pages, order);
 	//Note: SBI_SM_ALLOC_ENCLAVE_MEM's arg is the num of bytes instead of pages
+	begin_cycle = dd_get_cycle();
 	require_sec_memory.size = total_pages << RISCV_PGSHIFT;
 	ret = SBI_CALL_1(SBI_SM_ALLOC_ENCLAVE_MEM, __pa(&require_sec_memory));
 	pa = require_sec_memory.paddr;
@@ -101,6 +109,9 @@ enclave_t* create_enclave(int total_pages)
 		printk("KERNEL MODULE: [SBI_CALL]alloc enclave mem failed\n");
 		goto free_enclave;
 	}
+	end_cycle = dd_get_cycle();
+	printk("[Penglai Driver@%s] Prepare Secure Mem takes (cycles): %lu\n",
+			__func__, end_cycle - begin_cycle);
 
 	addr = (vaddr_t)__va(pa);
 	size = require_sec_memory.resp_size;

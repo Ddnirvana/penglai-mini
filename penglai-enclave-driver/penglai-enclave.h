@@ -93,4 +93,6 @@ unsigned int enclave_idr_alloc(enclave_t* enclave);
 enclave_t* enclave_idr_remove(unsigned int ueid); 
 enclave_t* get_enclave_by_id(unsigned int ueid);
 
+inline unsigned long dd_get_cycle(void);
+
 #endif

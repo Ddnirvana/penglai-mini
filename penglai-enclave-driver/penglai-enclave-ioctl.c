@@ -8,13 +8,13 @@ DEFINE_SPINLOCK(enclave_big_lock);
 void acquire_big_lock(const char * str)
 {
 	spin_lock(&enclave_big_lock);
-	printk("[PENGLAI Driver@%s] %s get lock\n", __func__, str);
+	//printk("[PENGLAI Driver@%s] %s get lock\n", __func__, str);
 }
 
 void release_big_lock(const char * str)
 {
 	spin_unlock(&enclave_big_lock);
-	printk("[PENGLAI Driver@%s] %s release lock\n", __func__, str);
+	//printk("[PENGLAI Driver@%s] %s release lock\n", __func__, str);
 }
 
 unsigned int total_enclave_page(int elf_size, int stack_size)
@@ -149,8 +149,8 @@ int penglai_enclave_create(struct file * filep, unsigned long args)
 	}
 	enclave->untrusted_mem->addr = (vaddr_t)untrusted_mem_ptr;
 	enclave->untrusted_mem->size = untrusted_mem_size;
-	printk("[Penglai Driver@%s] untrusted_mem->addr:0x%lx untrusted_mem->size:0x%lx\n",
-			__func__, (vaddr_t)untrusted_mem_ptr, untrusted_mem_size);
+	//printk("[Penglai Driver@%s] untrusted_mem->addr:0x%lx untrusted_mem->size:0x%lx\n",
+	//		__func__, (vaddr_t)untrusted_mem_ptr, untrusted_mem_size);
 
 	alloc_kbuffer(ENCLAVE_DEFAULT_KBUFFER_SIZE, &kbuffer_ptr, enclave);
 	enclave->kbuffer = (vaddr_t)kbuffer_ptr;
@@ -163,11 +163,16 @@ int penglai_enclave_create(struct file * filep, unsigned long args)
 			enclave->enclave_mem->size, elf_entry, __pa(untrusted_mem_ptr),
 			untrusted_mem_size, __pa(free_mem));
 
-	printk("[Penglai Driver@%s] enclave_mem->paddr:0x%lx, size:0x%lx\n",
-			__func__, (unsigned long)(enclave->enclave_mem->paddr),
-			enclave->enclave_mem->size);
+	//printk("[Penglai Driver@%s] enclave_mem->paddr:0x%lx, size:0x%lx\n",
+	//		__func__, (unsigned long)(enclave->enclave_mem->paddr),
+	//		enclave->enclave_mem->size);
 
+
+	unsigned long begin_cycle, end_cycle;
+
+	begin_cycle = dd_get_cycle();
 	ret = SBI_CALL_1(SBI_SM_CREATE_ENCLAVE, __pa(&enclave_sbi_param));
+	end_cycle = dd_get_cycle();
 
 	//if(ret < 0)
 	if(ret.error)
@@ -175,6 +180,9 @@ int penglai_enclave_create(struct file * filep, unsigned long args)
 		printk("KERNEL  MODULE: SBI_SM_CREATE_ENCLAVE is failed \n");
 		goto destroy_enclave;
 	}
+
+	printk("[Penglai Driver@%s] SBI_SM_CREATE_ENCLAVE takes (cycles): %lu\n",
+			__func__, end_cycle - begin_cycle);
 
 	enclave_param->eid = enclave_idr_alloc(enclave);
 
@@ -290,7 +298,7 @@ int penglai_enclave_run(struct file *filep, unsigned long args)
 	int retval = 0;
 	int resume_id = 0;
 
-	printk("[Penglai Driver@%s] begin\n", __func__);
+	//printk("[Penglai Driver@%s] begin\n", __func__);
 	acquire_big_lock(__func__);
 
 	enclave = get_enclave_by_id(eid);
@@ -318,7 +326,7 @@ int penglai_enclave_run(struct file *filep, unsigned long args)
 			return -EFAULT;
 	}
 
-	printk("[Penglai Driver@%s] goto infinite run loop\n", __func__);
+	//printk("[Penglai Driver@%s] goto infinite run loop\n", __func__);
 	// In the (infinite loop), we do not need to acquire the lock
 	// The monitor is responsible to check the authentication
 	// It will only exit when either:
@@ -327,6 +335,9 @@ int penglai_enclave_run(struct file *filep, unsigned long args)
 	//
 	// Note: stop_enclave will not leave the loop, but will not run
 	// 	 the enclave (as resume_from_timer_irq will check status of an enclave)
+	unsigned long begin_cycle, end_cycle;
+
+	begin_cycle = dd_get_cycle();
 	ret = SBI_CALL_1(SBI_SM_RUN_ENCLAVE, enclave_eid);
 	resume_id = enclave->eid;
 
@@ -368,7 +379,7 @@ int penglai_enclave_run(struct file *filep, unsigned long args)
 					ret = SBI_CALL_2(SBI_SM_RESUME_ENCLAVE, resume_id, RESUME_FROM_OCALL);
 				}
 			}
-		}	
+		}
 	}
 
 	/* Use untrusted mem as in_out_buf*/
@@ -384,8 +395,9 @@ int penglai_enclave_run(struct file *filep, unsigned long args)
 		printk("KERNEL MODULE: sbi call run enclave is failed \n");
 		goto destroy_enclave;
 	}else{
-		printk("[Penglai Driver@%s] run returned successfully\n",
-				__func__);
+		end_cycle = dd_get_cycle();
+		printk("[Penglai Driver@%s] run returned successfully, takes (cycles) %lu\n",
+				__func__, end_cycle - begin_cycle);
 	}
 
 	//free_enclave:
@@ -424,8 +436,15 @@ int penglai_enclave_attest(struct file * filep, unsigned long args)
 		goto out;
 	}
 
+	unsigned long begin_cycle, end_cycle;
+
+	begin_cycle = dd_get_cycle();
 	ret = SBI_CALL_3(SBI_SM_ATTEST_ENCLAVE, enclave->eid, __pa(&(enclave_param->report)), enclave_param->nonce);
+	end_cycle = dd_get_cycle();
 	retval = ret.value;
+
+	printk("[Penglai Driver@%s] SBI_SM_ATTEST_ENCLAVE takes (cycles): %lu\n",
+			__func__, end_cycle-begin_cycle);
 
 out:
 	release_big_lock(__func__);
