@@ -1,6 +1,7 @@
 #!/bin/bash
 qemu-system-riscv64 -nographic -machine virt \
-	-smp 1 -m 8G \
+	-smp 1 -m 1000M \
+	-icount shift=0 \
 	-kernel  ./opensbi-0.9/build-oe/qemu-virt/platform/generic/firmware/fw_payload.elf  \
 	-drive file=openeuler.riscv64.raw,format=raw,id=hd0 \
 	-object rng-random,filename=/dev/urandom,id=rng0 \
