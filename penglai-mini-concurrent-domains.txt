@@ -1,0 +1,820 @@
+[    0.000000] Linux version 5.10.0 (root@dd-PC7) (riscv64-unknown-linux-gnu-gcc (GCC) 7.2.0, GNU ld (GNU Binutils) 2.29) #1 SMP Mon Nov 1 12:17:48 UTC 2021
+[    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
+[    0.000000] earlycon: ns16550a0 at MMIO 0x0000000010000000 (options '')
+[    0.000000] printk: bootconsole [ns16550a0] enabled
+[    0.000000] efi: UEFI not found.
+[    0.000000] Zone ranges:
+[    0.000000]   DMA32    [mem 0x0000000080200000-0x00000000be7fffff]
+[    0.000000]   Normal   empty
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080200000-0x00000000be7fffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080200000-0x00000000be7fffff]
+[    0.000000] On node 0 totalpages: 255488
+[    0.000000]   DMA32 zone: 3493 pages used for memmap
+[    0.000000]   DMA32 zone: 0 pages reserved
+[    0.000000]   DMA32 zone: 255488 pages, LIFO batch:63
+[    0.000000] software IO TLB: mapped [mem 0x00000000b99fa000-0x00000000bd9fa000] (64MB)
+[    0.000000] SBI specification v0.2 detected
+[    0.000000] SBI implementation ID=0x1 Version=0x9
+[    0.000000] SBI v0.2 TIME extension detected
+[    0.000000] SBI v0.2 IPI extension detected
+[    0.000000] SBI v0.2 RFENCE extension detected
+[    0.000000] SBI v0.2 HSM extension detected
+[    0.000000] riscv: ISA extensions acdfimsu
+[    0.000000] riscv: ELF capabilities acdfim
+[    0.000000] percpu: Embedded 17 pages/cpu s32088 r8192 d29352 u69632
+[    0.000000] pcpu-alloc: s32088 r8192 d29352 u69632 alloc=17*4096
+[    0.000000] pcpu-alloc: [0] 0 
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 251995
+[    0.000000] Kernel command line: root=/dev/vda1 rw console=ttyS0 systemd.default_timeout_start_sec=600 selinux=0 highres=off mem=4096M earlycon
+[    0.000000] Dentry cache hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    0.000000] Sorting __ex_table...
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] Memory: 922448K/1021952K available (7157K kernel code, 3890K rwdata, 4096K rodata, 231K init, 355K bss, 99504K reserved, 0K cma-reserved)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+[    0.000000] rcu: Hierarchical RCU implementation.
+[    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=1.
+[    0.000000] 	Tracing variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=1
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] riscv-intc: 64 local interrupts mapped
+[    0.000000] plic: plic@c000000: mapped 53 interrupts with 1 handlers for 2 contexts.
+[    0.000000] random: get_random_bytes called from start_kernel+0x306/0x48e with crng_init=0
+[    0.000000] riscv_timer_init_dt: Registering clocksource cpuid [0] hartid [0]
+[    0.000000] clocksource: riscv_clocksource: mask: 0xffffffffffffffff max_cycles: 0x24e6a1710, max_idle_ns: 440795202120 ns
+[    0.000003] sched_clock: 64 bits at 10MHz, resolution 100ns, wraps every 4398046511100ns
+[    0.000076] Console: colour dummy device 80x25
+[    0.000093] Calibrating delay loop (skipped), value calculated using timer frequency.. 20.00 BogoMIPS (lpj=40000)
+[    0.000114] pid_max: default: 32768 minimum: 301
+[    0.000203] Mount-cache hash table entries: 2048 (order: 2, 16384 bytes, linear)
+[    0.000221] Mountpoint-cache hash table entries: 2048 (order: 2, 16384 bytes, linear)
+[    0.000778] rcu: Hierarchical SRCU implementation.
+[    0.000842] EFI services will not be available.
+[    0.000880] smp: Bringing up secondary CPUs ...
+[    0.000891] smp: Brought up 1 node, 1 CPU
+[    0.001033] devtmpfs: initialized
+[    0.001931] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.001949] futex hash table entries: 256 (order: 2, 16384 bytes, linear)
+[    0.002127] NET: Registered protocol family 16
+[    0.010366] HugeTLB registered 1.00 GiB page size, pre-allocated 0 pages
+[    0.010380] HugeTLB registered 2.00 MiB page size, pre-allocated 0 pages
+[    0.010902] vgaarb: loaded
+[    0.011048] SCSI subsystem initialized
+[    0.011108] libata version 3.00 loaded.
+[    0.011197] usbcore: registered new interface driver usbfs
+[    0.011227] usbcore: registered new interface driver hub
+[    0.011251] usbcore: registered new device driver usb
+[    0.011754] clocksource: Switched to clocksource riscv_clocksource
+[    0.014378] NET: Registered protocol family 2
+[    0.014720] tcp_listen_portaddr_hash hash table entries: 512 (order: 1, 8192 bytes, linear)
+[    0.014746] TCP established hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    0.014861] TCP bind hash table entries: 8192 (order: 5, 131072 bytes, linear)
+[    0.014973] TCP: Hash tables configured (established 8192 bind 8192)
+[    0.015019] UDP hash table entries: 512 (order: 2, 16384 bytes, linear)
+[    0.015050] UDP-Lite hash table entries: 512 (order: 2, 16384 bytes, linear)
+[    0.015123] NET: Registered protocol family 1
+[    0.015294] RPC: Registered named UNIX socket transport module.
+[    0.015305] RPC: Registered udp transport module.
+[    0.015316] RPC: Registered tcp transport module.
+[    0.015326] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    0.015339] PCI: CLS 0 bytes, default 64
+[    0.015574] kvm [1]: hypervisor extension not available
+[    0.015763] workingset: timestamp_bits=62 max_order=18 bucket_order=0
+[    0.020305] NFS: Registering the id_resolver key type
+[    0.020331] Key type id_resolver registered
+[    0.020340] Key type id_legacy registered
+[    0.020399] nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+[    0.020412] nfs4flexfilelayout_init: NFSv4 Flexfile Layout Driver Registering...
+[    0.020465] 9p: Installing v9fs 9p2000 file system support
+[    0.020615] NET: Registered protocol family 38
+[    0.020635] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 251)
+[    0.020648] io scheduler mq-deadline registered
+[    0.020658] io scheduler kyber registered
+[    0.020925] pci-host-generic 30000000.pci: host bridge /soc/pci@30000000 ranges:
+[    0.020954] pci-host-generic 30000000.pci:       IO 0x0003000000..0x000300ffff -> 0x0000000000
+[    0.020978] pci-host-generic 30000000.pci:      MEM 0x0040000000..0x007fffffff -> 0x0040000000
+[    0.022019] pci-host-generic 30000000.pci: ECAM at [mem 0x30000000-0x3fffffff] for [bus 00-ff]
+[    0.022077] pci-host-generic 30000000.pci: PCI host bridge to bus 0000:00
+[    0.022093] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    0.022107] pci_bus 0000:00: root bus resource [io  0x0000-0xffff]
+[    0.022122] pci_bus 0000:00: root bus resource [mem 0x40000000-0x7fffffff]
+[    0.022144] pci 0000:00:00.0: [1b36:0008] type 00 class 0x060000
+[    0.038097] Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+[    0.038600] printk: console [ttyS0] disabled
+[    0.038641] 10000000.uart: ttyS0 at MMIO 0x10000000 (irq = 2, base_baud = 230400) is a 16550A
+[    0.038661] printk: console [ttyS0] enabled
+[    0.038677] printk: bootconsole [ns16550a0] disabled
+[    0.039061] [drm] radeon kernel modesetting enabled.
+[    0.042137] loop: module loaded
+[    0.044219] virtio_blk virtio1: [vda] 20971520 512-byte logical blocks (10.7 GB/10.0 GiB)
+[    0.044238] vda: detected capacity change from 0 to 10737418240
+[    0.044823] random: fast init done
+[    0.044922] random: crng init done
+[    0.045010]  vda: vda1
+[    0.045725] libphy: Fixed MDIO Bus: probed
+[    0.046479] e1000e: Intel(R) PRO/1000 Network Driver
+[    0.046491] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+[    0.046546] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+[    0.046560] ehci-pci: EHCI PCI platform driver
+[    0.046586] ehci-platform: EHCI generic platform driver
+[    0.046642] ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
+[    0.046658] ohci-pci: OHCI PCI platform driver
+[    0.046686] ohci-platform: OHCI generic platform driver
+[    0.046903] usbcore: registered new interface driver uas
+[    0.046938] usbcore: registered new interface driver usb-storage
+[    0.046992] mousedev: PS/2 mouse device common for all mice
+[    0.047135] goldfish_rtc 101000.rtc: registered as rtc0
+[    0.047153] goldfish_rtc 101000.rtc: setting system clock to 2022-07-07T08:10:46 UTC (1657181446)
+[    0.047301] syscon-poweroff soc:poweroff: pm_power_off already claimed 00000000406d21e5 sbi_shutdown
+[    0.047321] syscon-poweroff: probe of soc:poweroff failed with error -16
+[    0.047427] sdhci: Secure Digital Host Controller Interface driver
+[    0.047441] sdhci: Copyright(c) Pierre Ossman
+[    0.047462] sdhci-pltfm: SDHCI platform and OF driver helper
+[    0.047570] usbcore: registered new interface driver usbhid
+[    0.047582] usbhid: USB HID core driver
+[    0.048004] NET: Registered protocol family 10
+[    0.048350] Segment Routing with IPv6
+[    0.048392] sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+[    0.048658] NET: Registered protocol family 17
+[    0.048772] 9pnet: Installing 9P2000 support
+[    0.048810] Key type dns_resolver registered
+[    0.067048] EXT4-fs (vda1): recovery complete
+[    0.069203] EXT4-fs (vda1): mounted filesystem with ordered data mode. Opts: (null)
+[    0.069228] VFS: Mounted root (ext4 filesystem) on device 254:1.
+[    0.069501] devtmpfs: mounted
+[    0.069561] Freeing unused kernel memory: 228K
+[    0.079842] Run /sbin/init as init process
+[    0.079852]   with arguments:
+[    0.079855]     /sbin/init
+[    0.079858]   with environment:
+[    0.079861]     HOME=/
+[    0.079865]     TERM=linux
+[    0.079868]     selinux=0
+[    0.079871]     mem=4096M
+[    0.111330] systemd[1]: systemd v243-22.oe1 running in system mode. (+PAM +AUDIT +SELINUX +IMA -APPARMOR +SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +SECCOMP +BLKID +ELFUTILS +KMOD +IDN2 -IDN +PCRE2 default-hierarchy=legacy)
+[    0.111413] systemd[1]: Detected architecture riscv64.
+[    0.112248] systemd[1]: Set hostname to <openEuler-RISCV-rare>.
+[    0.245809] systemd-rc-local-generator[50]: /etc/rc.d/rc.local is not marked executable, skipping.
+[    0.268907] systemd[1]: /usr/lib/systemd/system/auditd.service:13: PIDFile= references a path below legacy directory /var/run/, updating /var/run/auditd.pid → /run/auditd.pid; please update the unit file accordingly.
+[    0.345888] systemd[1]: /usr/lib/systemd/system/dbus.socket:5: ListenStream= references a path below legacy directory /var/run/, updating /var/run/dbus/system_bus_socket → /run/dbus/system_bus_socket; please update the unit file accordingly.
+[    0.439686] systemd[1]: system-getty.slice: unit configures an IP firewall, but the local system does not support BPF/cgroup firewalling.
+[    0.439713] systemd[1]: (This warning is only shown for the first unit using IP firewalling.)
+[    0.440004] systemd[1]: Created slice system-getty.slice.
+[    0.440332] systemd[1]: Created slice system-serial\x2dgetty.slice.
+[    0.440636] systemd[1]: Created slice system-sshd\x2dkeygen.slice.
+[    0.727869] systemd-journald[60]: Received client request to flush runtime journal.
+[    0.729920] systemd-journald[60]: File /var/log/journal/5752e0903cf6471ba6b18338c39992db/system.journal corrupted or uncleanly shut down, renaming and replacing.
+[  231.320020] penglai: loading out-of-tree module taints kernel.
+[  231.321316] enclave_ioctl_init...
+[  231.321378] [Penglai KModule] register_chrdev succeeded!
+[  236.063134] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.069453] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6304774
+[  236.069906] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 185102
+[  236.070162] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.070179] [Penglai SDK Driver Error@create_enclave] alloc_enclave_mem error
+[  236.076600] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6423418
+[  236.076865] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3226
+[  236.077154] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.083474] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6305323
+[  236.083735] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3233
+[  236.083966] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.090286] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6305585
+[  236.090547] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3240
+[  236.090768] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.097087] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6304989
+[  236.097348] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3247
+[  236.097580] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.103901] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6306406
+[  236.104162] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3254
+[  236.104385] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.110705] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6305453
+[  236.110966] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3261
+[  236.111194] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.117515] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6306232
+[  236.117776] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3268
+[  236.118006] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.124327] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6305991
+[  236.124588] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3275
+[  236.124804] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.131126] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6307606
+[  236.131388] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3282
+[  236.131608] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.137928] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6305643
+[  236.138189] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3289
+[  236.138497] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.144817] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6306060
+[  236.145078] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3296
+[  236.145296] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.151615] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6305335
+[  236.151878] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3303
+[  236.152089] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.158409] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6305209
+[  236.158670] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3310
+[  236.158893] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.165214] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6306419
+[  236.165475] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3317
+[  236.165690] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.172011] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6306380
+[  236.172272] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3324
+[  236.172487] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.178807] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6305331
+[  236.179068] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3331
+[  236.179294] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.179311] [Penglai SDK Driver Error@create_enclave] alloc_enclave_mem error
+[  236.185733] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6424737
+[  236.185995] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3344
+[  236.186022] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.192337] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6300915
+[  236.192599] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3351
+[  236.192626] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.198942] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6300965
+[  236.199203] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3358
+[  236.199230] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.205546] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6300905
+[  236.205807] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3365
+[  236.205838] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.212158] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6305162
+[  236.212419] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3372
+[  236.212449] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.218766] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302410
+[  236.219027] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3379
+[  236.219054] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.225370] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6300965
+[  236.225628] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3386
+[  236.226955] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.233273] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6304310
+[  236.233535] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3393
+[  236.233562] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.239877] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301113
+[  236.240139] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3400
+[  236.240166] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.246482] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6300879
+[  236.246743] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3407
+[  236.246770] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.253086] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6300965
+[  236.253347] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3414
+[  236.253375] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.259690] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6300872
+[  236.259955] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3421
+[  236.259982] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.266298] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301017
+[  236.266559] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3428
+[  236.266587] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.272902] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6300892
+[  236.273171] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3435
+[  236.273198] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.279513] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6300937
+[  236.279778] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3442
+[  236.279805] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.286121] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6300878
+[  236.286382] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3449
+[  236.286412] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.286428] [Penglai SDK Driver Error@create_enclave] alloc_enclave_mem error
+[  236.292845] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6419442
+[  236.293104] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3462
+[  236.293131] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.299446] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301115
+[  236.299708] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3469
+[  236.299738] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.306060] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302238
+[  236.306322] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3476
+[  236.306351] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.312671] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6305406
+[  236.312933] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3483
+[  236.312970] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.319285] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301271
+[  236.319547] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3490
+[  236.319574] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.325890] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301142
+[  236.326152] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3497
+[  236.326179] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.332495] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301208
+[  236.332756] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3504
+[  236.332783] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.339099] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301121
+[  236.339361] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3511
+[  236.339388] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.345704] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301346
+[  236.345965] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3518
+[  236.345993] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.352308] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301135
+[  236.352570] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3525
+[  236.352597] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.358913] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301195
+[  236.359174] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3532
+[  236.359202] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.365517] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301134
+[  236.365776] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3539
+[  236.365805] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.372120] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301273
+[  236.372382] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3546
+[  236.372415] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.378731] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301121
+[  236.378993] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3553
+[  236.379022] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.385337] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301200
+[  236.385599] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3560
+[  236.385628] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.391944] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301133
+[  236.392206] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3567
+[  236.392235] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.392252] [Penglai SDK Driver Error@create_enclave] alloc_enclave_mem error
+[  236.398669] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6419719
+[  236.398931] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3580
+[  236.398960] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.405276] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301377
+[  236.405538] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3587
+[  236.405567] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.411883] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301450
+[  236.412145] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3594
+[  236.412174] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.418490] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301365
+[  236.418752] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3601
+[  236.418781] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.425097] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301523
+[  236.425359] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3608
+[  236.425386] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.431702] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301358
+[  236.431967] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3615
+[  236.431994] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.438310] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301437
+[  236.438569] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3622
+[  236.438596] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.444912] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301377
+[  236.445174] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3629
+[  236.445201] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.451517] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302052
+[  236.451783] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3636
+[  236.451810] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.458126] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301364
+[  236.458388] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3643
+[  236.458415] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.464731] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301450
+[  236.464993] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3650
+[  236.465020] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.471336] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301357
+[  236.471598] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3657
+[  236.471625] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.477941] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301522
+[  236.478203] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3664
+[  236.478230] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.484546] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301377
+[  236.484808] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3671
+[  236.484836] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.491152] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301430
+[  236.491421] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3678
+[  236.491448] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.497764] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301377
+[  236.498026] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3685
+[  236.498053] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.498070] [Penglai SDK Driver Error@create_enclave] alloc_enclave_mem error
+[  236.504488] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6420151
+[  236.504746] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3698
+[  236.504774] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.511090] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301607
+[  236.511351] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3705
+[  236.511379] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.517695] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301693
+[  236.517957] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3712
+[  236.517984] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.524300] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301620
+[  236.524562] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3719
+[  236.524591] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.530907] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301753
+[  236.531169] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3726
+[  236.531196] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.537512] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301620
+[  236.537774] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3733
+[  236.537802] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.544118] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301693
+[  236.544380] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3740
+[  236.544407] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.550725] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6303647
+[  236.550987] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3747
+[  236.551017] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.557333] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301824
+[  236.557595] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3754
+[  236.557622] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.563938] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301604
+[  236.564200] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3761
+[  236.564228] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.570544] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301664
+[  236.570806] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3768
+[  236.570833] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.577149] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301604
+[  236.577408] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3775
+[  236.577435] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.583751] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301723
+[  236.584016] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3782
+[  236.584043] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.590359] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301591
+[  236.590622] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3789
+[  236.590649] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.596965] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301669
+[  236.597227] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3796
+[  236.597254] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.603571] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301583
+[  236.603836] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3803
+[  236.603865] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.603882] [Penglai SDK Driver Error@create_enclave] alloc_enclave_mem error
+[  236.610300] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6420449
+[  236.610562] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3816
+[  236.610591] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.616908] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301847
+[  236.617170] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3823
+[  236.617199] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.623515] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301900
+[  236.623781] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3830
+[  236.623810] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.630127] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301834
+[  236.630389] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3837
+[  236.630418] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.636734] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301993
+[  236.636996] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3844
+[  236.637026] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.643342] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301827
+[  236.643604] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3851
+[  236.643633] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.649949] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301927
+[  236.650208] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3858
+[  236.650241] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.656557] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301847
+[  236.656819] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3865
+[  236.656849] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.663165] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302038
+[  236.663427] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3872
+[  236.663454] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.669771] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301854
+[  236.670033] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3879
+[  236.670060] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.676377] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301920
+[  236.676639] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3886
+[  236.676666] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.682983] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301834
+[  236.683245] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3893
+[  236.683272] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.689589] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301985
+[  236.689851] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3900
+[  236.689878] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.696195] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301847
+[  236.696457] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3907
+[  236.696484] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.702800] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301899
+[  236.703070] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3914
+[  236.703097] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.709413] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6301846
+[  236.709676] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3921
+[  236.709705] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.709722] [Penglai SDK Driver Error@create_enclave] alloc_enclave_mem error
+[  236.716145] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6425657
+[  236.716404] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3934
+[  236.716431] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.722747] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302077
+[  236.723010] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3941
+[  236.723037] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.729353] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302163
+[  236.729616] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3948
+[  236.729643] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.735960] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302090
+[  236.736222] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3955
+[  236.736249] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.742566] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302223
+[  236.742829] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3962
+[  236.742856] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.749172] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302090
+[  236.749435] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3969
+[  236.749462] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.755778] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302163
+[  236.756041] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3976
+[  236.756068] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.762385] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302077
+[  236.762647] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3983
+[  236.762674] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.768991] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302301
+[  236.769253] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3990
+[  236.769281] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.775597] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302070
+[  236.775863] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 3997
+[  236.775891] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.782207] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302150
+[  236.782470] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4004
+[  236.782497] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.788813] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302090
+[  236.789072] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4011
+[  236.789100] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.795416] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302208
+[  236.795679] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4018
+[  236.795706] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.802022] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302097
+[  236.802285] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4025
+[  236.802314] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.808630] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302155
+[  236.808893] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4035
+[  236.808920] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.815237] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302069
+[  236.815500] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4042
+[  236.815527] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.815544] [Penglai SDK Driver Error@create_enclave] alloc_enclave_mem error
+[  236.821962] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6421221
+[  236.822225] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4055
+[  236.822253] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.828569] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302333
+[  236.828832] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4062
+[  236.828859] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.835176] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302386
+[  236.835439] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4069
+[  236.835466] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.841786] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6305053
+[  236.842048] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4076
+[  236.842082] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.848399] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302489
+[  236.848661] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4083
+[  236.848690] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.855007] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302320
+[  236.855270] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4090
+[  236.855299] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.861616] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302406
+[  236.861875] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4097
+[  236.863770] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.870088] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6304204
+[  236.870351] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4104
+[  236.870382] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.876704] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6307181
+[  236.876966] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4111
+[  236.877010] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.883326] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302323
+[  236.883589] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4118
+[  236.883618] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.889935] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302413
+[  236.890198] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4125
+[  236.890234] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.896551] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302333
+[  236.896814] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4132
+[  236.896843] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.903160] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302451
+[  236.903422] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4139
+[  236.903450] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.909766] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302340
+[  236.910029] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 4146
+[  236.910057] [Penglai Driver@create_enclave] total_pages:512 order:13
+[  236.916374] [Penglai Driver@create_enclave] Prepare Secure Mem takes (cycles): 6302398
+[  236.916824] [Penglai Driver@penglai_enclave_create] SBI_SM_CREATE_ENCLAVE takes (cycles): 185690
+[  237.125323] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205523422
+[  237.330883] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522165
+[  237.536457] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518021
+[  237.742011] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205521771
+[  237.947570] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520805
+[  238.153126] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518089
+[  238.358679] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520140
+[  238.564233] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518081
+[  238.769784] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518054
+[  238.975339] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522442
+[  239.180899] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205519578
+[  239.386463] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518081
+[  239.592015] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520056
+[  239.797569] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518064
+[  240.003124] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205521956
+[  240.208685] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522919
+[  240.414241] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518166
+[  240.619791] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518071
+[  240.825344] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520039
+[  241.030902] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522150
+[  241.236580] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205524814
+[  241.442162] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205523148
+[  241.647724] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518081
+[  241.853280] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520056
+[  242.058838] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520077
+[  242.264394] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520075
+[  242.469948] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518081
+[  242.675507] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205526056
+[  242.881161] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522562
+[  243.086723] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522256
+[  243.292294] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522081
+[  243.497847] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518081
+[  243.703400] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520242
+[  243.908958] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522519
+[  244.114517] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205519422
+[  244.320070] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518011
+[  244.525625] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522260
+[  244.731183] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520266
+[  244.936738] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520319
+[  245.142294] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520077
+[  245.347848] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518121
+[  245.553399] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518131
+[  245.758952] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520043
+[  245.964508] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520259
+[  246.170063] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205519776
+[  246.375618] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205521852
+[  246.581176] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518141
+[  246.786731] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522311
+[  246.992289] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522077
+[  247.197846] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205519543
+[  247.403413] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520198
+[  247.608969] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520676
+[  247.814522] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518064
+[  248.020075] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520358
+[  248.225632] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205521931
+[  248.431188] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518021
+[  248.636739] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518130
+[  248.842294] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522577
+[  249.047850] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518028
+[  249.253405] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522023
+[  249.458962] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520638
+[  249.664516] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518081
+[  249.870069] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520452
+[  250.075624] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520586
+[  250.281178] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518174
+[  250.486730] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518071
+[  250.692283] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520601
+[  250.897839] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520846
+[  251.103395] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205519484
+[  251.308961] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520064
+[  251.514517] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520048
+[  251.720073] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520241
+[  251.925632] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522224
+[  252.131190] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205519362
+[  252.336744] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520148
+[  252.542298] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520144
+[  252.747851] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518081
+[  252.953406] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205521711
+[  253.158966] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520075
+[  253.364519] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518021
+[  253.570071] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518131
+[  253.777296] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205523340
+[  253.982861] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205524182
+[  254.188429] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518029
+[  254.393982] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520143
+[  254.599536] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518081
+[  254.805087] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518054
+[  255.010647] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205526762
+[  255.216220] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518030
+[  255.421771] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518156
+[  255.627325] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520055
+[  255.832879] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518064
+[  256.038434] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522524
+[  256.243993] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205521341
+[  256.449548] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518081
+[  256.655100] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518131
+[  256.860658] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205524933
+[  257.068671] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518029
+[  257.274222] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518071
+[  257.479775] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205519998
+[  257.685330] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518141
+[  257.890883] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520769
+[  258.096442] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205521314
+[  258.301997] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520043
+[  258.507550] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518021
+[  258.713104] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520113
+[  258.918662] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522118
+[  259.124221] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205521405
+[  259.329912] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205523126
+[  259.535490] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205524375
+[  259.741046] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518141
+[  259.946601] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205522823
+[  260.152162] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205519362
+[  260.357716] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520070
+[  260.563272] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520604
+[  260.768827] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518064
+[  260.974380] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520784
+[  261.179939] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205521964
+[  261.385493] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518081
+[  261.591044] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518131
+[  261.796598] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205519982
+[  262.002154] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520876
+[  262.207707] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518029
+[  262.413260] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520059
+[  262.618814] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205518141
+[  262.824368] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205519958
+[  263.029927] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205524175
+[  263.235499] [Penglai Driver@penglai_enclave_attest] SBI_SM_ATTEST_ENCLAVE takes (cycles): 205520303
+[  266.266344] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6371520
+[  266.272772] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6375831
+[  266.279285] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6324864
+[  266.285718] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311180
+[  266.292144] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311908
+[  266.298578] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311154
+[  266.305014] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311906
+[  266.311447] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6310811
+[  266.317884] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311810
+[  266.324323] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311741
+[  266.330749] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6310870
+[  266.337175] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311886
+[  266.343607] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6310890
+[  266.350032] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311255
+[  266.356466] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311766
+[  266.362907] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6310927
+[  266.369344] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311983
+[  266.375779] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311802
+[  266.382213] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311092
+[  266.388647] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311808
+[  266.395081] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6310888
+[  266.401519] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311854
+[  266.407953] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311692
+[  266.414391] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6310955
+[  266.420825] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311922
+[  266.427259] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311007
+[  266.433696] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311841
+[  266.440130] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311715
+[  266.446563] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6310947
+[  266.452930] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6310396
+[  266.459292] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307886
+[  266.465841] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6310546
+[  266.472206] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6309634
+[  266.478569] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6308559
+[  266.484929] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307173
+[  266.491289] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307037
+[  266.497648] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307079
+[  266.504008] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307072
+[  266.510368] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307123
+[  266.517220] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6310492
+[  266.523584] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6309106
+[  266.529949] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6310724
+[  266.536313] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307135
+[  266.542673] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307162
+[  266.549032] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307133
+[  266.555392] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307071
+[  266.561752] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307129
+[  266.568112] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307149
+[  266.574479] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307091
+[  266.580839] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307149
+[  266.587199] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307047
+[  266.593559] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307131
+[  266.599919] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307108
+[  266.606279] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307066
+[  266.612639] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307121
+[  266.618999] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307080
+[  266.625359] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307149
+[  266.631721] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6309164
+[  266.638087] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6306818
+[  266.644447] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307121
+[  266.650807] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307126
+[  266.657167] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307226
+[  266.663527] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307143
+[  266.669887] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307208
+[  266.676249] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307078
+[  266.682609] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307124
+[  266.688969] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307212
+[  266.695329] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307231
+[  266.701691] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307713
+[  266.708050] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307154
+[  266.714411] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307255
+[  266.720771] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307100
+[  266.727131] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307223
+[  266.733491] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307129
+[  266.739851] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307239
+[  266.746211] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307132
+[  266.752571] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307211
+[  266.758930] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307140
+[  266.765290] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307260
+[  266.771651] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307278
+[  266.778013] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6309226
+[  266.784378] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6309753
+[  266.790740] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307960
+[  266.797100] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307183
+[  266.803460] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307135
+[  266.809821] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307226
+[  266.816182] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307163
+[  266.822542] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307215
+[  266.828901] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307304
+[  266.835261] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307100
+[  266.841621] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307184
+[  266.847981] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307132
+[  266.854341] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307242
+[  266.860711] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307132
+[  266.867071] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307188
+[  266.873431] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307144
+[  266.879791] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307368
+[  266.889757] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6310542
+[  266.896122] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6309833
+[  266.902488] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6311221
+[  266.908876] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307205
+[  266.915236] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307239
+[  266.921596] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307265
+[  266.927956] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307172
+[  266.934316] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307203
+[  266.940676] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307344
+[  266.947037] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307147
+[  266.953397] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307229
+[  266.959757] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307172
+[  266.966117] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307216
+[  266.972477] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307242
+[  266.978838] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307282
+[  266.985201] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6310912
+[  266.991563] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307231
+[  266.997924] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307191
+[  267.004285] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6308905
+[  267.010658] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307274
+[  267.017018] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307292
+[  267.023378] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307264
+[  267.029738] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307349
+[  267.036097] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307306
+[  267.042458] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307378
+[  267.048818] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307292
+[  267.055178] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307239
+[  267.061537] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307267
+[  267.067897] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307349
+[  267.074257] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307291
+[  267.080618] [Penglai Driver@penglai_enclave_run] run returned successfully, takes (cycles) 6307489
