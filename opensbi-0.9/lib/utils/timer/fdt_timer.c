@@ -63,7 +63,7 @@ void fdt_timer_exit(void)
 		current_driver->exit();
 }
 
-static int fdt_timer_warm_init(void)
+static int __init fdt_timer_warm_init(void)
 {
 	if (current_driver->warm_init)
 		return current_driver->warm_init();

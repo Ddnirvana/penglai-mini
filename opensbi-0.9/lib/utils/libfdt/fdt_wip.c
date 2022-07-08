@@ -10,7 +10,7 @@
 
 #include "libfdt_internal.h"
 
-int fdt_setprop_inplace_namelen_partial(void *fdt, int nodeoffset,
+int __init fdt_setprop_inplace_namelen_partial(void *fdt, int nodeoffset,
 					const char *name, int namelen,
 					uint32_t idx, const void *val,
 					int len)
@@ -30,7 +30,7 @@ int fdt_setprop_inplace_namelen_partial(void *fdt, int nodeoffset,
 	return 0;
 }
 
-int fdt_setprop_inplace(void *fdt, int nodeoffset, const char *name,
+int __init fdt_setprop_inplace(void *fdt, int nodeoffset, const char *name,
 			const void *val, int len)
 {
 	const void *propval;
@@ -48,7 +48,7 @@ int fdt_setprop_inplace(void *fdt, int nodeoffset, const char *name,
 						   val, len);
 }
 
-static void fdt_nop_region_(void *start, int len)
+static void __init fdt_nop_region_(void *start, int len)
 {
 	fdt32_t *p;
 
@@ -56,7 +56,7 @@ static void fdt_nop_region_(void *start, int len)
 		*p = cpu_to_fdt32(FDT_NOP);
 }
 
-int fdt_nop_property(void *fdt, int nodeoffset, const char *name)
+int __init fdt_nop_property(void *fdt, int nodeoffset, const char *name)
 {
 	struct fdt_property *prop;
 	int len;
@@ -70,7 +70,7 @@ int fdt_nop_property(void *fdt, int nodeoffset, const char *name)
 	return 0;
 }
 
-int fdt_node_end_offset_(void *fdt, int offset)
+int __init fdt_node_end_offset_(void *fdt, int offset)
 {
 	int depth = 0;
 
@@ -80,7 +80,7 @@ int fdt_node_end_offset_(void *fdt, int offset)
 	return offset;
 }
 
-int fdt_nop_node(void *fdt, int nodeoffset)
+int __init fdt_nop_node(void *fdt, int nodeoffset)
 {
 	int endoffset;
 

@@ -12,7 +12,7 @@
 #include <sbi_utils/reset/fdt_reset.h>
 #include <sbi_utils/sys/sifive_test.h>
 
-static int sifive_test_reset_init(void *fdt, int nodeoff,
+static int __init sifive_test_reset_init(void *fdt, int nodeoff,
 				  const struct fdt_match *match)
 {
 	int rc;

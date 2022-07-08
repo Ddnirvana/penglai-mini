@@ -48,7 +48,7 @@ volatile uint64_t fromhost __attribute__((section(".htif")));
 static int htif_console_buf;
 static spinlock_t htif_lock = SPIN_LOCK_INITIALIZER;
 
-static void __check_fromhost()
+static void __init __check_fromhost()
 {
 	uint64_t fh = fromhost;
 	if (!fh)
@@ -69,7 +69,7 @@ static void __check_fromhost()
 	}
 }
 
-static void __set_tohost(uint64_t dev, uint64_t cmd, uint64_t data)
+static void __init __set_tohost(uint64_t dev, uint64_t cmd, uint64_t data)
 {
 	while (tohost)
 		__check_fromhost();
@@ -77,7 +77,7 @@ static void __set_tohost(uint64_t dev, uint64_t cmd, uint64_t data)
 }
 
 #if __riscv_xlen == 32
-static void do_tohost_fromhost(uint64_t dev, uint64_t cmd, uint64_t data)
+static void __init do_tohost_fromhost(uint64_t dev, uint64_t cmd, uint64_t data)
 {
 	spin_lock(&htif_lock);
 
@@ -98,7 +98,7 @@ static void do_tohost_fromhost(uint64_t dev, uint64_t cmd, uint64_t data)
 	spin_unlock(&htif_lock);
 }
 
-void htif_putc(char ch)
+void __init htif_putc(char ch)
 {
 	/* HTIF devices are not supported on RV32, so do a proxy write call */
 	volatile uint64_t magic_mem[8];
@@ -109,7 +109,7 @@ void htif_putc(char ch)
 	do_tohost_fromhost(HTIF_DEV_SYSTEM, 0, (uint64_t)(uintptr_t)magic_mem);
 }
 #else
-void htif_putc(char ch)
+void __init htif_putc(char ch)
 {
 	spin_lock(&htif_lock);
 	__set_tohost(HTIF_DEV_CONSOLE, HTIF_CONSOLE_CMD_PUTC, ch);
@@ -117,7 +117,7 @@ void htif_putc(char ch)
 }
 #endif
 
-int htif_getc(void)
+int __init htif_getc(void)
 {
 	int ch;
 
@@ -140,12 +140,12 @@ int htif_getc(void)
 	return ch - 1;
 }
 
-int htif_system_reset_check(u32 type, u32 reason)
+int __init htif_system_reset_check(u32 type, u32 reason)
 {
 	return 1;
 }
 
-void htif_system_reset(u32 type, u32 reason)
+void __init htif_system_reset(u32 type, u32 reason)
 {
 	while (1) {
 		fromhost = 0;

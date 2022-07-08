@@ -172,7 +172,7 @@ static void generic_final_exit(void)
 		generic_plat->final_exit(generic_plat_match);
 }
 
-static int generic_domains_init(void)
+static int __init generic_domains_init(void)
 {
 	return fdt_domains_populate(sbi_scratch_thishart_arg1_ptr());
 }

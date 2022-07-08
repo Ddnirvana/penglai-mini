@@ -42,7 +42,7 @@ static struct fdt_errtabent fdt_errtable[] = {
 };
 #define FDT_ERRTABSIZE	(sizeof(fdt_errtable) / sizeof(fdt_errtable[0]))
 
-const char *fdt_strerror(int errval)
+const char * __init fdt_strerror(int errval)
 {
 	if (errval > 0)
 		return "<valid offset/length>";
