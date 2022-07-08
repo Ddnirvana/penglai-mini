@@ -31,7 +31,7 @@ static const struct platform_override *special_platforms[] = {
 static const struct platform_override *generic_plat = NULL;
 static const struct fdt_match *generic_plat_match = NULL;
 
-static void fw_platform_lookup_special(void *fdt, int root_offset)
+static void __init fw_platform_lookup_special(void *fdt, int root_offset)
 {
 	int pos, noff;
 	const struct platform_override *plat;
@@ -68,7 +68,7 @@ static u32 generic_hart_index2id[SBI_HARTMASK_MAX_BITS] = { 0 };
  * FDT is unchanged (or FDT is modified in-place) then fw_platform_init()
  * can always return the original FDT location (i.e. 'arg1') unmodified.
  */
-unsigned long fw_platform_init(unsigned long arg0, unsigned long arg1,
+unsigned long __init fw_platform_init(unsigned long arg0, unsigned long arg1,
 				unsigned long arg2, unsigned long arg3,
 				unsigned long arg4)
 {
@@ -115,7 +115,7 @@ fail:
 		wfi();
 }
 
-static int generic_early_init(bool cold_boot)
+static int __init generic_early_init(bool cold_boot)
 {
 	int rc;
 
@@ -131,7 +131,7 @@ static int generic_early_init(bool cold_boot)
 	return fdt_reset_init();
 }
 
-static int generic_final_init(bool cold_boot)
+static int __init generic_final_init(bool cold_boot)
 {
 	void *fdt;
 	int rc;

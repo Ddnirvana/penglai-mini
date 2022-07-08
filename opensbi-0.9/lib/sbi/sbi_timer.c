@@ -91,7 +91,7 @@ void sbi_timer_process(void)
 	csr_set(CSR_MIP, MIP_STIP);
 }
 
-int sbi_timer_init(struct sbi_scratch *scratch, bool cold_boot)
+int __init sbi_timer_init(struct sbi_scratch *scratch, bool cold_boot)
 {
 	u64 *time_delta;
 	const struct sbi_platform *plat = sbi_platform_ptr(scratch);

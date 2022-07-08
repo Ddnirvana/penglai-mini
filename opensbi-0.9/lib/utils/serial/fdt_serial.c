@@ -52,7 +52,7 @@ int fdt_serial_getc(void)
 	return current_driver->getc();
 }
 
-int fdt_serial_init(void)
+int __init fdt_serial_init(void)
 {
 	const void *prop;
 	struct fdt_serial *drv;

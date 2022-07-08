@@ -15,7 +15,7 @@
  * that the given buffer contains what appears to be a flattened
  * device tree with sane information in its header.
  */
-int32_t fdt_ro_probe_(const void *fdt)
+int32_t __init fdt_ro_probe_(const void *fdt)
 {
 	uint32_t totalsize = fdt_totalsize(fdt);
 
@@ -45,12 +45,12 @@ int32_t fdt_ro_probe_(const void *fdt)
 		return -FDT_ERR_TRUNCATED;
 }
 
-static int check_off_(uint32_t hdrsize, uint32_t totalsize, uint32_t off)
+static int __init check_off_(uint32_t hdrsize, uint32_t totalsize, uint32_t off)
 {
 	return (off >= hdrsize) && (off <= totalsize);
 }
 
-static int check_block_(uint32_t hdrsize, uint32_t totalsize,
+static int __init check_block_(uint32_t hdrsize, uint32_t totalsize,
 			uint32_t base, uint32_t size)
 {
 	if (!check_off_(hdrsize, totalsize, base))
@@ -62,7 +62,7 @@ static int check_block_(uint32_t hdrsize, uint32_t totalsize,
 	return 1;
 }
 
-size_t fdt_header_size_(uint32_t version)
+size_t __init fdt_header_size_(uint32_t version)
 {
 	if (version <= 1)
 		return FDT_V1_SIZE;
@@ -76,13 +76,13 @@ size_t fdt_header_size_(uint32_t version)
 		return FDT_V17_SIZE;
 }
 
-size_t fdt_header_size(const void *fdt)
+size_t __init fdt_header_size(const void *fdt)
 {
 	return can_assume(LATEST) ? FDT_V17_SIZE :
 		fdt_header_size_(fdt_version(fdt));
 }
 
-int fdt_check_header(const void *fdt)
+int __init fdt_check_header(const void *fdt)
 {
 	size_t hdrsize;
 
@@ -132,7 +132,7 @@ int fdt_check_header(const void *fdt)
 	return 0;
 }
 
-const void *fdt_offset_ptr(const void *fdt, int offset, unsigned int len)
+const void * __init fdt_offset_ptr(const void *fdt, int offset, unsigned int len)
 {
 	unsigned absoffset = offset + fdt_off_dt_struct(fdt);
 
@@ -150,7 +150,7 @@ const void *fdt_offset_ptr(const void *fdt, int offset, unsigned int len)
 	return fdt_offset_ptr_(fdt, offset);
 }
 
-uint32_t fdt_next_tag(const void *fdt, int startoffset, int *nextoffset)
+uint32_t __init fdt_next_tag(const void *fdt, int startoffset, int *nextoffset)
 {
 	const fdt32_t *tagp, *lenp;
 	uint32_t tag;
@@ -204,7 +204,7 @@ uint32_t fdt_next_tag(const void *fdt, int startoffset, int *nextoffset)
 	return tag;
 }
 
-int fdt_check_node_offset_(const void *fdt, int offset)
+int __init fdt_check_node_offset_(const void *fdt, int offset)
 {
 	if (can_assume(VALID_INPUT))
 		return offset;
@@ -215,7 +215,7 @@ int fdt_check_node_offset_(const void *fdt, int offset)
 	return offset;
 }
 
-int fdt_check_prop_offset_(const void *fdt, int offset)
+int __init fdt_check_prop_offset_(const void *fdt, int offset)
 {
 	if ((offset < 0) || (offset % FDT_TAGSIZE)
 	    || (fdt_next_tag(fdt, offset, &offset) != FDT_PROP))
@@ -224,7 +224,7 @@ int fdt_check_prop_offset_(const void *fdt, int offset)
 	return offset;
 }
 
-int fdt_next_node(const void *fdt, int offset, int *depth)
+int __init fdt_next_node(const void *fdt, int offset, int *depth)
 {
 	int nextoffset = 0;
 	uint32_t tag;
@@ -264,7 +264,7 @@ int fdt_next_node(const void *fdt, int offset, int *depth)
 	return offset;
 }
 
-int fdt_first_subnode(const void *fdt, int offset)
+int __init fdt_first_subnode(const void *fdt, int offset)
 {
 	int depth = 0;
 
@@ -275,7 +275,7 @@ int fdt_first_subnode(const void *fdt, int offset)
 	return offset;
 }
 
-int fdt_next_subnode(const void *fdt, int offset)
+int __init fdt_next_subnode(const void *fdt, int offset)
 {
 	int depth = 1;
 
@@ -292,7 +292,7 @@ int fdt_next_subnode(const void *fdt, int offset)
 	return offset;
 }
 
-const char *fdt_find_string_(const char *strtab, int tabsize, const char *s)
+const char * __init fdt_find_string_(const char *strtab, int tabsize, const char *s)
 {
 	int len = strlen(s) + 1;
 	const char *last = strtab + tabsize - len;
@@ -304,7 +304,7 @@ const char *fdt_find_string_(const char *strtab, int tabsize, const char *s)
 	return NULL;
 }
 
-int fdt_move(const void *fdt, void *buf, int bufsize)
+int __init fdt_move(const void *fdt, void *buf, int bufsize)
 {
 	FDT_RO_PROBE(fdt);
 

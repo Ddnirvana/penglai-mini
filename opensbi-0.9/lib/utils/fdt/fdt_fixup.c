@@ -17,7 +17,7 @@
 #include <sbi_utils/fdt/fdt_fixup.h>
 #include <sbi_utils/fdt/fdt_helper.h>
 
-void fdt_cpu_fixup(void *fdt)
+void __init fdt_cpu_fixup(void *fdt)
 {
 	struct sbi_domain *dom = sbi_domain_thishart_ptr();
 	int err, cpu_offset, cpus_offset, len;
@@ -51,7 +51,7 @@ void fdt_cpu_fixup(void *fdt)
 	}
 }
 
-void fdt_plic_fixup(void *fdt, const char *compat)
+void __init fdt_plic_fixup(void *fdt, const char *compat)
 {
 	u32 *cells;
 	int i, cells_count;
@@ -76,7 +76,7 @@ void fdt_plic_fixup(void *fdt, const char *compat)
 	}
 }
 
-static int fdt_resv_memory_update_node(void *fdt, unsigned long addr,
+static int __init fdt_resv_memory_update_node(void *fdt, unsigned long addr,
 				       unsigned long size, int index,
 				       int parent, bool no_map)
 {
@@ -150,7 +150,7 @@ static int fdt_resv_memory_update_node(void *fdt, unsigned long addr,
  * Some additional memory spaces may be protected by platform codes via PMP as
  * well, and corresponding child nodes will be inserted.
  */
-int fdt_reserved_memory_fixup(void *fdt)
+int __init fdt_reserved_memory_fixup(void *fdt)
 {
 	struct sbi_domain_memregion *reg;
 	struct sbi_domain *dom = sbi_domain_thishart_ptr();
@@ -231,7 +231,7 @@ int fdt_reserved_memory_fixup(void *fdt)
 	return 0;
 }
 
-int fdt_reserved_memory_nomap_fixup(void *fdt)
+int __init fdt_reserved_memory_nomap_fixup(void *fdt)
 {
 	int parent, subnode;
 	int err;
@@ -255,7 +255,7 @@ int fdt_reserved_memory_nomap_fixup(void *fdt)
 	return 0;
 }
 
-void fdt_fixups(void *fdt)
+void __init fdt_fixups(void *fdt)
 {
 	fdt_plic_fixup(fdt, "riscv,plic0");
 

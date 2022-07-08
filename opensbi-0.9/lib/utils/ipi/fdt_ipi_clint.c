@@ -17,7 +17,7 @@
 static unsigned long clint_ipi_count = 0;
 static struct clint_data clint_ipi[CLINT_IPI_MAX_NR];
 
-static int ipi_clint_cold_init(void *fdt, int nodeoff,
+static int __init ipi_clint_cold_init(void *fdt, int nodeoff,
 			       const struct fdt_match *match)
 {
 	int rc;

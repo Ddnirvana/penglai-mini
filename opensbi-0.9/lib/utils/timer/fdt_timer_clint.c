@@ -17,7 +17,7 @@
 static unsigned long clint_timer_count = 0;
 static struct clint_data clint_timer[CLINT_TIMER_MAX_NR];
 
-static int timer_clint_cold_init(void *fdt, int nodeoff,
+static int __init timer_clint_cold_init(void *fdt, int nodeoff,
 				  const struct fdt_match *match)
 {
 	int rc;

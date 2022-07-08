@@ -51,7 +51,7 @@ static void __init sbi_boot_print_banner(struct sbi_scratch *scratch)
 	sbi_printf(BANNER);
 }
 
-static void sbi_boot_print_general(struct sbi_scratch *scratch)
+static void __init sbi_boot_print_general(struct sbi_scratch *scratch)
 {
 	char str[128];
 	const struct sbi_platform *plat = sbi_platform_ptr(scratch);
@@ -78,7 +78,7 @@ static void sbi_boot_print_general(struct sbi_scratch *scratch)
 	sbi_printf("\n");
 }
 
-static void sbi_boot_print_domains(struct sbi_scratch *scratch)
+static void __init sbi_boot_print_domains(struct sbi_scratch *scratch)
 {
 	if (scratch->options & SBI_SCRATCH_NO_BOOT_PRINTS)
 		return;
@@ -87,7 +87,7 @@ static void sbi_boot_print_domains(struct sbi_scratch *scratch)
 	sbi_domain_dump_all("      ");
 }
 
-static void sbi_boot_print_hart(struct sbi_scratch *scratch, u32 hartid)
+static void __init sbi_boot_print_hart(struct sbi_scratch *scratch, u32 hartid)
 {
 	int xlen;
 	char str[128];

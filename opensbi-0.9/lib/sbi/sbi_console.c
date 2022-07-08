@@ -390,7 +390,7 @@ int sbi_dprintf(const char *format, ...)
 	return retval;
 }
 
-int sbi_console_init(struct sbi_scratch *scratch)
+int __init sbi_console_init(struct sbi_scratch *scratch)
 {
 	console_plat = sbi_platform_ptr(scratch);
 

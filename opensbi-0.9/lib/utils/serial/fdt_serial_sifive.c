@@ -11,7 +11,7 @@
 #include <sbi_utils/serial/fdt_serial.h>
 #include <sbi_utils/serial/sifive-uart.h>
 
-static int serial_sifive_init(void *fdt, int nodeoff,
+static int __init serial_sifive_init(void *fdt, int nodeoff,
 				const struct fdt_match *match)
 {
 	int rc;

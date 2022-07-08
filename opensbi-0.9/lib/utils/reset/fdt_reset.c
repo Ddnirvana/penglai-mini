@@ -35,7 +35,7 @@ void fdt_system_reset(u32 reset_type, u32 reset_reason)
 		current_driver->system_reset(reset_type, reset_reason);
 }
 
-int fdt_reset_init(void)
+int __init fdt_reset_init(void)
 {
 	int pos, noff, rc;
 	struct fdt_reset *drv;

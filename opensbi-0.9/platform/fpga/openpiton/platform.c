@@ -46,7 +46,7 @@ static struct clint_data clint = {
 /*
  * OpenPiton platform early initialization.
  */
-static int openpiton_early_init(bool cold_boot)
+static int __init openpiton_early_init(bool cold_boot)
 {
 	void *fdt;
 	struct platform_uart_data uart_data;

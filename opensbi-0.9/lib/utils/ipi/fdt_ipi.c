@@ -59,7 +59,7 @@ static int fdt_ipi_warm_init(void)
 	return 0;
 }
 
-static int fdt_ipi_cold_init(void)
+static int __init fdt_ipi_cold_init(void)
 {
 	int pos, noff, rc;
 	struct fdt_ipi *drv;
@@ -87,7 +87,7 @@ static int fdt_ipi_cold_init(void)
 	return 0;
 }
 
-int fdt_ipi_init(bool cold_boot)
+int __init fdt_ipi_init(bool cold_boot)
 {
 	int rc;
 

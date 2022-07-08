@@ -29,7 +29,7 @@
 #define DEFAULT_SHAKTI_UART_FREQ		50000000
 #define DEFAULT_SHAKTI_UART_BAUD		115200
 
-const struct fdt_match *fdt_match_node(void *fdt, int nodeoff,
+const struct fdt_match * __init fdt_match_node(void *fdt, int nodeoff,
 				       const struct fdt_match *match_table)
 {
 	int ret;
@@ -48,7 +48,7 @@ const struct fdt_match *fdt_match_node(void *fdt, int nodeoff,
 	return NULL;
 }
 
-int fdt_find_match(void *fdt, int startoff,
+int __init fdt_find_match(void *fdt, int startoff,
 		   const struct fdt_match *match_table,
 		   const struct fdt_match **out_match)
 {
@@ -71,7 +71,7 @@ int fdt_find_match(void *fdt, int startoff,
 	return SBI_ENODEV;
 }
 
-static int fdt_translate_address(void *fdt, uint64_t reg, int parent,
+static int __init fdt_translate_address(void *fdt, uint64_t reg, int parent,
 				 unsigned long *addr)
 {
 	int i, rlen;
@@ -109,7 +109,7 @@ static int fdt_translate_address(void *fdt, uint64_t reg, int parent,
 	return 0;
 }
 
-int fdt_get_node_addr_size(void *fdt, int node, unsigned long *addr,
+int __init fdt_get_node_addr_size(void *fdt, int node, unsigned long *addr,
 			   unsigned long *size)
 {
 	int parent, len, i, rc;
@@ -157,7 +157,7 @@ int fdt_get_node_addr_size(void *fdt, int node, unsigned long *addr,
 	return 0;
 }
 
-int fdt_parse_hart_id(void *fdt, int cpu_offset, u32 *hartid)
+int __init fdt_parse_hart_id(void *fdt, int cpu_offset, u32 *hartid)
 {
 	int len;
 	const void *prop;
@@ -185,7 +185,7 @@ int fdt_parse_hart_id(void *fdt, int cpu_offset, u32 *hartid)
 	return 0;
 }
 
-int fdt_parse_max_hart_id(void *fdt, u32 *max_hartid)
+int __init fdt_parse_max_hart_id(void *fdt, u32 *max_hartid)
 {
 	u32 hartid;
 	int err, cpu_offset, cpus_offset;
@@ -213,7 +213,7 @@ int fdt_parse_max_hart_id(void *fdt, u32 *max_hartid)
 	return 0;
 }
 
-int fdt_parse_shakti_uart_node(void *fdt, int nodeoffset,
+int __init fdt_parse_shakti_uart_node(void *fdt, int nodeoffset,
 			       struct platform_uart_data *uart)
 {
 	int len, rc;
@@ -247,7 +247,7 @@ int fdt_parse_shakti_uart_node(void *fdt, int nodeoffset,
 	return 0;
 }
 
-int fdt_parse_sifive_uart_node(void *fdt, int nodeoffset,
+int __init fdt_parse_sifive_uart_node(void *fdt, int nodeoffset,
 			       struct platform_uart_data *uart)
 {
 	int len, rc;
@@ -285,7 +285,7 @@ int fdt_parse_sifive_uart_node(void *fdt, int nodeoffset,
 	return 0;
 }
 
-int fdt_parse_uart8250_node(void *fdt, int nodeoffset,
+int __init fdt_parse_uart8250_node(void *fdt, int nodeoffset,
 			    struct platform_uart_data *uart)
 {
 	int len, rc;
@@ -331,7 +331,7 @@ int fdt_parse_uart8250_node(void *fdt, int nodeoffset,
 	return 0;
 }
 
-int fdt_parse_uart8250(void *fdt, struct platform_uart_data *uart,
+int __init fdt_parse_uart8250(void *fdt, struct platform_uart_data *uart,
 		   const char *compatible)
 {
 	int nodeoffset;
@@ -346,7 +346,7 @@ int fdt_parse_uart8250(void *fdt, struct platform_uart_data *uart,
 	return fdt_parse_uart8250_node(fdt, nodeoffset, uart);
 }
 
-int fdt_parse_plic_node(void *fdt, int nodeoffset, struct plic_data *plic)
+int __init fdt_parse_plic_node(void *fdt, int nodeoffset, struct plic_data *plic)
 {
 	int len, rc;
 	const fdt32_t *val;
@@ -367,7 +367,7 @@ int fdt_parse_plic_node(void *fdt, int nodeoffset, struct plic_data *plic)
 	return 0;
 }
 
-int fdt_parse_plic(void *fdt, struct plic_data *plic, const char *compat)
+int __init fdt_parse_plic(void *fdt, struct plic_data *plic, const char *compat)
 {
 	int nodeoffset;
 
@@ -381,7 +381,7 @@ int fdt_parse_plic(void *fdt, struct plic_data *plic, const char *compat)
 	return fdt_parse_plic_node(fdt, nodeoffset, plic);
 }
 
-int fdt_parse_clint_node(void *fdt, int nodeoffset, bool for_timer,
+int __init fdt_parse_clint_node(void *fdt, int nodeoffset, bool for_timer,
 			 struct clint_data *clint)
 {
 	const fdt32_t *val;
@@ -448,7 +448,7 @@ int fdt_parse_clint_node(void *fdt, int nodeoffset, bool for_timer,
 	return 0;
 }
 
-int fdt_parse_compat_addr(void *fdt, unsigned long *addr,
+int __init fdt_parse_compat_addr(void *fdt, unsigned long *addr,
 			  const char *compatible)
 {
 	int nodeoffset, rc;

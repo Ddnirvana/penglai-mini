@@ -178,7 +178,7 @@ unsigned int sbi_hart_pmp_addrbits(struct sbi_scratch *scratch)
 	return hfeatures->pmp_addr_bits;
 }
 
-int sbi_hart_pmp_configure(struct sbi_scratch *scratch)
+int __init sbi_hart_pmp_configure(struct sbi_scratch *scratch)
 {
 	struct sbi_domain_memregion *reg;
 	struct sbi_domain *dom = sbi_domain_thishart_ptr();
@@ -431,7 +431,7 @@ __mhpm_skip:
 		hfeatures->features |= SBI_HART_HAS_TIME;
 }
 
-int sbi_hart_init(struct sbi_scratch *scratch, bool cold_boot)
+int __init sbi_hart_init(struct sbi_scratch *scratch, bool cold_boot)
 {
 	int rc;
 
@@ -468,7 +468,7 @@ void __attribute__((noreturn)) sbi_hart_hang(void)
 	__builtin_unreachable();
 }
 
-void __attribute__((noreturn))
+void __init __attribute__((noreturn))
 sbi_hart_switch_mode(unsigned long arg0, unsigned long arg1,
 		     unsigned long next_addr, unsigned long next_mode,
 		     bool next_virt)

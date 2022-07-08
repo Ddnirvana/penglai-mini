@@ -23,7 +23,7 @@ static struct plic_data plic[PLIC_MAX_NR];
 static struct plic_data *plic_hartid2data[SBI_HARTMASK_MAX_BITS];
 static int plic_hartid2context[SBI_HARTMASK_MAX_BITS][2];
 
-static int irqchip_plic_warm_init(void)
+static int __init irqchip_plic_warm_init(void)
 {
 	u32 hartid = current_hartid();
 
@@ -77,7 +77,7 @@ static int irqchip_plic_update_hartid_table(void *fdt, int nodeoff,
 	return 0;
 }
 
-static int irqchip_plic_cold_init(void *fdt, int nodeoff,
+static int __init irqchip_plic_cold_init(void *fdt, int nodeoff,
 				  const struct fdt_match *match)
 {
 	int i, rc;

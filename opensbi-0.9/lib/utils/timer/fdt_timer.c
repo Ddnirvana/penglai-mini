@@ -70,7 +70,7 @@ static int fdt_timer_warm_init(void)
 	return 0;
 }
 
-static int fdt_timer_cold_init(void)
+static int __init fdt_timer_cold_init(void)
 {
 	int pos, noff, rc;
 	struct fdt_timer *drv;

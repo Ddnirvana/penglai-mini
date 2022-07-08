@@ -152,7 +152,7 @@ int sbi_ecall_handler(struct sbi_trap_regs *regs)
 	return 0;
 }
 
-int sbi_ecall_init(void)
+int __init sbi_ecall_init(void)
 {
 	int ret;
 

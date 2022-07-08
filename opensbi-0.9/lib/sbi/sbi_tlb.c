@@ -371,7 +371,7 @@ int sbi_tlb_request(ulong hmask, ulong hbase, struct sbi_tlb_info *tinfo)
 	return sbi_ipi_send_many(hmask, hbase, tlb_event, tinfo);
 }
 
-int sbi_tlb_init(struct sbi_scratch *scratch, bool cold_boot)
+int __init sbi_tlb_init(struct sbi_scratch *scratch, bool cold_boot)
 {
 	int ret;
 	void *tlb_mem;

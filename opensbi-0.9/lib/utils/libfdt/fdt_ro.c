@@ -10,7 +10,7 @@
 
 #include "libfdt_internal.h"
 
-static int fdt_nodename_eq_(const void *fdt, int offset,
+static int __init fdt_nodename_eq_(const void *fdt, int offset,
 			    const char *s, int len)
 {
 	int olen;
@@ -31,7 +31,7 @@ static int fdt_nodename_eq_(const void *fdt, int offset,
 		return 0;
 }
 
-const char *fdt_get_string(const void *fdt, int stroffset, int *lenp)
+const char * __init fdt_get_string(const void *fdt, int stroffset, int *lenp)
 {
 	int32_t totalsize;
 	uint32_t absoffset;
@@ -95,12 +95,12 @@ fail:
 	return NULL;
 }
 
-const char *fdt_string(const void *fdt, int stroffset)
+const char * __init fdt_string(const void *fdt, int stroffset)
 {
 	return fdt_get_string(fdt, stroffset, NULL);
 }
 
-static int fdt_string_eq_(const void *fdt, int stroffset,
+static int __init fdt_string_eq_(const void *fdt, int stroffset,
 			  const char *s, int len)
 {
 	int slen;
@@ -109,7 +109,7 @@ static int fdt_string_eq_(const void *fdt, int stroffset,
 	return p && (slen == len) && (memcmp(p, s, len) == 0);
 }
 
-int fdt_find_max_phandle(const void *fdt, uint32_t *phandle)
+int __init fdt_find_max_phandle(const void *fdt, uint32_t *phandle)
 {
 	uint32_t max = 0;
 	int offset = -1;
@@ -137,7 +137,7 @@ int fdt_find_max_phandle(const void *fdt, uint32_t *phandle)
 	return 0;
 }
 
-int fdt_generate_phandle(const void *fdt, uint32_t *phandle)
+int __init fdt_generate_phandle(const void *fdt, uint32_t *phandle)
 {
 	uint32_t max;
 	int err;
@@ -155,7 +155,7 @@ int fdt_generate_phandle(const void *fdt, uint32_t *phandle)
 	return 0;
 }
 
-static const struct fdt_reserve_entry *fdt_mem_rsv(const void *fdt, int n)
+static const struct fdt_reserve_entry * __init fdt_mem_rsv(const void *fdt, int n)
 {
 	int offset = n * sizeof(struct fdt_reserve_entry);
 	int absoffset = fdt_off_mem_rsvmap(fdt) + offset;
@@ -170,7 +170,7 @@ static const struct fdt_reserve_entry *fdt_mem_rsv(const void *fdt, int n)
 	return fdt_mem_rsv_(fdt, n);
 }
 
-int fdt_get_mem_rsv(const void *fdt, int n, uint64_t *address, uint64_t *size)
+int __init fdt_get_mem_rsv(const void *fdt, int n, uint64_t *address, uint64_t *size)
 {
 	const struct fdt_reserve_entry *re;
 
@@ -184,7 +184,7 @@ int fdt_get_mem_rsv(const void *fdt, int n, uint64_t *address, uint64_t *size)
 	return 0;
 }
 
-int fdt_num_mem_rsv(const void *fdt)
+int __init fdt_num_mem_rsv(const void *fdt)
 {
 	int i;
 	const struct fdt_reserve_entry *re;
@@ -196,7 +196,7 @@ int fdt_num_mem_rsv(const void *fdt)
 	return -FDT_ERR_TRUNCATED;
 }
 
-static int nextprop_(const void *fdt, int offset)
+static int __init nextprop_(const void *fdt, int offset)
 {
 	uint32_t tag;
 	int nextoffset;
@@ -220,7 +220,7 @@ static int nextprop_(const void *fdt, int offset)
 	return -FDT_ERR_NOTFOUND;
 }
 
-int fdt_subnode_offset_namelen(const void *fdt, int offset,
+int __init fdt_subnode_offset_namelen(const void *fdt, int offset,
 			       const char *name, int namelen)
 {
 	int depth;
@@ -239,13 +239,13 @@ int fdt_subnode_offset_namelen(const void *fdt, int offset,
 	return offset; /* error */
 }
 
-int fdt_subnode_offset(const void *fdt, int parentoffset,
+int __init fdt_subnode_offset(const void *fdt, int parentoffset,
 		       const char *name)
 {
 	return fdt_subnode_offset_namelen(fdt, parentoffset, name, strlen(name));
 }
 
-int fdt_path_offset_namelen(const void *fdt, const char *path, int namelen)
+int __init fdt_path_offset_namelen(const void *fdt, const char *path, int namelen)
 {
 	const char *end = path + namelen;
 	const char *p = path;
@@ -290,12 +290,12 @@ int fdt_path_offset_namelen(const void *fdt, const char *path, int namelen)
 	return offset;
 }
 
-int fdt_path_offset(const void *fdt, const char *path)
+int __init fdt_path_offset(const void *fdt, const char *path)
 {
 	return fdt_path_offset_namelen(fdt, path, strlen(path));
 }
 
-const char *fdt_get_name(const void *fdt, int nodeoffset, int *len)
+const char * __init fdt_get_name(const void *fdt, int nodeoffset, int *len)
 {
 	const struct fdt_node_header *nh = fdt_offset_ptr_(fdt, nodeoffset);
 	const char *nameptr;
@@ -333,7 +333,7 @@ const char *fdt_get_name(const void *fdt, int nodeoffset, int *len)
 	return NULL;
 }
 
-int fdt_first_property_offset(const void *fdt, int nodeoffset)
+int __init fdt_first_property_offset(const void *fdt, int nodeoffset)
 {
 	int offset;
 
@@ -343,7 +343,7 @@ int fdt_first_property_offset(const void *fdt, int nodeoffset)
 	return nextprop_(fdt, offset);
 }
 
-int fdt_next_property_offset(const void *fdt, int offset)
+int __init fdt_next_property_offset(const void *fdt, int offset)
 {
 	if ((offset = fdt_check_prop_offset_(fdt, offset)) < 0)
 		return offset;
@@ -351,7 +351,7 @@ int fdt_next_property_offset(const void *fdt, int offset)
 	return nextprop_(fdt, offset);
 }
 
-static const struct fdt_property *fdt_get_property_by_offset_(const void *fdt,
+static const struct fdt_property * __init fdt_get_property_by_offset_(const void *fdt,
 						              int offset,
 						              int *lenp)
 {
@@ -373,7 +373,7 @@ static const struct fdt_property *fdt_get_property_by_offset_(const void *fdt,
 	return prop;
 }
 
-const struct fdt_property *fdt_get_property_by_offset(const void *fdt,
+const struct fdt_property * __init fdt_get_property_by_offset(const void *fdt,
 						      int offset,
 						      int *lenp)
 {
@@ -389,7 +389,7 @@ const struct fdt_property *fdt_get_property_by_offset(const void *fdt,
 	return fdt_get_property_by_offset_(fdt, offset, lenp);
 }
 
-static const struct fdt_property *fdt_get_property_namelen_(const void *fdt,
+static const struct fdt_property * __init fdt_get_property_namelen_(const void *fdt,
 						            int offset,
 						            const char *name,
 						            int namelen,
@@ -420,7 +420,7 @@ static const struct fdt_property *fdt_get_property_namelen_(const void *fdt,
 }
 
 
-const struct fdt_property *fdt_get_property_namelen(const void *fdt,
+const struct fdt_property * __init fdt_get_property_namelen(const void *fdt,
 						    int offset,
 						    const char *name,
 						    int namelen, int *lenp)
@@ -438,7 +438,7 @@ const struct fdt_property *fdt_get_property_namelen(const void *fdt,
 }
 
 
-const struct fdt_property *fdt_get_property(const void *fdt,
+const struct fdt_property * __init fdt_get_property(const void *fdt,
 					    int nodeoffset,
 					    const char *name, int *lenp)
 {
@@ -446,7 +446,7 @@ const struct fdt_property *fdt_get_property(const void *fdt,
 					strlen(name), lenp);
 }
 
-const void *fdt_getprop_namelen(const void *fdt, int nodeoffset,
+const void * __init fdt_getprop_namelen(const void *fdt, int nodeoffset,
 				const char *name, int namelen, int *lenp)
 {
 	int poffset;
@@ -464,7 +464,7 @@ const void *fdt_getprop_namelen(const void *fdt, int nodeoffset,
 	return prop->data;
 }
 
-const void *fdt_getprop_by_offset(const void *fdt, int offset,
+const void * __init fdt_getprop_by_offset(const void *fdt, int offset,
 				  const char **namep, int *lenp)
 {
 	const struct fdt_property *prop;
@@ -497,13 +497,13 @@ const void *fdt_getprop_by_offset(const void *fdt, int offset,
 	return prop->data;
 }
 
-const void *fdt_getprop(const void *fdt, int nodeoffset,
+const void * __init fdt_getprop(const void *fdt, int nodeoffset,
 			const char *name, int *lenp)
 {
 	return fdt_getprop_namelen(fdt, nodeoffset, name, strlen(name), lenp);
 }
 
-uint32_t fdt_get_phandle(const void *fdt, int nodeoffset)
+uint32_t __init fdt_get_phandle(const void *fdt, int nodeoffset)
 {
 	const fdt32_t *php;
 	int len;
@@ -520,7 +520,7 @@ uint32_t fdt_get_phandle(const void *fdt, int nodeoffset)
 	return fdt32_ld(php);
 }
 
-const char *fdt_get_alias_namelen(const void *fdt,
+const char * __init fdt_get_alias_namelen(const void *fdt,
 				  const char *name, int namelen)
 {
 	int aliasoffset;
@@ -532,12 +532,12 @@ const char *fdt_get_alias_namelen(const void *fdt,
 	return fdt_getprop_namelen(fdt, aliasoffset, name, namelen, NULL);
 }
 
-const char *fdt_get_alias(const void *fdt, const char *name)
+const char * __init fdt_get_alias(const void *fdt, const char *name)
 {
 	return fdt_get_alias_namelen(fdt, name, strlen(name));
 }
 
-int fdt_get_path(const void *fdt, int nodeoffset, char *buf, int buflen)
+int __init fdt_get_path(const void *fdt, int nodeoffset, char *buf, int buflen)
 {
 	int pdepth = 0, p = 0;
 	int offset, depth, namelen;
@@ -589,7 +589,7 @@ int fdt_get_path(const void *fdt, int nodeoffset, char *buf, int buflen)
 	return offset; /* error from fdt_next_node() */
 }
 
-int fdt_supernode_atdepth_offset(const void *fdt, int nodeoffset,
+int __init fdt_supernode_atdepth_offset(const void *fdt, int nodeoffset,
 				 int supernodedepth, int *nodedepth)
 {
 	int offset, depth;
@@ -627,7 +627,7 @@ int fdt_supernode_atdepth_offset(const void *fdt, int nodeoffset,
 	return offset; /* error from fdt_next_node() */
 }
 
-int fdt_node_depth(const void *fdt, int nodeoffset)
+int __init fdt_node_depth(const void *fdt, int nodeoffset)
 {
 	int nodedepth;
 	int err;
@@ -639,7 +639,7 @@ int fdt_node_depth(const void *fdt, int nodeoffset)
 	return nodedepth;
 }
 
-int fdt_parent_offset(const void *fdt, int nodeoffset)
+int __init fdt_parent_offset(const void *fdt, int nodeoffset)
 {
 	int nodedepth = fdt_node_depth(fdt, nodeoffset);
 
@@ -649,7 +649,7 @@ int fdt_parent_offset(const void *fdt, int nodeoffset)
 					    nodedepth - 1, NULL);
 }
 
-int fdt_node_offset_by_prop_value(const void *fdt, int startoffset,
+int __init fdt_node_offset_by_prop_value(const void *fdt, int startoffset,
 				  const char *propname,
 				  const void *propval, int proplen)
 {
@@ -676,7 +676,7 @@ int fdt_node_offset_by_prop_value(const void *fdt, int startoffset,
 	return offset; /* error from fdt_next_node() */
 }
 
-int fdt_node_offset_by_phandle(const void *fdt, uint32_t phandle)
+int __init fdt_node_offset_by_phandle(const void *fdt, uint32_t phandle)
 {
 	int offset;
 
@@ -701,7 +701,7 @@ int fdt_node_offset_by_phandle(const void *fdt, uint32_t phandle)
 	return offset; /* error from fdt_next_node() */
 }
 
-int fdt_stringlist_contains(const char *strlist, int listlen, const char *str)
+int __init fdt_stringlist_contains(const char *strlist, int listlen, const char *str)
 {
 	int len = strlen(str);
 	const char *p;
@@ -718,7 +718,7 @@ int fdt_stringlist_contains(const char *strlist, int listlen, const char *str)
 	return 0;
 }
 
-int fdt_stringlist_count(const void *fdt, int nodeoffset, const char *property)
+int __init fdt_stringlist_count(const void *fdt, int nodeoffset, const char *property)
 {
 	const char *list, *end;
 	int length, count = 0;
@@ -743,7 +743,7 @@ int fdt_stringlist_count(const void *fdt, int nodeoffset, const char *property)
 	return count;
 }
 
-int fdt_stringlist_search(const void *fdt, int nodeoffset, const char *property,
+int __init fdt_stringlist_search(const void *fdt, int nodeoffset, const char *property,
 			  const char *string)
 {
 	int length, len, idx = 0;
@@ -773,7 +773,7 @@ int fdt_stringlist_search(const void *fdt, int nodeoffset, const char *property,
 	return -FDT_ERR_NOTFOUND;
 }
 
-const char *fdt_stringlist_get(const void *fdt, int nodeoffset,
+const char * __init fdt_stringlist_get(const void *fdt, int nodeoffset,
 			       const char *property, int idx,
 			       int *lenp)
 {
@@ -818,7 +818,7 @@ const char *fdt_stringlist_get(const void *fdt, int nodeoffset,
 	return NULL;
 }
 
-int fdt_node_check_compatible(const void *fdt, int nodeoffset,
+int __init fdt_node_check_compatible(const void *fdt, int nodeoffset,
 			      const char *compatible)
 {
 	const void *prop;
@@ -831,7 +831,7 @@ int fdt_node_check_compatible(const void *fdt, int nodeoffset,
 	return !fdt_stringlist_contains(prop, len, compatible);
 }
 
-int fdt_node_offset_by_compatible(const void *fdt, int startoffset,
+int __init fdt_node_offset_by_compatible(const void *fdt, int startoffset,
 				  const char *compatible)
 {
 	int offset, err;

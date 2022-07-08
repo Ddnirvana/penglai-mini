@@ -25,7 +25,7 @@
  *      0, if the phandle was not found
  *	-1, if the phandle was malformed
  */
-static uint32_t overlay_get_target_phandle(const void *fdto, int fragment)
+static uint32_t __init overlay_get_target_phandle(const void *fdto, int fragment)
 {
 	const fdt32_t *val;
 	int len;
@@ -55,7 +55,7 @@ static uint32_t overlay_get_target_phandle(const void *fdto, int fragment)
  *      the targeted node offset in the base device tree
  *      Negative error code on error
  */
-static int overlay_get_target(const void *fdt, const void *fdto,
+static int __init overlay_get_target(const void *fdt, const void *fdto,
 			      int fragment, char const **pathp)
 {
 	uint32_t phandle;
@@ -113,7 +113,7 @@ static int overlay_get_target(const void *fdt, const void *fdto,
  *      0 on success.
  *      Negative error code on error
  */
-static int overlay_phandle_add_offset(void *fdt, int node,
+static int __init overlay_phandle_add_offset(void *fdt, int node,
 				      const char *name, uint32_t delta)
 {
 	const fdt32_t *val;
@@ -153,7 +153,7 @@ static int overlay_phandle_add_offset(void *fdt, int node,
  *      0 on success
  *      Negative error code on failure
  */
-static int overlay_adjust_node_phandles(void *fdto, int node,
+static int __init overlay_adjust_node_phandles(void *fdto, int node,
 					uint32_t delta)
 {
 	int child;
@@ -190,7 +190,7 @@ static int overlay_adjust_node_phandles(void *fdto, int node,
  *      0 on success
  *      Negative error code on failure
  */
-static int overlay_adjust_local_phandles(void *fdto, uint32_t delta)
+static int __init overlay_adjust_local_phandles(void *fdto, uint32_t delta)
 {
 	/*
 	 * Start adjusting the phandles from the overlay root
@@ -217,7 +217,7 @@ static int overlay_adjust_local_phandles(void *fdto, uint32_t delta)
  *      0 on success
  *      Negative error code on failure
  */
-static int overlay_update_local_node_references(void *fdto,
+static int __init overlay_update_local_node_references(void *fdto,
 						int tree_node,
 						int fixup_node,
 						uint32_t delta)
@@ -321,7 +321,7 @@ static int overlay_update_local_node_references(void *fdto,
  *      0 on success
  *      Negative error code on failure
  */
-static int overlay_update_local_references(void *fdto, uint32_t delta)
+static int __init overlay_update_local_references(void *fdto, uint32_t delta)
 {
 	int fixups;
 
@@ -364,7 +364,7 @@ static int overlay_update_local_references(void *fdto, uint32_t delta)
  *      0 on success
  *      Negative error code on failure
  */
-static int overlay_fixup_one_phandle(void *fdt, void *fdto,
+static int __init overlay_fixup_one_phandle(void *fdt, void *fdto,
 				     int symbols_off,
 				     const char *path, uint32_t path_len,
 				     const char *name, uint32_t name_len,
@@ -424,7 +424,7 @@ static int overlay_fixup_one_phandle(void *fdt, void *fdto,
  *      0 on success
  *      Negative error code on failure
  */
-static int overlay_fixup_phandle(void *fdt, void *fdto, int symbols_off,
+static int __init overlay_fixup_phandle(void *fdt, void *fdto, int symbols_off,
 				 int property)
 {
 	const char *value;
@@ -506,7 +506,7 @@ static int overlay_fixup_phandle(void *fdt, void *fdto, int symbols_off,
  *      0 on success
  *      Negative error code on failure
  */
-static int overlay_fixup_phandles(void *fdt, void *fdto)
+static int __init overlay_fixup_phandles(void *fdt, void *fdto)
 {
 	int fixups_off, symbols_off;
 	int property;
@@ -553,7 +553,7 @@ static int overlay_fixup_phandles(void *fdt, void *fdto)
  *      0 on success
  *      Negative error code on failure
  */
-static int overlay_apply_node(void *fdt, int target,
+static int __init overlay_apply_node(void *fdt, int target,
 			      void *fdto, int node)
 {
 	int property;
@@ -615,7 +615,7 @@ static int overlay_apply_node(void *fdt, int target,
  *      0 on success
  *      Negative error code on failure
  */
-static int overlay_merge(void *fdt, void *fdto)
+static int __init overlay_merge(void *fdt, void *fdto)
 {
 	int fragment;
 
@@ -647,7 +647,7 @@ static int overlay_merge(void *fdt, void *fdto)
 	return 0;
 }
 
-static int get_path_len(const void *fdt, int nodeoffset)
+static int __init get_path_len(const void *fdt, int nodeoffset)
 {
 	int len = 0, namelen;
 	const char *name;
@@ -691,7 +691,7 @@ static int get_path_len(const void *fdt, int nodeoffset)
  *      0 on success
  *      Negative error code on failure
  */
-static int overlay_symbol_update(void *fdt, void *fdto)
+static int __init overlay_symbol_update(void *fdt, void *fdto)
 {
 	int root_sym, ov_sym, prop, path_len, fragment, target;
 	int len, frag_name_len, ret, rel_path_len;
@@ -826,7 +826,7 @@ static int overlay_symbol_update(void *fdt, void *fdto)
 	return 0;
 }
 
-int fdt_overlay_apply(void *fdt, void *fdto)
+int __init fdt_overlay_apply(void *fdt, void *fdto)
 {
 	uint32_t delta;
 	int ret;

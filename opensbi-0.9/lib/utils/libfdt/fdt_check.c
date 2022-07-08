@@ -10,7 +10,7 @@
 
 #include "libfdt_internal.h"
 
-int fdt_check_full(const void *fdt, size_t bufsize)
+int __init fdt_check_full(const void *fdt, size_t bufsize)
 {
 	int err;
 	int num_memrsv;

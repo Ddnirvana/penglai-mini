@@ -25,14 +25,14 @@ void fdt_irqchip_exit(void)
 		current_driver->exit();
 }
 
-static int fdt_irqchip_warm_init(void)
+static int __init fdt_irqchip_warm_init(void)
 {
 	if (current_driver && current_driver->warm_init)
 		return current_driver->warm_init();
 	return 0;
 }
 
-static int fdt_irqchip_cold_init(void)
+static int __init fdt_irqchip_cold_init(void)
 {
 	int pos, noff, rc;
 	struct fdt_irqchip *drv;
@@ -60,7 +60,7 @@ static int fdt_irqchip_cold_init(void)
 	return 0;
 }
 
-int fdt_irqchip_init(bool cold_boot)
+int __init fdt_irqchip_init(bool cold_boot)
 {
 	int rc;
 

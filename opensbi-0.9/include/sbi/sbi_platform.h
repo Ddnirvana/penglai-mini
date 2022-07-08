@@ -378,7 +378,7 @@ static inline int sbi_platform_hart_stop(const struct sbi_platform *plat)
  *
  * @return 0 on success and negative error code on failure
  */
-static inline int sbi_platform_early_init(const struct sbi_platform *plat,
+static inline int __init sbi_platform_early_init(const struct sbi_platform *plat,
 					  bool cold_boot)
 {
 	if (plat && sbi_platform_ops(plat)->early_init)
@@ -394,7 +394,7 @@ static inline int sbi_platform_early_init(const struct sbi_platform *plat,
  *
  * @return 0 on success and negative error code on failure
  */
-static inline int sbi_platform_final_init(const struct sbi_platform *plat,
+static inline int __init sbi_platform_final_init(const struct sbi_platform *plat,
 					  bool cold_boot)
 {
 	if (plat && sbi_platform_ops(plat)->final_init)
@@ -533,7 +533,7 @@ static inline int sbi_platform_console_init(const struct sbi_platform *plat)
  *
  * @return 0 on success and negative error code on failure
  */
-static inline int sbi_platform_irqchip_init(const struct sbi_platform *plat,
+static inline int __init sbi_platform_irqchip_init(const struct sbi_platform *plat,
 					    bool cold_boot)
 {
 	if (plat && sbi_platform_ops(plat)->irqchip_init)
