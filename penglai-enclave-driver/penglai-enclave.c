@@ -60,7 +60,8 @@ enclave_t* create_enclave(int total_pages)
 
 	int size;
 	struct sbiret ret;
-	unsigned long order = ilog2(total_pages-1) + 1;
+	//+4 means we reserve 16x memory resources when we extend the memory
+	unsigned long order = ilog2(total_pages-1) + 1 + 4;
 	unsigned long begin_cycle, end_cycle;
 
 	if(!enclave || !enclave_mem || !untrusted_mem)
